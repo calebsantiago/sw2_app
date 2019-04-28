@@ -1,0 +1,22 @@
+doctype html
+html(lang = "en")
+    head
+        meta(charset = "UTF-8")
+        meta(name = "viewport" content = "width=device-width, initial-scale=1.0")
+        meta(http-equiv = "X-UA-Compatible" content = "ie=edge")
+        link(rel = "stylesheet" type = "text/css" href = "stylesheets/index.css")
+        title CRUD
+    body
+        div(class = "index-title")
+            h1 CRUD
+        div(class = "index-group")
+            h2(class = "index-group-title") index
+            div(class = "index-group-div")
+                a(href = "create")
+                    button(type = "button" class = "index-group-create") create user
+                a(href = "show")
+                    button(type = "button" class = "index-group-show") show user
+                a(href = "update")
+                    button(type = "button" class = "index-group-update") update user
+                a(href = "delete")
+                    button(type = "button" class = "index-group-delete") delete user       

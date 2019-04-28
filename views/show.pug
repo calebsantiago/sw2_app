@@ -1,0 +1,27 @@
+doctype html
+html(lang = "en")
+    head
+        meta(charset = "UTF-8")
+        meta(name = "viewport" content = "width=device-width, initial-scale=1.0")
+        meta(http-equiv = "X-UA-Compatible" content = "ie=edge")
+        link(rel = "stylesheet" href = "stylesheets/groups.css")
+        title CRUD
+    body
+        div(class = "show-title")
+            h1 CRUD
+        div(class = "show-group")
+            h2(class = "show-group-title") show
+            each user in users
+                div(class = "show-group-div")
+                    p
+                        label name: 
+                        label= user.name
+                    p
+                        label password: 
+                        label= user.password
+                    p
+                        label email: 
+                        label= user.email
+            div(class = "show-group-button")
+                a(href = "/")
+                    button(type = "button" class = "show-group-return") return index

@@ -1,0 +1,29 @@
+doctype html
+html(lang = "en")
+    head
+        meta(charset = "UTF-8")
+        meta(name = "viewport" content = "width=device-width, initial-scale=1.0")
+        meta(http-equiv = "X-UA-Compatible" content = "ie=edge")
+        link(rel = "stylesheet" href = "../stylesheets/groups.css")
+        title CRUD
+    body
+        div(class = "delete-title")
+            h1 CRUD
+        div(class = "delete-group")
+            h2(class = "delete-group-title") delete
+            each user in users
+                div(class = "delete-group-div")
+                    p
+                        label name: 
+                        label= user.name
+                    p
+                        label password: 
+                        label= user.password
+                    p
+                        label email: 
+                        label= user.email
+                    a(href = "delete/drop/"+user.id)
+                        button(type = "button" class = "delete-group-delete") delete user
+            div(class = "delete-group-button")
+                a(href = "/")
+                    button(type = "button" class = "delete-group-return") return index

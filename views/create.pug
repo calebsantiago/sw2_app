@@ -1,0 +1,23 @@
+doctype html
+html(lang = "en")
+    head
+        meta(charset = "UTF-8")
+        meta(name = "viewport" content = "width=device-width, initial-scale=1.0")
+        meta(http-equiv = "X-UA-Compatible" content = "ie=edge")
+        link(rel = "stylesheet" type = "text/css" href = "stylesheets/forms.css")
+        script(type = "text/javascript" src = "javascripts/validate.js")
+        title CRUD
+    body
+        div(class = "create-title")
+            h1 CRUD
+        div(class = "create-form")
+            form(action = "create" method = "post" onsubmit = "return validate()")
+                h2(class = "create-form-title") create
+                div(class = "create-form-div")
+                    input(type = "text" id = "name" name = "name" placeholder = "name" class = "create-form-input" required)
+                    input(type = "password" id = "password" name = "password" placeholder = "password" class = "create-form-input" required)
+                    input(type = "email" id = "email" name = "email" placeholder = "email" class = "create-form-input" required)
+                    input(type = "submit" value = "create user" class = "create-form-submit")
+            div(class = "create-form-button")
+                a(href = "/")
+                    button(type = "button" class = "create-form-return") return index

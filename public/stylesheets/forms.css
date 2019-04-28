@@ -1,0 +1,94 @@
+* {
+    padding: 0;
+    font-family: sans-serif;
+    box-sizing: border-box;
+}
+body {
+    margin: 0;
+    background: #204862;
+}
+.create-title, .update-title, .delete-title {
+    color: #fff;
+    text-align: center;
+}
+.create-form, .update-form, .delete-form {
+    width: 500px;
+    max-width: 100%;
+    margin: auto;
+    background: white;
+    border-radius: 7px;
+    padding-bottom: 30px;
+    box-shadow: 0 0 20px 1px rgba(0,0,0,0.3);
+    position: relative;
+}
+.create-form-title, .update-form-title, .delete-form-title {
+    background: deepskyblue;
+    color: #fff;
+    padding: 20px;
+    text-align: center;
+    font-weight: 100;
+    font-size: 30px;
+    border-radius: 7px 7px 0px 0px;
+    border-bottom: 5px solid crimson;
+}
+.create-form-div, .update-form-div, .delete-form-div {
+    padding: 10px 30px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+.create-form-input, .update-form-input, .delete-form-input {
+    display: block;
+    width: 100%;
+    font-size: 15px;
+    padding: 15px;
+    border: 1px solid darkgray;
+    border-radius: 3px;
+    margin-bottom: 15px;
+    background: rgba(0, 0, 0, 0.05);
+}
+.create-form-input:focus, .update-form-input:focus, .delete-form-input:focus {
+    outline: 1px solid rgba(0, 0, 0, 0.7);
+}
+.create-form-submit, .update-form-submit, .delete-form-submit {
+    background: deepskyblue;
+    color: #fff;
+    opacity: 1;
+    margin: auto;
+    padding: 10px 30px;
+    cursor: pointer;
+    font-size: 20px;
+    border-radius: 10px;
+    width: 80%;
+}
+.create-form-button, .update-form-button, .delete-form-button {
+    padding: 5px 30px;
+    text-align: center;
+}
+.create-form-return, .update-form-back, .delete-form-back {
+    background: crimson;
+    color: #fff;
+    opacity: 1;
+    margin: auto;
+    padding: 10px 30px;
+    cursor: pointer;
+    font-size: 20px;
+    border-radius: 10px;
+    width: 80%;
+}
+.create-form-submit:hover, .create-form-return:hover, .update-form-submit:hover, .update-form-back:hover, .delete-form-submit:hover, .delete-form-back:hover {
+    opacity: 0.8;
+}
+.create-form-submit:active, .create-form-return:active, .update-form-submit:active, .update-form-back:active, .delete-form-submit:active, .delete-form-back:active {
+    transform: scale(1.05);
+}
+@media(max-width: 768px) {
+    .create-form, .update-form, .delete-form {
+        width: 75%;
+    }
+}
+@media(max-width: 480px) {
+    .create-form, .update-form, .delete-form {
+        width: 95%;
+    }
+}
