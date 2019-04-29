@@ -5,23 +5,50 @@ html(lang = "en")
         meta(name = "viewport" content = "width=device-width, initial-scale=1.0")
         meta(http-equiv = "X-UA-Compatible" content = "ie=edge")
         link(rel = "stylesheet" href = "../stylesheets/groups.css")
-        title CRUD
+        title CONTACTA
     body
         div(class = "update-title")
-            h1 CRUD
+            h1 CONTACTA
         div(class = "update-group")
             h2(class = "update-group-title") update
             each user in users
                 div(class = "update-group-div")
                     p
-                        label name: 
-                        label= user.name
+                        label username: 
+                        label= user.username
                     p
                         label password: 
                         label= user.password
                     p
+                        label account: 
+                        label= user.account
+                    p
+                        label name: 
+                        label= user.name
+                    p
+                        label lastname: 
+                        label= user.lastname
+                    p
+                        label gender: 
+                        label= user.gender
+                    p
+                        label birthdate: 
+                        label= user.birthdate
+                    p
+                        label phonenumber: 
+                        label= user.phonenumber
+                    p
                         label email: 
                         label= user.email
+                    p
+                        label address: 
+                        label= user.address
+                    p
+                        label latitude: 
+                        label= user.coordinate[0]
+                    p
+                        label longitude: 
+                        label= user.coordinate[1]
                     a(href = "update/edit/"+user.id)
                         button(type = "button" class = "update-group-update") update user
             div(class = "update-group-button")

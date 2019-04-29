@@ -4,6 +4,8 @@ import method_override from 'method-override';
 import {connectDB} from './connection';
 import {user_model} from './schema/user';
 import {User} from './class/user';
+import nodemailer from 'nodemailer';
+
 let main = () => {
     let app : express.Application = express();
     app.set('view engine', 'pug');
@@ -20,11 +22,43 @@ let main = () => {
     });
     app.post('/create', (request, response) => {
         connectDB();
-        let name : string = request.body.name;
+        let username : string = request.body.username;
         let password : string = request.body.password;
+        let account : string = request.body.account;
+        let name : string = request.body.name;
+        let lastname : string = request.body.lastname;
+        let gender : string = request.body.gender;
+        let birthdate : string = request.body.birthdate;
+        console.log(request.body.birthdate);
+        console.log(birthdate);
+        let phonenumber : number = request.body.phonenumber;
         let email : string = request.body.email;
-        let user : User = new User(name, password, email);
+        let address : string = request.body.address;
+        let latitude : number = request.body.latitude;
+        let longitude : number = request.body.longitude;
+        let user : User = new User(username, password, account, name, lastname, gender, birthdate, phonenumber, email, address, latitude, longitude);
         let model = new user_model(user);
+        let transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+                user: 'contactaulima@gmail.com',
+                pass: 'ulimasw2'
+            }
+        });
+        let mailOptions = {
+            from: 'contactaulima@gmail.com',
+            to: user.email,
+            subject: 'Asunto',
+            text: 'Hola ' + user.username
+        };
+        transporter.sendMail(mailOptions, (error, info) => {
+            if (error) {
+                console.log(error);
+            }
+            else {
+                console.log('Email sent: '+ info.response);
+            }
+        });
         console.log(model);
         model.save((error) => {
             if(error){
@@ -66,10 +100,19 @@ let main = () => {
     app.put('/update/edit/:id', (request, response) => {
         connectDB();
         let user_id = request.params.id;
-        let name : string = request.body.name;
+        let username : string = request.body.username;
         let password : string = request.body.password;
+        let account : string = request.body.account;
+        let name : string = request.body.name;
+        let lastname : string = request.body.lastname;
+        let gender : string = request.body.gender;
+        let birthdate : string = request.body.birthdate;
+        let phonenumber : number = request.body.phonenumber;
         let email : string = request.body.email;
-        let user = new User(name, password, email);
+        let address : string = request.body.address;
+        let latitude : number = request.body.latitude;
+        let longitude : number = request.body.longitude;
+        let user : User = new User(username, password, account, name, lastname, gender, birthdate, phonenumber, email, address, latitude, longitude);
         user_model.updateOne({_id : user_id}, user, (error) => {
             if(error){
                 console.log(error);

@@ -6,17 +6,44 @@ html(lang = "en")
         meta(http-equiv = "X-UA-Compatible" content = "ie=edge")
         link(rel = "stylesheet" type = "text/css" href = "../../stylesheets/forms.css")
         script(type = "text/javascript" src = "../../javascripts/validate.js")
-        title CRUD
+        title CONTACTA
     body
         div(class = "update-title")
-            h1 CRUD
+            h1 CONTACTA
         div(class = "update-form")
             form(action = user.id+"?_method=put" method = "post" onsubmit = "return validate()")
                 h2(class = "update-form-title") update
                 div(class = "update-form-div")
-                    input(type = "text" id = "name" name = "name" value = user.name placeholder = "name" class = "update-form-input" required)
+                    input(type = "text" id = "username" name = "username" value = user.username placeholder = "username" class = "update-form-input" required)
                     input(type = "password" id = "password" name = "password" value = user.password placeholder = "password" class = "update-form-input" required)
+                    if user.account == "client"
+                        input(type = "radio" id = "account" name = "account" value = "client" class = "update-form-input" checked required)
+                        | client
+                        input(type = "radio" id = "account" name = "account" value = "provider" class = "update-form-input" required)
+                        | provider
+                    else
+                        input(type = "radio" id = "account" name = "account" value = "client" class = "update-form-input" required)
+                        | client
+                        input(type = "radio" id = "account" name = "account" value = "provider" class = "update-form-input" checked required)
+                        | provider
+                    input(type = "text" id = "name" name = "name" value = user.name placeholder = "name" class = "update-form-input" required)
+                    input(type = "text" id = "lastname" name = "lastname" value = user.lastname placeholder = "lastname" class = "update-form-input" required)
+                    if user.gender == "male"
+                        input(type = "radio" id = "gender" name = "gender" value = "male" class = "update-form-input" checked required)
+                        | male
+                        input(type = "radio" id = "gender" name = "gender" value = "female" class = "update-form-input" required)
+                        | female
+                    else
+                        input(type = "radio" id = "gender" name = "gender" value = "male" class = "update-form-input" required)
+                        | male
+                        input(type = "radio" id = "gender" name = "gender" value = "female" class = "update-form-input" checked required)
+                        | female
+                    input(type = "date" id = "birthdate" name = "birthdate" value = user.birthdate pattern = "[0-9]{4}-[0-9]{2}-[0-9]{2}" class = "update-form-input" required)
+                    input(type = "tel" id = "phonenumber" name = "phonenumber" value = user.phonenumber placeholder = "phonenumber" pattern = "[0-9]{9}" class = "update-form-input" required)
                     input(type = "email" id = "email" name = "email" value = user.email placeholder = "email" class = "update-form-input" required)
+                    input(type = "text" id = "address" name = "address" value = user.address placeholder = "address" class = "update-form-input" required)
+                    input(type = "text" id = "latitude" name = "latitude" value = user.coordinate[0] placeholder = "latitude" class = "update-form-input" required)
+                    input(type = "text" id = "longitude" name = "longitude" value = user.coordinate[1] placeholder = "longitude" class = "update-form-input" required)
                     input(type = "submit" value = "update user" class = "update-form-submit")
             div(class = "update-form-button")
                 a(href = "/update")
