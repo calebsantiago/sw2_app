@@ -15,19 +15,16 @@ html(lang = "en")
                 div(class = "show-group-div")
                     p
                         label username: 
-                        label= user.username
+                        label= user.account.username
                     p
                         label password: 
-                        label= user.password
+                        label= user.account.password
                     p
-                        label account: 
-                        label= user.account
-                    p
-                        label name: 
-                        label= user.name
+                        label firstname: 
+                        label= user.name.firstname
                     p
                         label lastname: 
-                        label= user.lastname
+                        label= user.name.lastname
                     p
                         label gender: 
                         label= user.gender
@@ -45,10 +42,10 @@ html(lang = "en")
                         label= user.address
                     p
                         label latitude: 
-                        label= user.coordinate[0]
+                        label= user.coordinate.latitude
                     p
                         label longitude: 
-                        label= user.coordinate[1]
+                        label= user.coordinate.longitude
             div(class = "show-group-button")
                 a(href = "/")
                     button(type = "button" class = "show-group-return") return index

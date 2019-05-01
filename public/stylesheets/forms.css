@@ -47,6 +47,10 @@ body {
     margin-bottom: 15px;
     background: rgba(0, 0, 0, 0.05);
 }
+.create-form-map {
+    height: 350px;
+	width: 680px;
+}
 .create-form-input:focus, .update-form-input:focus, .delete-form-input:focus {
     outline: 1px solid rgba(0, 0, 0, 0.7);
 }

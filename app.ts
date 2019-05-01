@@ -3,8 +3,9 @@ import bodyParser from 'body-parser';
 import method_override from 'method-override';
 import {connectDB} from './connection';
 import {user_model} from './schema/user';
-import {User} from './class/user';
-import nodemailer from 'nodemailer';
+import {client_model} from './schema/client';
+import {Client} from './class/client';
+import {Provider} from './class/provider';
 
 let main = () => {
     let app : express.Application = express();
@@ -21,51 +22,35 @@ let main = () => {
         response.render('create');
     });
     app.post('/create', (request, response) => {
-        connectDB();
         let username : string = request.body.username;
         let password : string = request.body.password;
+        let image : string = request.body.image;
         let account : string = request.body.account;
-        let name : string = request.body.name;
+        let firstname : string = request.body.firstname;
         let lastname : string = request.body.lastname;
         let gender : string = request.body.gender;
+        let idcard : number = request.body.idcard;
         let birthdate : string = request.body.birthdate;
-        console.log(request.body.birthdate);
-        console.log(birthdate);
         let phonenumber : number = request.body.phonenumber;
         let email : string = request.body.email;
         let address : string = request.body.address;
         let latitude : number = request.body.latitude;
         let longitude : number = request.body.longitude;
-        let user : User = new User(username, password, account, name, lastname, gender, birthdate, phonenumber, email, address, latitude, longitude);
-        let model = new user_model(user);
-        let transporter = nodemailer.createTransport({
-            service: 'gmail',
-            auth: {
-                user: 'contactaulima@gmail.com',
-                pass: 'ulimasw2'
-            }
-        });
-        let mailOptions = {
-            from: 'contactaulima@gmail.com',
-            to: user.email,
-            subject: 'Asunto',
-            text: 'Hola ' + user.username
-        };
-        transporter.sendMail(mailOptions, (error, info) => {
-            if (error) {
-                console.log(error);
-            }
-            else {
-                console.log('Email sent: '+ info.response);
-            }
-        });
-        console.log(model);
-        model.save((error) => {
-            if(error){
-                console.log(error);
-            }
-            response.redirect('/');
-        });
+        let video : string = request.body.video;
+        let description : string = request.body.description;
+        let certificate : string = request.body.certificate;
+        let service : string = request.body.service;
+        if (account === 'client') {
+            let user : Client = new Client(username, password, image, account, firstname, lastname, gender, birthdate, phonenumber, email, address, latitude, longitude);
+            user.createAccount();
+            user.sendMail();
+        }
+        else {
+            let user : Provider = new Provider(username, password, image, account, firstname, lastname, gender, birthdate, phonenumber, email, address, latitude, longitude, idcard, video, description, certificate, service);
+            user.createAccount();
+            user.sendMail();
+        }
+        response.redirect('/');
     });
     app.get('/show', (request, response) => {
         connectDB();
@@ -79,7 +64,7 @@ let main = () => {
     });
     app.get('/update', (request, response) => {
         connectDB();
-        user_model.find((error, document) => {
+        client_model.find((error, document) => {
             if(error){
                 console.log(error);
             }
@@ -89,7 +74,7 @@ let main = () => {
     app.get('/update/edit/:id', (request, response) => {
         connectDB();
         let user_id = request.params.id;
-        user_model.findOne({_id : user_id}, (error, document) => {
+        client_model.findOne({_id : user_id}, (error, document) => {
             if(error){
                 console.log(error);
             }
@@ -98,12 +83,12 @@ let main = () => {
         });
     });
     app.put('/update/edit/:id', (request, response) => {
-        connectDB();
-        let user_id = request.params.id;
+        let user_id : string = request.params.id;
         let username : string = request.body.username;
+        let image : string = request.body.image;
         let password : string = request.body.password;
         let account : string = request.body.account;
-        let name : string = request.body.name;
+        let firstname : string = request.body.firstname;
         let lastname : string = request.body.lastname;
         let gender : string = request.body.gender;
         let birthdate : string = request.body.birthdate;
@@ -112,17 +97,13 @@ let main = () => {
         let address : string = request.body.address;
         let latitude : number = request.body.latitude;
         let longitude : number = request.body.longitude;
-        let user : User = new User(username, password, account, name, lastname, gender, birthdate, phonenumber, email, address, latitude, longitude);
-        user_model.updateOne({_id : user_id}, user, (error) => {
-            if(error){
-                console.log(error);
-            }
-            response.redirect('/');
-        });
+        let user : Client = new Client(username, password, image, account, firstname, lastname, gender, birthdate, phonenumber, email, address, latitude, longitude);
+        user.updateAccount(user_id);
+        response.redirect('/');
     });
     app.get('/delete', (request, response) => {
         connectDB();
-        user_model.find((error, document) => {
+        client_model.find((error, document) => {
             if(error){
                 console.log(error);
             }
@@ -132,7 +113,7 @@ let main = () => {
     app.get('/delete/drop/:id', (request, response) => {
         connectDB();
         let user_id = request.params.id;
-        user_model.findOne({_id : user_id}, (error, document) => {
+        client_model.findOne({_id : user_id}, (error, document) => {
             if(error){
                 console.log(error);
             }
@@ -141,14 +122,10 @@ let main = () => {
         });
     });
     app.delete('/delete/drop/:id', (request, response) => {
-        connectDB();
         let user_id = request.params.id;
-        user_model.deleteOne({_id : user_id}, (error) => {
-            if(error){
-                console.log(error);
-            }
-            response.redirect('/');
-        });
+        let user : Client = new Client("", "", "", "", "", "", "", "", 0, "", "", 0, 0);
+        user.deleteAccount(user_id);
+        response.redirect('/');
     });
     module.exports = app;
 };

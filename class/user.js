@@ -1,11 +1,16 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
+var nodemailer_1 = __importDefault(require("nodemailer"));
 var User = /** @class */ (function () {
-    function User(username, password, account, name, lastname, gender, birthdate, phonenumber, email, address, latitude, longitude) {
+    function User(username, password, image, account, firstname, lastname, gender, birthdate, phonenumber, email, address, latitude, longitude) {
         this.username = username;
         this.password = password;
+        this.image = image;
         this.account = account;
-        this.name = name;
+        this.firstname = firstname;
         this.lastname = lastname;
         this.gender = gender;
         this.birthdate = birthdate;
@@ -26,17 +31,23 @@ var User = /** @class */ (function () {
     User.prototype.setPassword = function (password) {
         this.password = password;
     };
+    User.prototype.getImage = function () {
+        return this.image;
+    };
+    User.prototype.setImage = function (image) {
+        this.image = image;
+    };
     User.prototype.getAccount = function () {
         return this.account;
     };
     User.prototype.setAccount = function (account) {
         this.account = account;
     };
-    User.prototype.getName = function () {
-        return this.name;
+    User.prototype.getFirstname = function () {
+        return this.firstname;
     };
-    User.prototype.setName = function (name) {
-        this.name = name;
+    User.prototype.setFirstname = function (firstname) {
+        this.firstname = firstname;
     };
     User.prototype.getLastname = function () {
         return this.lastname;
@@ -80,14 +91,28 @@ var User = /** @class */ (function () {
     User.prototype.setCoordinate = function (latitude, longitude) {
         this.coordinate = [latitude, longitude];
     };
-    User.prototype.createAccount = function () {
-        console.log('create account');
-    };
-    User.prototype.updateAccount = function () {
-        console.log('update account');
-    };
-    User.prototype.deleteAccount = function () {
-        console.log('delete account');
+    User.prototype.sendMail = function () {
+        var transporter = nodemailer_1.default.createTransport({
+            service: 'gmail',
+            auth: {
+                user: 'contactaulima@gmail.com',
+                pass: 'ulimasw2'
+            }
+        });
+        var mailOptions = {
+            from: 'contactaulima@gmail.com',
+            to: this.getEmail(),
+            subject: 'Asunto',
+            text: 'Hola ' + this.getUsername()
+        };
+        transporter.sendMail(mailOptions, function (error, info) {
+            if (error) {
+                console.log(error);
+            }
+            else {
+                console.log('Email sent: ' + info.response);
+            }
+        });
     };
     User.prototype.logIn = function () {
         console.log('log in');

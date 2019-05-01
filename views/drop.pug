@@ -14,8 +14,8 @@ html(lang = "en")
             form(action = user.id+"?_method=delete" method = "post" onsubmit = "return validate()")
                 h2(class = "delete-form-title") delete
                 div(class = "delete-form-div")
-                    input(type = "text" id = "username" name = "username" value = user.username class = "delete-form-input" readonly)
-                    input(type = "password" id = "password" name = "password" value = user.password class = "delete-form-input" readonly)
+                    input(type = "text" id = "username" name = "username" value = user.account.username class = "delete-form-input" readonly)
+                    input(type = "password" id = "password" name = "password" value = user.account.password class = "delete-form-input" readonly)
                     if user.account == "client"
                         input(type = "radio" id = "account" name = "account" value = "client" class = "delete-form-input" checked disabled)
                         | client
@@ -26,8 +26,8 @@ html(lang = "en")
                         | client
                         input(type = "radio" id = "account" name = "account" value = "provider" class = "delete-form-input" checked disabled)
                         | provider
-                    input(type = "text" id = "name" name = "name" value = user.name class = "delete-form-input" readonly)
-                    input(type = "text" id = "lastname" name = "lastname" value = user.lastname class = "delete-form-input" readonly)
+                    input(type = "text" id = "firstname" name = "firstname" value = user.name.firstname class = "delete-form-input" readonly)
+                    input(type = "text" id = "lastname" name = "lastname" value = user.name.lastname class = "delete-form-input" readonly)
                     if user.gender == "male"
                         input(type = "radio" id = "gender" name = "gender" value = "male" class = "delete-form-input" checked disabled)
                         | male
@@ -42,8 +42,8 @@ html(lang = "en")
                     input(type = "tel" id = "phonenumber" name = "phonenumber" value = user.phonenumber class = "delete-form-input" readonly)
                     input(type = "email" id = "email" name = "email" value = user.email class = "delete-form-input" readonly)
                     input(type = "text" id = "address" name = "address" value = user.address class = "delete-form-input" readonly)
-                    input(type = "text" id = "latitude" name = "latitude" value = user.coordinate[0] class = "delete-form-input" readonly)
-                    input(type = "text" id = "longitude" name = "longitude" value = user.coordinate[1] class = "delete-form-input" readonly)
+                    input(type = "text" id = "latitude" name = "latitude" value = user.coordinate.latitude class = "delete-form-input" readonly)
+                    input(type = "text" id = "longitude" name = "longitude" value = user.coordinate.longitude class = "delete-form-input" readonly)
                     input(type = "submit" value = "delete user" class = "delete-form-submit")
             div(class = "delete-form-button")
                 a(href = "/delete")

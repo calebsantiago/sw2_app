@@ -12,22 +12,127 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 var user_1 = require("./user");
+var connection_1 = require("../connection");
+var provider_1 = require("../schema/provider");
+var mongoose_1 = __importDefault(require("mongoose"));
 var Provider = /** @class */ (function (_super) {
     __extends(Provider, _super);
-    function Provider(username, password, account, name, lastname, gender, birthdate, phonenumber, email, address, latitude, longitude, idcard, service, description) {
-        var _this = _super.call(this, username, password, account, name, lastname, gender, birthdate, phonenumber, email, address, latitude, longitude) || this;
+    function Provider(username, password, image, account, firstname, lastname, gender, birthdate, phonenumber, email, address, latitude, longitude, idcard, video, description, certificate, service) {
+        var _this = _super.call(this, username, password, image, account, firstname, lastname, gender, birthdate, phonenumber, email, address, latitude, longitude) || this;
         _this.idcard = idcard;
-        _this.service = [service];
+        _this.video = video;
         _this.description = description;
+        _this.certificate = certificate;
+        _this.service = [service];
         return _this;
     }
+    Provider.prototype.createAccount = function () {
+        connection_1.connectDB();
+        var model = new provider_1.provider_model({
+            _id: new mongoose_1.default.Types.ObjectId(),
+            account: {
+                username: this.getUsername(),
+                password: this.getPassword(),
+                image: this.getImage()
+            },
+            name: {
+                firstname: this.getFirstname(),
+                lastname: this.getLastname()
+            },
+            gender: this.getGender(),
+            birthdate: this.getBirthdate(),
+            idcard: this.getIdcard(),
+            phonenumber: this.getPhonenumber(),
+            email: this.getEmail(),
+            address: this.getAddres(),
+            coordinate: {
+                latitude: this.getCoordinate()[0],
+                longitude: this.getCoordinate()[1]
+            },
+            video: this.getVideo(),
+            description: this.getDescription(),
+            certificate: this.getCertificate(),
+            service: {
+                title: this.getService()[0]
+            }
+        });
+        console.log(model);
+        model.save(function (error) {
+            if (error) {
+                console.log(error);
+            }
+        });
+    };
+    Provider.prototype.updateAccount = function (id) {
+        connection_1.connectDB();
+        provider_1.provider_model.updateOne({ _id: id }, {
+            account: {
+                username: this.getUsername(),
+                password: this.getPassword(),
+                image: this.getImage()
+            },
+            name: {
+                firstname: this.getFirstname(),
+                lastname: this.getLastname()
+            },
+            gender: this.getGender(),
+            birthdate: this.getBirthdate(),
+            idcard: this.getIdcard(),
+            phonenumber: this.getPhonenumber(),
+            email: this.getEmail(),
+            address: this.getAddres(),
+            coordinate: {
+                latitude: this.getCoordinate()[0],
+                longitude: this.getCoordinate()[1]
+            },
+            video: this.getVideo(),
+            description: this.getDescription(),
+            certificate: this.getCertificate(),
+            service: {
+                type: this.getService()
+            }
+        }, function (error) {
+            if (error) {
+                console.log(error);
+            }
+        });
+    };
+    Provider.prototype.deleteAccount = function (id) {
+        connection_1.connectDB();
+        provider_1.provider_model.deleteOne({ _id: id }, function (error) {
+            if (error) {
+                console.log(error);
+            }
+        });
+    };
     Provider.prototype.getIdcard = function () {
         return this.idcard;
     };
     Provider.prototype.setIdcard = function (idcard) {
         this.idcard = idcard;
+    };
+    Provider.prototype.getVideo = function () {
+        return this.video;
+    };
+    Provider.prototype.setVideo = function (video) {
+        this.video = video;
+    };
+    Provider.prototype.getDescription = function () {
+        return this.description;
+    };
+    Provider.prototype.setDescription = function (description) {
+        this.description = description;
+    };
+    Provider.prototype.getCertificate = function () {
+        return this.certificate;
+    };
+    Provider.prototype.setCertificate = function (certificate) {
+        this.certificate = certificate;
     };
     Provider.prototype.getService = function () {
         return this.service;
@@ -46,12 +151,6 @@ var Provider = /** @class */ (function (_super) {
         if (state == true) {
             this.service.splice(index, 1, newService);
         }
-    };
-    Provider.prototype.getDescription = function () {
-        return this.description;
-    };
-    Provider.prototype.setDescription = function (description) {
-        this.description = description;
     };
     Provider.prototype.addService = function (service) {
         this.service.splice(service.length, 0, service);
