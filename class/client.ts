@@ -7,6 +7,31 @@ export class Client extends User {
     constructor(username : string, password : string, image : string, account : string, firstname : string, lastname : string, gender : string, birthdate : string, phonenumber : number, email : string, address :  string, latitude : number, longitude : number) {
         super(username, password, image, account, firstname, lastname, gender, birthdate, phonenumber, email, address, latitude, longitude);
     }
+    /*public validateUsername() : boolean {
+        connectDB();
+        let state : boolean = false;
+        let doc : object = client_model.findOne({'account.username' : this.getUsername()}, (error, document) => {
+            if(error){
+                console.log(error);
+            }
+        }).lean();
+        console.log(doc);
+
+        
+        let doc = (done : any) => {
+            client_model.findOne({'account.username' : this.getUsername()}, (error, document) => {
+                if (error) {
+                    return done(error);
+                }
+                return done(document);
+            });
+        }
+        if (doc != null){
+            console.log('si existe');
+            console.log(doc);
+        }
+        return state;
+    }*/
     public createAccount() : void {
         connectDB();
         let model = new client_model({
@@ -33,11 +58,31 @@ export class Client extends User {
         console.log(model);
         model.save((error) => {
             if(error) {
-                console.log(error);
+                 console.log(error);
             }
         });
     }
-    public updateAccount(id : string) {
+    public validateAccount(username : string, password : string) : void {
+        connectDB();
+        client_model.findOne({'account.username' : username}, (error, document) => {
+            if(error) {
+                console.log(error);
+            }
+            console.log(document);
+            if(document != null) {
+                if (username === document.toObject().account.username && password === document.toObject().account.password){
+                    console.log('welcome ' + username);
+                }
+                else {
+                    console.log('passwords does not match');
+                }
+            }
+            else {
+                console.log('username does not exist');
+            }
+        });
+    }
+    public updateAccount(id : string) : void {
         connectDB();
         client_model.updateOne({_id : id}, {
             account : {

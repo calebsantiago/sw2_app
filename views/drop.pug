@@ -11,7 +11,7 @@ html(lang = "en")
         div(class = "delete-title")
             h1 CONTACTA
         div(class = "delete-form")
-            form(action = user.id+"?_method=delete" method = "post" onsubmit = "return validate()")
+            form(action = user._id+"?_method=delete" method = "post" onsubmit = "return validate()")
                 h2(class = "delete-form-title") delete
                 div(class = "delete-form-div")
                     input(type = "text" id = "username" name = "username" value = user.account.username class = "delete-form-input" readonly)

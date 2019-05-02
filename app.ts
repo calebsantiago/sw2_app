@@ -42,14 +42,30 @@ let main = () => {
         let service : string = request.body.service;
         if (account === 'client') {
             let user : Client = new Client(username, password, image, account, firstname, lastname, gender, birthdate, phonenumber, email, address, latitude, longitude);
-            user.createAccount();
-            user.sendMail();
+            /*let state : boolean = user.validateUsername();
+            if (state == true) {
+                console.log('username already exists');
+            }
+            else {*/
+                user.createAccount();
+                user.sendMail();
+            //}
         }
         else {
             let user : Provider = new Provider(username, password, image, account, firstname, lastname, gender, birthdate, phonenumber, email, address, latitude, longitude, idcard, video, description, certificate, service);
             user.createAccount();
             user.sendMail();
         }
+        response.redirect('/');
+    });
+    app.get('/signin', (request, response) => {
+        response.render('signin');
+    });
+    app.post('/signin', (request, response) => {
+        let username : string = request.body.username;
+        let password : string = request.body.password;
+        let user : Client = new Client(username, password, "", "", "", "", "", "", 0, "", "", 0, 0);
+        user.validateAccount(username, password);
         response.redirect('/');
     });
     app.get('/show', (request, response) => {
@@ -110,19 +126,14 @@ let main = () => {
             response.render('delete', {users : document});
         });
     });
-    app.get('/delete/drop/:id', (request, response) => {
+    /*app.get('/delete/drop/:_id', (request, response) => {
         connectDB();
-        let user_id = request.params.id;
-        client_model.findOne({_id : user_id}, (error, document) => {
-            if(error){
-                console.log(error);
-            }
-            console.log(document);
-            response.render('drop', {user : document});
-        });
-    });
-    app.delete('/delete/drop/:id', (request, response) => {
-        let user_id = request.params.id;
+        let user_id = request.params._id;
+        let user : Client = new Client("", "", "", "", "", "", "", "", 0, "", "", 0, 0);
+        response.render('drop', {user : user.selectAccount(user_id)});
+    });*/
+    app.delete('/delete/drop/:_id', (request, response) => {
+        let user_id = request.params._id;
         let user : Client = new Client("", "", "", "", "", "", "", "", 0, "", "", 0, 0);
         user.deleteAccount(user_id);
         response.redirect('/');

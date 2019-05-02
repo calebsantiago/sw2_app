@@ -18,42 +18,79 @@ export class Provider extends User {
     }
     public createAccount() : void {
         connectDB();
-        let model = new provider_model({
-            _id: new mongoose.Types.ObjectId(),
-            account : {
-                username : this.getUsername(),
-                password : this.getPassword(),
-                image : this.getImage()
-            },
-            name : {
-                firstname : this.getFirstname(),
-                lastname : this.getLastname()
-            },
-            gender : this.getGender(),
-            birthdate : this.getBirthdate(),
-            idcard : this.getIdcard(),
-            phonenumber : this.getPhonenumber(),
-            email : this.getEmail(),
-            address :  this.getAddres(),
-            coordinate : {
-                latitude : this.getCoordinate()[0],
-                longitude : this.getCoordinate()[1]
-            },
-            video : this.getVideo(),
-            description : this.getDescription(),
-            certificate : this.getCertificate(),
-            service : {
-                title : this.getService()[0]
-            }
-        });
-        console.log(model);
-        model.save((error) => {
+        provider_model.findOne({'account.username' : this.getUsername()}, (error, document) => {
             if(error) {
                 console.log(error);
             }
+            if (document != null) {
+                console.log('username already exists')
+            }
+            else {
+                let model = new provider_model({
+                    _id: new mongoose.Types.ObjectId(),
+                    account : {
+                        username : this.getUsername(),
+                        password : this.getPassword(),
+                        image : this.getImage()
+                    },
+                    name : {
+                        firstname : this.getFirstname(),
+                        lastname : this.getLastname()
+                    },
+                    gender : this.getGender(),
+                    birthdate : this.getBirthdate(),
+                    idcard : this.getIdcard(),
+                    phonenumber : this.getPhonenumber(),
+                    email : this.getEmail(),
+                    address :  this.getAddres(),
+                    coordinate : {
+                        latitude : this.getCoordinate()[0],
+                        longitude : this.getCoordinate()[1]
+                    },
+                    video : this.getVideo(),
+                    description : this.getDescription(),
+                    certificate : this.getCertificate(),
+                    service : {
+                        title : this.getService()[0]
+                    }
+                });
+                console.log(model);
+                model.save((error) => {
+                    if(error) {
+                        console.log(error);
+                    }
+                });
+            }
         });
     }
-    public updateAccount(id : string) {
+    public selectAccount(id : string) : void {
+        connectDB();
+        provider_model.findOne({_id : id}, (error, document) => {
+            if(error) {
+                console.log(error);
+            }
+            console.log(document);
+            if (document != null){
+                /*this.setUserName(document.account.username);
+                this.setPassword(document.account.password);
+                this.setImage(document.account.image);
+                this.setFirstname(document.name.firstname);
+                this.setLastname(document.name.lastname);
+                this.setGender(document.gender);
+                this.setBirthdate(document.birthdate);
+                this.setPhonenumber(document.phonenumber);
+                this.setEmail(document.email);
+                this.setAddress(document.address);
+                this.setCoordinate(document.coordinate.latitude, document.coordinate.longitude);
+                */    
+                return document;
+            }
+        });
+    }
+    public validateAccount(username : string, password : string) : void {
+
+    }
+    public updateAccount(id : string) : void {
         connectDB();
         provider_model.updateOne({_id : id}, {
             account : {

@@ -100,6 +100,7 @@ export abstract class User {
 		this.coordinate = [latitude, longitude];
   }
   public abstract createAccount() : void
+  public abstract validateAccount(username : string, password : string) : void
   public abstract updateAccount(id : string) : void
   public abstract deleteAccount(id : string) : void
   public sendMail() : void {
@@ -127,6 +128,7 @@ export abstract class User {
   }
   public logIn() : void {
     console.log('log in');
+
   }
   public logOut() : void {
     console.log('log out');

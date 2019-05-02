@@ -25,6 +25,31 @@ var Client = /** @class */ (function (_super) {
     function Client(username, password, image, account, firstname, lastname, gender, birthdate, phonenumber, email, address, latitude, longitude) {
         return _super.call(this, username, password, image, account, firstname, lastname, gender, birthdate, phonenumber, email, address, latitude, longitude) || this;
     }
+    /*public validateUsername() : boolean {
+        connectDB();
+        let state : boolean = false;
+        let doc : object = client_model.findOne({'account.username' : this.getUsername()}, (error, document) => {
+            if(error){
+                console.log(error);
+            }
+        }).lean();
+        console.log(doc);
+
+        
+        let doc = (done : any) => {
+            client_model.findOne({'account.username' : this.getUsername()}, (error, document) => {
+                if (error) {
+                    return done(error);
+                }
+                return done(document);
+            });
+        }
+        if (doc != null){
+            console.log('si existe');
+            console.log(doc);
+        }
+        return state;
+    }*/
     Client.prototype.createAccount = function () {
         connection_1.connectDB();
         var model = new client_1.client_model({
@@ -52,6 +77,27 @@ var Client = /** @class */ (function (_super) {
         model.save(function (error) {
             if (error) {
                 console.log(error);
+            }
+        });
+    };
+    Client.prototype.validateAccount = function (username, password) {
+        connection_1.connectDB();
+        client_1.client_model.findOne({ 'account.username': username }, function (error, document) {
+            if (error) {
+                console.log(error);
+            }
+            console.log(document);
+            if (document != null) {
+                console.log('username exists');
+                if (username.toLocaleLowerCase() === document.toObject().account.username.toLocaleLowerCase() && password === document.toObject().account.password) {
+                    console.log('welcome ' + username);
+                }
+                else {
+                    console.log('passwords does not match');
+                }
+            }
+            else {
+                console.log('username not exists');
             }
         });
     };

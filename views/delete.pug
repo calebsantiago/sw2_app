@@ -46,7 +46,7 @@ html(lang = "en")
                     p
                         label longitude: 
                         label= user.coordinate.longitude
-                    a(href = "delete/drop/"+user.id)
+                    a(href = "delete/drop/"+user._id)
                         button(type = "button" class = "delete-group-delete") delete user
             div(class = "delete-group-button")
                 a(href = "/")

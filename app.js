@@ -46,14 +46,30 @@ var main = function () {
         var service = request.body.service;
         if (account === 'client') {
             var user = new client_2.Client(username, password, image, account, firstname, lastname, gender, birthdate, phonenumber, email, address, latitude, longitude);
+            /*let state : boolean = user.validateUsername();
+            if (state == true) {
+                console.log('username already exists');
+            }
+            else {*/
             user.createAccount();
             user.sendMail();
+            //}
         }
         else {
             var user = new provider_1.Provider(username, password, image, account, firstname, lastname, gender, birthdate, phonenumber, email, address, latitude, longitude, idcard, video, description, certificate, service);
             user.createAccount();
             user.sendMail();
         }
+        response.redirect('/');
+    });
+    app.get('/signin', function (request, response) {
+        response.render('signin');
+    });
+    app.post('/signin', function (request, response) {
+        var username = request.body.username;
+        var password = request.body.password;
+        var user = new client_2.Client(username, password, "", "", "", "", "", "", 0, "", "", 0, 0);
+        user.validateAccount(username, password);
         response.redirect('/');
     });
     app.get('/show', function (request, response) {
@@ -114,19 +130,14 @@ var main = function () {
             response.render('delete', { users: document });
         });
     });
-    app.get('/delete/drop/:id', function (request, response) {
-        connection_1.connectDB();
-        var user_id = request.params.id;
-        client_1.client_model.findOne({ _id: user_id }, function (error, document) {
-            if (error) {
-                console.log(error);
-            }
-            console.log(document);
-            response.render('drop', { user: document });
-        });
-    });
-    app.delete('/delete/drop/:id', function (request, response) {
-        var user_id = request.params.id;
+    /*app.get('/delete/drop/:_id', (request, response) => {
+        connectDB();
+        let user_id = request.params._id;
+        let user : Client = new Client("", "", "", "", "", "", "", "", 0, "", "", 0, 0);
+        response.render('drop', {user : user.selectAccount(user_id)});
+    });*/
+    app.delete('/delete/drop/:_id', function (request, response) {
+        var user_id = request.params._id;
         var user = new client_2.Client("", "", "", "", "", "", "", "", 0, "", "", 0, 0);
         user.deleteAccount(user_id);
         response.redirect('/');
