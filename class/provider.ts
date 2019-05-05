@@ -8,8 +8,8 @@ export class Provider extends User {
     description : string;
     certificate : string;
     service : string[];
-    constructor(username : string, password : string, image : string, account : string, firstname : string, lastname : string, gender : string, birthdate : string, phonenumber : number, email : string, address :  string, latitude : number, longitude : number, idcard : number, video : string, description : string, certificate : string, service : string) {
-        super(username, password, image, account, firstname, lastname, gender, birthdate, phonenumber, email, address, latitude, longitude);
+    constructor(firstname : string, lastname : string, gender : string, birthdate : string, phonenumber : number, email : string, password : string, image : string, address :  string, latitude : number, longitude : number, idcard : number, video : string, description : string, certificate : string, service : string) {
+        super(firstname, lastname, gender, birthdate, phonenumber, email, password, image, address, latitude, longitude);
         this.idcard = idcard;
         this.video = video;
         this.description = description;
@@ -18,18 +18,18 @@ export class Provider extends User {
     }
     public createAccount() : void {
         connectDB();
-        provider_model.findOne({'account.username' : this.getUsername()}, (error, document) => {
+        provider_model.findOne({'account.email' : this.getEmail()}, (error, document) => {
             if(error) {
                 console.log(error);
             }
             if (document != null) {
-                console.log('username already exists')
+                console.log('email already exists')
             }
             else {
                 let model = new provider_model({
                     _id: new mongoose.Types.ObjectId(),
                     account : {
-                        username : this.getUsername(),
+                        email : this.getEmail(),
                         password : this.getPassword(),
                         image : this.getImage()
                     },
@@ -41,7 +41,6 @@ export class Provider extends User {
                     birthdate : this.getBirthdate(),
                     idcard : this.getIdcard(),
                     phonenumber : this.getPhonenumber(),
-                    email : this.getEmail(),
                     address :  this.getAddres(),
                     coordinate : {
                         latitude : this.getCoordinate()[0],
@@ -55,7 +54,7 @@ export class Provider extends User {
                     }
                 });
                 console.log(model);
-                model.save((error) => {
+                model.save((error :  any) => {
                     if(error) {
                         console.log(error);
                     }
@@ -70,31 +69,19 @@ export class Provider extends User {
                 console.log(error);
             }
             console.log(document);
-            if (document != null){
-                /*this.setUserName(document.account.username);
-                this.setPassword(document.account.password);
-                this.setImage(document.account.image);
-                this.setFirstname(document.name.firstname);
-                this.setLastname(document.name.lastname);
-                this.setGender(document.gender);
-                this.setBirthdate(document.birthdate);
-                this.setPhonenumber(document.phonenumber);
-                this.setEmail(document.email);
-                this.setAddress(document.address);
-                this.setCoordinate(document.coordinate.latitude, document.coordinate.longitude);
-                */    
+            if (document != null){   
                 return document;
             }
         });
     }
-    public validateAccount(username : string, password : string) : void {
+    public validateAccount(email : string, password : string) : void {
 
     }
     public updateAccount(id : string) : void {
         connectDB();
         provider_model.updateOne({_id : id}, {
             account : {
-                username : this.getUsername(),
+                email : this.getEmail(),
                 password : this.getPassword(),
                 image : this.getImage()
             },
@@ -106,7 +93,6 @@ export class Provider extends User {
             birthdate : this.getBirthdate(),
             idcard : this.getIdcard(),
             phonenumber : this.getPhonenumber(),
-            email : this.getEmail(),
             address :  this.getAddres(),
             coordinate : {
                 latitude : this.getCoordinate()[0],

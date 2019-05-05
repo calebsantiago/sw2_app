@@ -15,6 +15,14 @@ write in command prompt:
 - npm install @types/method-override --save
 - npm install nodemailer --save
 - npm install @types/nodemailer --save
+- npm install passport --save
+- npm install @types/passport --save
+- npm install express-session --save
+- npm install @types/express-session --save
+- npm install connect-flash --save
+- npm install @types/connect-flash --save
+- npm install bcryptjs --save
+- npm install @types/bcryptjs --save
 - npm install body-parser --save
 - npm install pug --save
 - npm init

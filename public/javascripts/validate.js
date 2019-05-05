@@ -1,8 +1,4 @@
 function validate() {
-    var username = document.getElementById("username").value;
-    var password = document.getElementById("password").value;
-    var image = document.getElementById("image").value;
-    var account = document.getElementById("account").value;
     var firstname = document.getElementById("firstname").value;
     var lastname = document.getElementById("lastname").value;
     var gender = document.getElementById("gender").value;
@@ -10,6 +6,9 @@ function validate() {
     var birthdate = document.getElementById("birthdate").value;
     var phonenumber = document.getElementById("phonenumber").value;
     var email = document.getElementById("email").value;
+    var password = document.getElementById("password").value;
+    var image = document.getElementById("image").value;
+    var account = document.getElementById("account").value;
     var address = document.getElementById("address").value;
     var latitude = document.getElementById("latitude").value;
     var longitude = document.getElementById("longitude").value;
@@ -22,7 +21,7 @@ function validate() {
     var date_expression = /[0-9]{4}-[0-9]{2}-[0-9]{2}/;
     var phone_expression = /[0-9]{9}/;
     var email_expression = /[^@\s]+@[^@\s]+\.[^@\s]+/;
-    if(username === "" || password === "" || account === "" || firstname === "" || lastname === "" || gender === "" || birthdate === "" || phonenumber === "" || email === "" || address === "" || latitude === "" || longitude === "") {
+    if(firstname === "" || lastname === "" || gender === "" || birthdate === "" || phonenumber === "" || email === "" || password === "" || account === "" || address === "" || latitude === "" || longitude === "") {
         alert("you must complete fields");
         return false;
     }

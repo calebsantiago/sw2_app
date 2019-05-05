@@ -2,42 +2,16 @@ import {User} from './user';
 import {connectDB} from '../connection';
 import {client_model} from '../schema/client';
 import mongoose from 'mongoose';
-
 export class Client extends User {
-    constructor(username : string, password : string, image : string, account : string, firstname : string, lastname : string, gender : string, birthdate : string, phonenumber : number, email : string, address :  string, latitude : number, longitude : number) {
-        super(username, password, image, account, firstname, lastname, gender, birthdate, phonenumber, email, address, latitude, longitude);
+    constructor(firstname : string, lastname : string, gender : string, birthdate : string, phonenumber : number, email : string, password : string, image : string, address :  string, latitude : number, longitude : number) {
+        super(firstname, lastname, gender, birthdate, phonenumber, email, password, image, address, latitude, longitude);
     }
-    /*public validateUsername() : boolean {
-        connectDB();
-        let state : boolean = false;
-        let doc : object = client_model.findOne({'account.username' : this.getUsername()}, (error, document) => {
-            if(error){
-                console.log(error);
-            }
-        }).lean();
-        console.log(doc);
-
-        
-        let doc = (done : any) => {
-            client_model.findOne({'account.username' : this.getUsername()}, (error, document) => {
-                if (error) {
-                    return done(error);
-                }
-                return done(document);
-            });
-        }
-        if (doc != null){
-            console.log('si existe');
-            console.log(doc);
-        }
-        return state;
-    }*/
     public createAccount() : void {
         connectDB();
         let model = new client_model({
             _id: new mongoose.Types.ObjectId(),
             account : {
-                username : this.getUsername(),
+                email : this.getEmail(),
                 password : this.getPassword(),
                 image : this.getImage()
             },
@@ -48,7 +22,6 @@ export class Client extends User {
             gender : this.getGender(),
             birthdate : this.getBirthdate(),
             phonenumber : this.getPhonenumber(),
-            email : this.getEmail(),
             address :  this.getAddres(),
             coordinate : {
                 latitude : this.getCoordinate()[0],
@@ -56,29 +29,29 @@ export class Client extends User {
             }
         });
         console.log(model);
-        model.save((error) => {
+        model.save((error : any) => {
             if(error) {
                  console.log(error);
             }
         });
     }
-    public validateAccount(username : string, password : string) : void {
+    public validateAccount(email : string, password : string) : void {
         connectDB();
-        client_model.findOne({'account.username' : username}, (error, document) => {
+        client_model.findOne({'account.email' : email}, (error, document) => {
             if(error) {
                 console.log(error);
             }
             console.log(document);
             if(document != null) {
-                if (username === document.toObject().account.username && password === document.toObject().account.password){
-                    console.log('welcome ' + username);
+                if (email === document.toObject().account.email && password === document.toObject().account.password) {
+                    console.log('welcome ' + email);
                 }
                 else {
                     console.log('passwords does not match');
                 }
             }
             else {
-                console.log('username does not exist');
+                console.log('email does not exist');
             }
         });
     }
@@ -86,7 +59,7 @@ export class Client extends User {
         connectDB();
         client_model.updateOne({_id : id}, {
             account : {
-                username : this.getUsername(),
+                email : this.getEmail(),
                 password : this.getPassword(),
                 image : this.getImage()
             },
@@ -97,7 +70,6 @@ export class Client extends User {
             gender : this.getGender(),
             birthdate : this.getBirthdate(),
             phonenumber : this.getPhonenumber(),
-            email : this.getEmail(),
             address :  this.getAddres(),
             coordinate : {
                 latitude : this.getCoordinate()[0],

@@ -22,40 +22,15 @@ var client_1 = require("../schema/client");
 var mongoose_1 = __importDefault(require("mongoose"));
 var Client = /** @class */ (function (_super) {
     __extends(Client, _super);
-    function Client(username, password, image, account, firstname, lastname, gender, birthdate, phonenumber, email, address, latitude, longitude) {
-        return _super.call(this, username, password, image, account, firstname, lastname, gender, birthdate, phonenumber, email, address, latitude, longitude) || this;
+    function Client(firstname, lastname, gender, birthdate, phonenumber, email, password, image, address, latitude, longitude) {
+        return _super.call(this, firstname, lastname, gender, birthdate, phonenumber, email, password, image, address, latitude, longitude) || this;
     }
-    /*public validateUsername() : boolean {
-        connectDB();
-        let state : boolean = false;
-        let doc : object = client_model.findOne({'account.username' : this.getUsername()}, (error, document) => {
-            if(error){
-                console.log(error);
-            }
-        }).lean();
-        console.log(doc);
-
-        
-        let doc = (done : any) => {
-            client_model.findOne({'account.username' : this.getUsername()}, (error, document) => {
-                if (error) {
-                    return done(error);
-                }
-                return done(document);
-            });
-        }
-        if (doc != null){
-            console.log('si existe');
-            console.log(doc);
-        }
-        return state;
-    }*/
     Client.prototype.createAccount = function () {
         connection_1.connectDB();
         var model = new client_1.client_model({
             _id: new mongoose_1.default.Types.ObjectId(),
             account: {
-                username: this.getUsername(),
+                email: this.getEmail(),
                 password: this.getPassword(),
                 image: this.getImage()
             },
@@ -66,7 +41,6 @@ var Client = /** @class */ (function (_super) {
             gender: this.getGender(),
             birthdate: this.getBirthdate(),
             phonenumber: this.getPhonenumber(),
-            email: this.getEmail(),
             address: this.getAddres(),
             coordinate: {
                 latitude: this.getCoordinate()[0],
@@ -80,24 +54,23 @@ var Client = /** @class */ (function (_super) {
             }
         });
     };
-    Client.prototype.validateAccount = function (username, password) {
+    Client.prototype.validateAccount = function (email, password) {
         connection_1.connectDB();
-        client_1.client_model.findOne({ 'account.username': username }, function (error, document) {
+        client_1.client_model.findOne({ 'account.email': email }, function (error, document) {
             if (error) {
                 console.log(error);
             }
             console.log(document);
             if (document != null) {
-                console.log('username exists');
-                if (username.toLocaleLowerCase() === document.toObject().account.username.toLocaleLowerCase() && password === document.toObject().account.password) {
-                    console.log('welcome ' + username);
+                if (email === document.toObject().account.email && password === document.toObject().account.password) {
+                    console.log('welcome ' + email);
                 }
                 else {
                     console.log('passwords does not match');
                 }
             }
             else {
-                console.log('username not exists');
+                console.log('email does not exist');
             }
         });
     };
@@ -105,7 +78,7 @@ var Client = /** @class */ (function (_super) {
         connection_1.connectDB();
         client_1.client_model.updateOne({ _id: id }, {
             account: {
-                username: this.getUsername(),
+                email: this.getEmail(),
                 password: this.getPassword(),
                 image: this.getImage()
             },
@@ -116,7 +89,6 @@ var Client = /** @class */ (function (_super) {
             gender: this.getGender(),
             birthdate: this.getBirthdate(),
             phonenumber: this.getPhonenumber(),
-            email: this.getEmail(),
             address: this.getAddres(),
             coordinate: {
                 latitude: this.getCoordinate()[0],

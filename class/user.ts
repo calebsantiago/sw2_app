@@ -1,66 +1,37 @@
 import nodemailer from 'nodemailer';
-
 export abstract class User {
-    username : string;
-    password : string;
-    image :  string;
-    account : string;
-    firstname : string;
-    lastname : string;
-    gender : string;
-    birthdate : string;
-    phonenumber : number;
-    email : string;
-    address :  string;
-    coordinate : [number, number];
-    constructor(username : string, password : string, image : string, account : string, firstname : string, lastname : string, gender : string, birthdate : string, phonenumber : number, email : string, address :  string, latitude : number, longitude : number) {
-        this.username = username;
-        this.password = password;
-        this.image = image;
-        this.account = account;
-        this.firstname = firstname;
-        this.lastname = lastname;
-        this.gender = gender;
-        this.birthdate = birthdate;
-        this.phonenumber = phonenumber;
-        this.email = email;
-        this.address = address;
-        this.coordinate = [latitude, longitude];
-  }
-  public getUsername() : string {
-		return this.username;
-	}
-	public setUserName(username : string) : void {
-		this.username = username;
-	}
-	public getPassword() : string {
-		return this.password;
-	}
-	public setPassword(password : string) : void{
-		this.password = password;
-  }
-  public getImage() : string {
-		return this.image;
-	}
-	public setImage(image : string) : void {
-		this.image = image;
-	}
-    public getAccount() : string {
-		return this.account;
-	}
-	public setAccount(account : string) : void{
-		this.account = account;
+  firstname : string;
+  lastname : string;
+  gender : string;
+  birthdate : string;
+  phonenumber : number;
+  email : string;
+  password : string;
+  image :  string;
+  address :  string;
+  coordinate : [number, number];
+  constructor(firstname : string, lastname : string, gender : string, birthdate : string, phonenumber : number, email : string, password : string, image : string, address :  string, latitude : number, longitude : number) {
+    this.firstname = firstname;
+    this.lastname = lastname;
+    this.gender = gender;
+    this.birthdate = birthdate;
+    this.phonenumber = phonenumber;
+    this.email = email;
+    this.password = password;
+    this.image = image;
+    this.address = address;
+    this.coordinate = [latitude, longitude];
   }
   public getFirstname() : string {
 		return this.firstname;
 	}
-	public setFirstname(firstname : string) : void{
+	public setFirstname(firstname : string) : void {
 		this.firstname = firstname;
   }
   public getLastname() : string {
 		return this.lastname;
 	}
-	public setLastname(lastname : string) : void{
+	public setLastname(lastname : string) : void {
 		this.lastname = lastname;
   }
   public getGender() : string {
@@ -87,6 +58,18 @@ export abstract class User {
 	public setEmail(email : string) : void {
 		this.email = email;
   }
+	public getPassword() : string {
+		return this.password;
+	}
+	public setPassword(password : string) : void {
+		this.password = password;
+  }
+  public getImage() : string {
+		return this.image;
+	}
+	public setImage(image : string) : void {
+		this.image = image;
+	}
   public getAddres() : string {
 		return this.address;
 	}
@@ -100,7 +83,7 @@ export abstract class User {
 		this.coordinate = [latitude, longitude];
   }
   public abstract createAccount() : void
-  public abstract validateAccount(username : string, password : string) : void
+  public abstract validateAccount(email : string, password : string) : void
   public abstract updateAccount(id : string) : void
   public abstract deleteAccount(id : string) : void
   public sendMail() : void {
@@ -115,7 +98,7 @@ export abstract class User {
         from: 'contactaulima@gmail.com',
         to: this.getEmail(),
         subject: 'Asunto',
-        text: 'Hola ' + this.getUsername()
+        text: 'Hola ' + this.getEmail()
     };
     transporter.sendMail(mailOptions, (error, info) => {
         if (error) {

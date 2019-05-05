@@ -5,44 +5,18 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var nodemailer_1 = __importDefault(require("nodemailer"));
 var User = /** @class */ (function () {
-    function User(username, password, image, account, firstname, lastname, gender, birthdate, phonenumber, email, address, latitude, longitude) {
-        this.username = username;
-        this.password = password;
-        this.image = image;
-        this.account = account;
+    function User(firstname, lastname, gender, birthdate, phonenumber, email, password, image, address, latitude, longitude) {
         this.firstname = firstname;
         this.lastname = lastname;
         this.gender = gender;
         this.birthdate = birthdate;
         this.phonenumber = phonenumber;
         this.email = email;
+        this.password = password;
+        this.image = image;
         this.address = address;
         this.coordinate = [latitude, longitude];
     }
-    User.prototype.getUsername = function () {
-        return this.username;
-    };
-    User.prototype.setUserName = function (username) {
-        this.username = username;
-    };
-    User.prototype.getPassword = function () {
-        return this.password;
-    };
-    User.prototype.setPassword = function (password) {
-        this.password = password;
-    };
-    User.prototype.getImage = function () {
-        return this.image;
-    };
-    User.prototype.setImage = function (image) {
-        this.image = image;
-    };
-    User.prototype.getAccount = function () {
-        return this.account;
-    };
-    User.prototype.setAccount = function (account) {
-        this.account = account;
-    };
     User.prototype.getFirstname = function () {
         return this.firstname;
     };
@@ -79,6 +53,18 @@ var User = /** @class */ (function () {
     User.prototype.setEmail = function (email) {
         this.email = email;
     };
+    User.prototype.getPassword = function () {
+        return this.password;
+    };
+    User.prototype.setPassword = function (password) {
+        this.password = password;
+    };
+    User.prototype.getImage = function () {
+        return this.image;
+    };
+    User.prototype.setImage = function (image) {
+        this.image = image;
+    };
     User.prototype.getAddres = function () {
         return this.address;
     };
@@ -103,7 +89,7 @@ var User = /** @class */ (function () {
             from: 'contactaulima@gmail.com',
             to: this.getEmail(),
             subject: 'Asunto',
-            text: 'Hola ' + this.getUsername()
+            text: 'Hola ' + this.getEmail()
         };
         transporter.sendMail(mailOptions, function (error, info) {
             if (error) {

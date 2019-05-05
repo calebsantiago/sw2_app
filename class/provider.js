@@ -22,8 +22,8 @@ var provider_1 = require("../schema/provider");
 var mongoose_1 = __importDefault(require("mongoose"));
 var Provider = /** @class */ (function (_super) {
     __extends(Provider, _super);
-    function Provider(username, password, image, account, firstname, lastname, gender, birthdate, phonenumber, email, address, latitude, longitude, idcard, video, description, certificate, service) {
-        var _this = _super.call(this, username, password, image, account, firstname, lastname, gender, birthdate, phonenumber, email, address, latitude, longitude) || this;
+    function Provider(firstname, lastname, gender, birthdate, phonenumber, email, password, image, address, latitude, longitude, idcard, video, description, certificate, service) {
+        var _this = _super.call(this, firstname, lastname, gender, birthdate, phonenumber, email, password, image, address, latitude, longitude) || this;
         _this.idcard = idcard;
         _this.video = video;
         _this.description = description;
@@ -34,18 +34,18 @@ var Provider = /** @class */ (function (_super) {
     Provider.prototype.createAccount = function () {
         var _this = this;
         connection_1.connectDB();
-        provider_1.provider_model.findOne({ 'account.username': this.getUsername() }, function (error, document) {
+        provider_1.provider_model.findOne({ 'account.email': this.getEmail() }, function (error, document) {
             if (error) {
                 console.log(error);
             }
             if (document != null) {
-                console.log('username already exists');
+                console.log('email already exists');
             }
             else {
                 var model = new provider_1.provider_model({
                     _id: new mongoose_1.default.Types.ObjectId(),
                     account: {
-                        username: _this.getUsername(),
+                        email: _this.getEmail(),
                         password: _this.getPassword(),
                         image: _this.getImage()
                     },
@@ -57,7 +57,6 @@ var Provider = /** @class */ (function (_super) {
                     birthdate: _this.getBirthdate(),
                     idcard: _this.getIdcard(),
                     phonenumber: _this.getPhonenumber(),
-                    email: _this.getEmail(),
                     address: _this.getAddres(),
                     coordinate: {
                         latitude: _this.getCoordinate()[0],
@@ -87,29 +86,17 @@ var Provider = /** @class */ (function (_super) {
             }
             console.log(document);
             if (document != null) {
-                /*this.setUserName(document.account.username);
-                this.setPassword(document.account.password);
-                this.setImage(document.account.image);
-                this.setFirstname(document.name.firstname);
-                this.setLastname(document.name.lastname);
-                this.setGender(document.gender);
-                this.setBirthdate(document.birthdate);
-                this.setPhonenumber(document.phonenumber);
-                this.setEmail(document.email);
-                this.setAddress(document.address);
-                this.setCoordinate(document.coordinate.latitude, document.coordinate.longitude);
-                */
                 return document;
             }
         });
     };
-    Provider.prototype.validateAccount = function (username, password) {
+    Provider.prototype.validateAccount = function (email, password) {
     };
     Provider.prototype.updateAccount = function (id) {
         connection_1.connectDB();
         provider_1.provider_model.updateOne({ _id: id }, {
             account: {
-                username: this.getUsername(),
+                email: this.getEmail(),
                 password: this.getPassword(),
                 image: this.getImage()
             },
@@ -121,7 +108,6 @@ var Provider = /** @class */ (function (_super) {
             birthdate: this.getBirthdate(),
             idcard: this.getIdcard(),
             phonenumber: this.getPhonenumber(),
-            email: this.getEmail(),
             address: this.getAddres(),
             coordinate: {
                 latitude: this.getCoordinate()[0],

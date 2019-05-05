@@ -8,7 +8,7 @@ body {
     background: #204862;
 }
 .create-title, .update-title, .delete-title {
-    color: #fff;
+    color: #000;
     text-align: center;
 }
 .create-form, .update-form, .delete-form {
