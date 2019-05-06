@@ -42,15 +42,15 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var express_1 = __importDefault(require("express"));
 var body_parser_1 = __importDefault(require("body-parser"));
 var method_override_1 = __importDefault(require("method-override"));
-var connection_1 = require("./connection");
-var client_1 = require("./schema/client");
-var provider_1 = require("./schema/provider");
-var client_2 = require("./class/client");
-var provider_2 = require("./class/provider");
-var mongoose_1 = __importDefault(require("mongoose"));
 var express_session_1 = __importDefault(require("express-session"));
 var passport_1 = __importDefault(require("passport"));
 var connect_flash_1 = __importDefault(require("connect-flash"));
+var connection_1 = require("./connection");
+var client_1 = require("./class/client");
+var client_2 = require("./schema/client");
+var provider_1 = require("./class/provider");
+var provider_2 = require("./schema/provider");
+var mongoose_1 = __importDefault(require("mongoose"));
 var main = function () {
     var app = express_1.default();
     app.set('view engine', 'pug');
@@ -71,125 +71,64 @@ var main = function () {
     app.get('/', function (request, response) {
         response.render('index');
     });
-    app.get('/create', function (request, response) {
-        response.render('create');
+    app.get('/signup', function (request, response) {
+        response.render('signup');
     });
-    app.post('/create', function (request, response) { return __awaiter(_this, void 0, void 0, function () {
-        function getAge(birthdate) {
-            var today = new Date();
-            var age = today.getFullYear() - new Date(birthdate).getFullYear();
-            var month = today.getMonth() - new Date(birthdate).getMonth();
-            if (month < 0 || (month === 0 && today.getDate() < new Date(birthdate).getDate())) {
-                age--;
-            }
-            return age;
-        }
-        var _a, firstname, lastname, gender, birthdate, idcard, phonenumber, email, password, confirm_password, image, account, address, latitude, longitude, video, description, certificate, service, date_expression, phone_expression, email_expression, url_expression, id_expression, errors, user, doc1, doc2, doc3, doc4, model, _b, user, doc1, doc2, doc3, doc4, model, _c;
+    app.post('/signup', function (request, response) { return __awaiter(_this, void 0, void 0, function () {
+        var _a, firstname, lastname, gender, birthdate, idcard, phonenumber, email, password, confirm_password, image, account, address, latitude, longitude, video, description, certificate, service, user, errors, doc1, doc2, doc3, doc4, docs, model, _b, user, errors, doc1, doc2, doc3, doc4, docs, model, _c;
         return __generator(this, function (_d) {
             switch (_d.label) {
                 case 0:
                     _a = request.body, firstname = _a.firstname, lastname = _a.lastname, gender = _a.gender, birthdate = _a.birthdate, idcard = _a.idcard, phonenumber = _a.phonenumber, email = _a.email, password = _a.password, confirm_password = _a.confirm_password, image = _a.image, account = _a.account, address = _a.address, latitude = _a.latitude, longitude = _a.longitude, video = _a.video, description = _a.description, certificate = _a.certificate, service = _a.service;
-                    date_expression = /[0-9]{4}-[0-9]{2}-[0-9]{2}/;
-                    phone_expression = /[0-9]{9}/;
-                    email_expression = /[^@\s]+@[^@\s]+\.[^@\s]+/;
-                    url_expression = /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+/;
-                    id_expression = /[0-9]{8}/;
-                    errors = [];
-                    if (firstname === "" || lastname === "" || gender === "" || birthdate === "" || phonenumber === "" || email === "" || password === "" || confirm_password === "" || account === "" || address === "" || latitude === "" || longitude === "") {
-                        errors.push({ text: 'you must complete fields.' });
-                    }
-                    else {
-                        if (!date_expression.test(birthdate)) {
-                            errors.push({ text: 'birthdate is not valid.' });
-                        }
-                        if (getAge(birthdate) < 18) {
-                            errors.push({ text: 'you are under 18 years.' });
-                        }
-                        if (!phone_expression.test(phonenumber)) {
-                            errors.push({ text: 'phonenumber is not valid.' });
-                        }
-                        if (!email_expression.test(email)) {
-                            errors.push({ text: 'email is not valid.' });
-                        }
-                        if (password != confirm_password) {
-                            errors.push({ text: 'passwords do not match.' });
-                        }
-                        if (!isFinite(Number(latitude))) {
-                            errors.push({ text: 'latitude is not valid.' });
-                        }
-                        if (!isFinite(Number(longitude))) {
-                            errors.push({ text: 'longitude is not valid.' });
-                        }
-                        if (image != "") {
-                            if (!url_expression.test(image)) {
-                                errors.push({ text: 'image is not valid.' });
-                            }
-                        }
-                        if (account === "provider") {
-                            if (idcard === "" || video === "" || description === "" || service === "") {
-                                errors.push({ text: 'you must complete fields.' });
-                            }
-                            else {
-                                if (!id_expression.test(idcard)) {
-                                    errors.push({ text: 'idcard is not valid.' });
-                                }
-                                if (!url_expression.test(video)) {
-                                    errors.push({ text: 'video is not valid.' });
-                                }
-                                if (certificate != "") {
-                                    if (!url_expression.test(certificate)) {
-                                        errors.push({ text: 'certificate is not valid.' });
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    if (!(errors.length > 0)) return [3 /*break*/, 1];
-                    response.render('create', { errors: errors, firstname: firstname, lastname: lastname, gender: gender, birthdate: birthdate, idcard: idcard, phonenumber: phonenumber, email: email, password: password, confirm_password: confirm_password, image: image, account: account, video: video, description: description, certificate: certificate, service: service });
-                    return [3 /*break*/, 20];
-                case 1:
                     if (!(account === 'client')) return [3 /*break*/, 11];
-                    user = new client_2.Client(firstname, lastname, gender, birthdate, Number(phonenumber), email, password, image, address, Number(latitude), Number(longitude));
+                    user = new client_1.Client(firstname, lastname, gender, birthdate, Number(phonenumber), email, password, confirm_password, image, account, address, Number(latitude), Number(longitude));
+                    errors = user.validateSignUp();
+                    if (!(errors.length > 0)) return [3 /*break*/, 1];
+                    response.render('signup', { errors: errors, firstname: firstname, lastname: lastname, gender: gender, birthdate: birthdate, phonenumber: phonenumber, email: email, password: password, confirm_password: confirm_password, image: image, account: account });
+                    return [3 /*break*/, 10];
+                case 1:
                     connection_1.connectDB();
-                    return [4 /*yield*/, client_1.client_model.findOne({ 'phonenumber': user.getPhonenumber() }, function (error, document) {
+                    return [4 /*yield*/, client_2.client_model.findOne({ 'phonenumber': user.getPhonenumber() }, function (error) {
                             if (error) {
                                 console.log(error);
                             }
                         })];
                 case 2:
                     doc1 = _d.sent();
-                    return [4 /*yield*/, client_1.client_model.findOne({ 'account.email': user.getEmail() }, function (error, document) {
+                    return [4 /*yield*/, client_2.client_model.findOne({ 'account.email': user.getEmail() }, function (error) {
                             if (error) {
                                 console.log(error);
                             }
                         })];
                 case 3:
                     doc2 = _d.sent();
-                    return [4 /*yield*/, provider_1.provider_model.findOne({ 'phonenumber': user.getPhonenumber() }, function (error, document) {
+                    return [4 /*yield*/, provider_2.provider_model.findOne({ 'phonenumber': user.getPhonenumber() }, function (error) {
                             if (error) {
                                 console.log(error);
                             }
                         })];
                 case 4:
                     doc3 = _d.sent();
-                    return [4 /*yield*/, provider_1.provider_model.findOne({ 'account.email': user.getEmail() }, function (error, document) {
+                    return [4 /*yield*/, provider_2.provider_model.findOne({ 'account.email': user.getEmail() }, function (error) {
                             if (error) {
                                 console.log(error);
                             }
                         })];
                 case 5:
                     doc4 = _d.sent();
-                    if (!(doc1 || doc3)) return [3 /*break*/, 6];
+                    docs = [doc1, doc2, doc3, doc4];
+                    if (!(docs[0] || docs[2])) return [3 /*break*/, 6];
                     request.flash('info', 'phonenumber is already in use.');
-                    response.render('create', { error_message: request.flash('info'), firstname: firstname, lastname: lastname, gender: gender, birthdate: birthdate, phonenumber: phonenumber, email: email, password: password, confirm_password: confirm_password, image: image, account: account });
+                    response.render('signup', { error_message: request.flash('info'), firstname: firstname, lastname: lastname, gender: gender, birthdate: birthdate, phonenumber: phonenumber, email: email, password: password, confirm_password: confirm_password, image: image, account: account });
                     return [3 /*break*/, 10];
                 case 6:
-                    if (!(doc2 || doc4)) return [3 /*break*/, 7];
+                    if (!(docs[1] || docs[3])) return [3 /*break*/, 7];
                     request.flash('info', 'email is already in use.');
-                    response.render('create', { error_message: request.flash('info'), firstname: firstname, lastname: lastname, gender: gender, birthdate: birthdate, phonenumber: phonenumber, email: email, password: password, confirm_password: confirm_password, image: image, account: account });
+                    response.render('signup', { error_message: request.flash('info'), firstname: firstname, lastname: lastname, gender: gender, birthdate: birthdate, phonenumber: phonenumber, email: email, password: password, confirm_password: confirm_password, image: image, account: account });
                     return [3 /*break*/, 10];
                 case 7:
-                    model = new client_1.client_model({
+                    connection_1.connectDB();
+                    model = new client_2.client_model({
                         _id: new mongoose_1.default.Types.ObjectId(),
                         account: {
                             email: user.getEmail(),
@@ -203,7 +142,7 @@ var main = function () {
                         gender: user.getGender(),
                         birthdate: user.getBirthdate(),
                         phonenumber: user.getPhonenumber(),
-                        address: user.getAddres(),
+                        address: user.getAddress(),
                         coordinate: {
                             latitude: user.getCoordinate()[0],
                             longitude: user.getCoordinate()[1]
@@ -222,52 +161,59 @@ var main = function () {
                 case 9:
                     _d.sent();
                     request.flash('info', 'you are registered.');
-                    response.render('signin', { success_message: request.flash('info') });
+                    response.render('login', { success_message: request.flash('info') });
                     user.sendMail();
                     _d.label = 10;
-                case 10: return [3 /*break*/, 20];
+                case 10: return [3 /*break*/, 21];
                 case 11:
-                    user = new provider_2.Provider(firstname, lastname, gender, birthdate, phonenumber, email, password, image, address, latitude, longitude, idcard, video, description, certificate, service);
-                    connection_1.connectDB();
-                    return [4 /*yield*/, client_1.client_model.findOne({ 'phonenumber': user.getPhonenumber() }, function (error, document) {
-                            if (error) {
-                                console.log(error);
-                            }
-                        })];
+                    user = new provider_1.Provider(firstname, lastname, gender, birthdate, Number(phonenumber), email, password, confirm_password, image, account, address, Number(latitude), Number(longitude), Number(idcard), video, description, certificate, service);
+                    errors = user.validateSignUp();
+                    if (!(errors.length > 0)) return [3 /*break*/, 12];
+                    response.render('signup', { errors: errors, firstname: firstname, lastname: lastname, gender: gender, birthdate: birthdate, idcard: idcard, phonenumber: phonenumber, email: email, password: password, confirm_password: confirm_password, image: image, account: account, video: video, description: description, certificate: certificate, service: service });
+                    return [3 /*break*/, 21];
                 case 12:
-                    doc1 = _d.sent();
-                    return [4 /*yield*/, client_1.client_model.findOne({ 'account.email': user.getEmail() }, function (error, document) {
+                    connection_1.connectDB();
+                    return [4 /*yield*/, client_2.client_model.findOne({ 'phonenumber': user.getPhonenumber() }, function (error) {
                             if (error) {
                                 console.log(error);
                             }
                         })];
                 case 13:
-                    doc2 = _d.sent();
-                    return [4 /*yield*/, provider_1.provider_model.findOne({ 'phonenumber': user.getPhonenumber() }, function (error, document) {
+                    doc1 = _d.sent();
+                    return [4 /*yield*/, client_2.client_model.findOne({ 'account.email': user.getEmail() }, function (error) {
                             if (error) {
                                 console.log(error);
                             }
                         })];
                 case 14:
-                    doc3 = _d.sent();
-                    return [4 /*yield*/, provider_1.provider_model.findOne({ 'account.email': user.getEmail() }, function (error, document) {
+                    doc2 = _d.sent();
+                    return [4 /*yield*/, provider_2.provider_model.findOne({ 'phonenumber': user.getPhonenumber() }, function (error) {
                             if (error) {
                                 console.log(error);
                             }
                         })];
                 case 15:
-                    doc4 = _d.sent();
-                    if (!(doc1 || doc3)) return [3 /*break*/, 16];
-                    request.flash('info', 'phonenumber is already in use.');
-                    response.render('create', { error_message: request.flash('info'), firstname: firstname, lastname: lastname, gender: gender, birthdate: birthdate, idcard: idcard, phonenumber: phonenumber, email: email, password: password, confirm_password: confirm_password, image: image, account: account, video: video, description: description, certificate: certificate, service: service });
-                    return [3 /*break*/, 20];
+                    doc3 = _d.sent();
+                    return [4 /*yield*/, provider_2.provider_model.findOne({ 'account.email': user.getEmail() }, function (error) {
+                            if (error) {
+                                console.log(error);
+                            }
+                        })];
                 case 16:
-                    if (!(doc2 || doc4)) return [3 /*break*/, 17];
-                    request.flash('info', 'email is already in use.');
-                    response.render('create', { error_message: request.flash('info'), firstname: firstname, lastname: lastname, gender: gender, birthdate: birthdate, idcard: idcard, phonenumber: phonenumber, email: email, password: password, confirm_password: confirm_password, image: image, account: account, video: video, description: description, certificate: certificate, service: service });
-                    return [3 /*break*/, 20];
+                    doc4 = _d.sent();
+                    docs = [doc1, doc2, doc3, doc4];
+                    if (!(docs[0] || docs[2])) return [3 /*break*/, 17];
+                    request.flash('info', 'phonenumber is already in use.');
+                    response.render('signup', { error_message: request.flash('info'), firstname: firstname, lastname: lastname, gender: gender, birthdate: birthdate, idcard: idcard, phonenumber: phonenumber, email: email, password: password, confirm_password: confirm_password, image: image, account: account, video: video, description: description, certificate: certificate, service: service });
+                    return [3 /*break*/, 21];
                 case 17:
-                    model = new provider_1.provider_model({
+                    if (!(docs[1] || docs[3])) return [3 /*break*/, 18];
+                    request.flash('info', 'email is already in use.');
+                    response.render('signup', { error_message: request.flash('info'), firstname: firstname, lastname: lastname, gender: gender, birthdate: birthdate, idcard: idcard, phonenumber: phonenumber, email: email, password: password, confirm_password: confirm_password, image: image, account: account, video: video, description: description, certificate: certificate, service: service });
+                    return [3 /*break*/, 21];
+                case 18:
+                    connection_1.connectDB();
+                    model = new provider_2.provider_model({
                         _id: new mongoose_1.default.Types.ObjectId(),
                         account: {
                             email: user.getEmail(),
@@ -282,7 +228,7 @@ var main = function () {
                         birthdate: user.getBirthdate(),
                         idcard: user.getIdcard(),
                         phonenumber: user.getPhonenumber(),
-                        address: user.getAddres(),
+                        address: user.getAddress(),
                         coordinate: {
                             latitude: user.getCoordinate()[0],
                             longitude: user.getCoordinate()[1]
@@ -297,52 +243,44 @@ var main = function () {
                     console.log(model);
                     _c = model.account;
                     return [4 /*yield*/, model.encryptPassword(password)];
-                case 18:
+                case 19:
                     _c.password = _d.sent();
                     return [4 /*yield*/, model.save(function (error) {
                             if (error) {
                                 console.log(error);
                             }
                         })];
-                case 19:
+                case 20:
                     _d.sent();
                     request.flash('info', 'you are registered.');
-                    response.render('signin', { success_message: request.flash('info') });
+                    response.render('login', { success_message: request.flash('info') });
                     user.sendMail();
-                    _d.label = 20;
-                case 20: return [2 /*return*/];
+                    _d.label = 21;
+                case 21: return [2 /*return*/];
             }
         });
     }); });
-    app.get('/signin', function (request, response) {
-        response.render('signin');
+    app.get('/login', function (request, response) {
+        response.render('login');
     });
-    app.post('/signin', function (request, response) { return __awaiter(_this, void 0, void 0, function () {
-        var _a, email, password, account, email_expression, phone_expression, errors, doc, match, doc, match;
+    app.post('/login', function (request, response) { return __awaiter(_this, void 0, void 0, function () {
+        var _a, email, password, account, user, errors, email_expression, doc, match, user, errors, email_expression, doc, match;
         return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
                     _a = request.body, email = _a.email, password = _a.password, account = _a.account;
-                    email_expression = /[^@\s]+@[^@\s]+\.[^@\s]+/;
-                    phone_expression = /[0-9]{9}/;
-                    errors = [];
-                    if (email === "" || password === "" || account === "") {
-                        errors.push({ text: 'you must complete fields.' });
-                    }
-                    else {
-                        if (!email_expression.test(email) && !phone_expression.test(email)) {
-                            errors.push({ text: 'email or phonenumber is not valid.' });
-                        }
-                    }
-                    if (!(errors.length > 0)) return [3 /*break*/, 1];
-                    response.render('signin', { errors: errors, email: email, password: password, account: account });
-                    return [3 /*break*/, 16];
-                case 1:
                     if (!(account === 'client')) return [3 /*break*/, 9];
+                    user = new client_1.Client("", "", "", "", 0, "", "", "", "", "", "", 0, 0);
+                    errors = user.validateLogIn(email, password, account);
+                    if (!(errors.length > 0)) return [3 /*break*/, 1];
+                    response.render('login', { errors: errors, email: email, password: password, account: account });
+                    return [3 /*break*/, 8];
+                case 1:
                     connection_1.connectDB();
+                    email_expression = /[^@\s]+@[^@\s]+\.[^@\s]+/;
                     doc = void 0;
                     if (!email_expression.test(email)) return [3 /*break*/, 3];
-                    return [4 /*yield*/, client_1.client_model.findOne({ 'account.email': email }, function (error) {
+                    return [4 /*yield*/, client_2.client_model.findOne({ 'account.email': email }, function (error) {
                             if (error) {
                                 console.log(error);
                             }
@@ -350,7 +288,7 @@ var main = function () {
                 case 2:
                     doc = _b.sent();
                     return [3 /*break*/, 5];
-                case 3: return [4 /*yield*/, client_1.client_model.findOne({ phonenumber: email }, function (error) {
+                case 3: return [4 /*yield*/, client_2.client_model.findOne({ phonenumber: email }, function (error) {
                         if (error) {
                             console.log(error);
                         }
@@ -361,59 +299,66 @@ var main = function () {
                 case 5:
                     if (!!doc) return [3 /*break*/, 6];
                     request.flash('info', 'email or phonenumber does not exist.');
-                    response.render('signin', { error_message: request.flash('info'), email: email, password: password, account: account });
+                    response.render('login', { error_message: request.flash('info'), email: email, password: password, account: account });
                     return [3 /*break*/, 8];
                 case 6: return [4 /*yield*/, doc.matchPassword(password)];
                 case 7:
                     match = _b.sent();
                     if (match) {
                         request.flash('info', 'welcome ' + email + '.');
-                        response.render('principal', { success_message: request.flash('info'), email: email, password: password, account: account });
+                        response.render('main', { success_message: request.flash('info'), email: email, password: password, account: account });
                     }
                     else {
                         request.flash('info', 'passwords do not match.');
-                        response.render('signin', { error_message: request.flash('info'), email: email, password: password, account: account });
+                        response.render('login', { error_message: request.flash('info'), email: email, password: password, account: account });
                     }
                     _b.label = 8;
-                case 8: return [3 /*break*/, 16];
+                case 8: return [3 /*break*/, 17];
                 case 9:
+                    user = new provider_1.Provider("", "", "", "", 0, "", "", "", "", "", "", 0, 0, 0, "", "", "", "");
+                    errors = user.validateLogIn(email, password, account);
+                    if (!(errors.length > 0)) return [3 /*break*/, 10];
+                    response.render('login', { errors: errors, email: email, password: password, account: account });
+                    return [3 /*break*/, 17];
+                case 10:
                     connection_1.connectDB();
+                    email_expression = /[^@\s]+@[^@\s]+\.[^@\s]+/;
                     doc = void 0;
-                    if (!email_expression.test(email)) return [3 /*break*/, 11];
-                    return [4 /*yield*/, provider_1.provider_model.findOne({ 'account.email': email }, function (error) {
+                    if (!email_expression.test(email)) return [3 /*break*/, 12];
+                    return [4 /*yield*/, provider_2.provider_model.findOne({ 'account.email': email }, function (error) {
                             if (error) {
                                 console.log(error);
                             }
                         })];
-                case 10:
+                case 11:
                     doc = _b.sent();
-                    return [3 /*break*/, 13];
-                case 11: return [4 /*yield*/, provider_1.provider_model.findOne({ phonenumber: email }, function (error) {
+                    return [3 /*break*/, 14];
+                case 12: return [4 /*yield*/, provider_2.provider_model.findOne({ phonenumber: email }, function (error) {
                         if (error) {
                             console.log(error);
                         }
                     })];
-                case 12:
-                    doc = _b.sent();
-                    _b.label = 13;
                 case 13:
-                    if (!!doc) return [3 /*break*/, 14];
+                    doc = _b.sent();
+                    _b.label = 14;
+                case 14:
+                    if (!!doc) return [3 /*break*/, 15];
                     request.flash('info', 'email or phonenumber does not exist.');
-                    response.render('signin', { error_message: request.flash('info'), email: email, password: password, account: account });
-                    return [3 /*break*/, 16];
-                case 14: return [4 /*yield*/, doc.matchPassword(password)];
-                case 15:
+                    response.render('login', { error_message: request.flash('info'), email: email, password: password, account: account });
+                    return [3 /*break*/, 17];
+                case 15: return [4 /*yield*/, doc.matchPassword(password)];
+                case 16:
                     match = _b.sent();
                     if (match) {
                         request.flash('info', 'welcome ' + email + '.');
-                        response.render('principal', { success_message: request.flash('info'), email: email, password: password, account: account });
+                        response.render('main', { success_message: request.flash('info'), email: email, password: password, account: account });
                     }
                     else {
                         request.flash('info', 'passwords do not match.');
-                        response.render('signin', { error_message: request.flash('info'), email: email, password: password, account: account });
+                        response.render('login', { error_message: request.flash('info'), email: email, password: password, account: account });
                     }
-                    _b.label = 16;
-                case 16: return [2 /*return*/];
+                    _b.label = 17;
+                case 17: return [2 /*return*/];
             }
         });
     }); });
@@ -422,77 +367,6 @@ var main = function () {
         request.flash('info', 'bye.');
         response.render('index', { success_message: request.flash('info') });
     });
-    /*
-        app.get('/show', (request, response) => {
-            connectDB();
-            user_model.find((error, document) => {
-                if (error){
-                    console.log(error);
-                }
-                console.log(document);
-                response.render('show', {users : document});
-            });
-        });
-        app.get('/update', (request, response) => {
-            connectDB();
-            client_model.find((error, document) => {
-                if (error){
-                    console.log(error);
-                }
-                response.render('update', {users : document});
-            });
-        });
-        app.get('/update/edit/:id', (request, response) => {
-            connectDB();
-            let user_id = request.params.id;
-            client_model.findOne({_id : user_id}, (error, document) => {
-                if (error){
-                    console.log(error);
-                }
-                console.log(document);
-                response.render('edit', {user : document});
-            });
-        });
-        app.put('/update/edit/:id', (request, response) => {
-            let user_id : string = request.params.id;
-            let firstname : string = request.body.firstname;
-            let lastname : string = request.body.lastname;
-            let gender : string = request.body.gender;
-            let birthdate : string = request.body.birthdate;
-            let phonenumber : number = request.body.phonenumber;
-            let email : string = request.body.email;
-            let image : string = request.body.image;
-            let password : string = request.body.password;
-            let account : string = request.body.account;
-            let address : string = request.body.address;
-            let latitude : number = request.body.latitude;
-            let longitude : number = request.body.longitude;
-            let user : Client = new Client(firstname, lastname, gender, birthdate, phonenumber, email, password, image, address, latitude, longitude);
-            user.updateAccount(user_id);
-            response.redirect('/');
-        });
-        app.get('/delete', (request, response) => {
-            connectDB();
-            client_model.find((error, document) => {
-                if (error){
-                    console.log(error);
-                }
-                response.render('delete', {users : document});
-            });
-        });
-        /*app.get('/delete/drop/:_id', (request, response) => {
-            connectDB();
-            let user_id = request.params._id;
-            let user : Client = new Client("", "", "", "", "", "", "", "", 0, "", "", 0, 0);
-            response.render('drop', {user : user.selectAccount(user_id)});
-        });*/
-    /*
-    app.delete('/delete/drop/:_id', (request, response) => {
-        let user_id = request.params._id;
-        let user : Client = new Client("", "", "", "", 0, "", "", "", "", 0, 0);
-        user.deleteAccount(user_id);
-        response.redirect('/');
-    });*/
     module.exports = app;
 };
 main();

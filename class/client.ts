@@ -3,8 +3,47 @@ import {connectDB} from '../connection';
 import {client_model} from '../schema/client';
 import mongoose from 'mongoose';
 export class Client extends User {
-    constructor(firstname : string, lastname : string, gender : string, birthdate : string, phonenumber : number, email : string, password : string, image : string, address :  string, latitude : number, longitude : number) {
-        super(firstname, lastname, gender, birthdate, phonenumber, email, password, image, address, latitude, longitude);
+    constructor(firstname : string, lastname : string, gender : string, birthdate : string, phonenumber : number, email : string, password : string, confirm_password : string, image : string, account : string, address :  string, latitude : number, longitude : number) {
+        super(firstname, lastname, gender, birthdate, phonenumber, email, password, confirm_password, image, account, address, latitude, longitude);
+    }
+    public validateSignUp() : any[] {
+        let date_expression : RegExp = /[0-9]{4}-[0-9]{2}-[0-9]{2}/;
+        let phone_expression : RegExp = /[0-9]{9}/;
+        let email_expression : RegExp = /[^@\s]+@[^@\s]+\.[^@\s]+/;
+        let url_expression : RegExp = /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+/;
+        let errors : any[] = [];
+        if (this.getFirstname() === "" || this.getLastname() === "" || this.getGender() === "" || this.getBirthdate() === "" || this.getPhonenumber() === 0 || this.getEmail() === "" || this.getPassword() === "" || this.getConfirm_password() === "" || this.getAccount() === "" || this.getAddress() === "" || this.getCoordinate()[0] === 0 || this.getCoordinate()[1] === 0) {
+            errors.push({text : 'you must complete fields.'});
+        }
+        else {
+            if (!date_expression.test(this.getBirthdate())) {
+                errors.push({text : 'birthdate is not valid.'});
+            }
+            if (this.getAge(this.getBirthdate()) < 18) {
+                errors.push({text : 'you are under 18 years old.'});
+            }
+            if (!phone_expression.test(this.getPhonenumber().toString())) {
+                errors.push({text : 'phonenumber is not valid.'});
+            }
+            if (!email_expression.test(this.getEmail())) {
+                errors.push({text : 'email is not valid.'});
+            }
+            if (this.getPassword() != this.getConfirm_password()) {
+                errors.push({text : 'passwords do not match.'});
+            }
+            if (!isFinite(this.getCoordinate()[0])) {
+                errors.push({text : 'latitude is not valid.'});
+            }
+            if (!isFinite(this.getCoordinate()[1])) {
+                errors.push({text : 'longitude is not valid.'});
+            }
+            if (this.getImage() != "") {
+                if (!url_expression.test(this.getImage())) {
+                    errors.push({text : 'image is not valid.'});
+                }
+            }
+        }
+        return errors;
     }
     public createAccount() : void {
         connectDB();
@@ -22,38 +61,39 @@ export class Client extends User {
             gender : this.getGender(),
             birthdate : this.getBirthdate(),
             phonenumber : this.getPhonenumber(),
-            address :  this.getAddres(),
+            address :  this.getAddress(),
             coordinate : {
                 latitude : this.getCoordinate()[0],
                 longitude : this.getCoordinate()[1]
             }
         });
         console.log(model);
+        model.account.password = model.encryptPassword(this.getPassword());
         model.save((error : any) => {
-            if(error) {
-                 console.log(error);
+            if (error) {
+                console.log(error);
             }
         });
     }
-    public validateAccount(email : string, password : string) : void {
+    public logIn(email : string) : any {
         connectDB();
-        client_model.findOne({'account.email' : email}, (error, document) => {
-            if(error) {
-                console.log(error);
-            }
-            console.log(document);
-            if(document != null) {
-                if (email === document.toObject().account.email && password === document.toObject().account.password) {
-                    console.log('welcome ' + email);
+        let email_expression : RegExp = /[^@\s]+@[^@\s]+\.[^@\s]+/;
+        let doc;
+        if (email_expression.test(email)) {
+            doc = client_model.findOne({'account.email' : email}, (error) => {
+                if(error) {
+                    console.log(error);
                 }
-                else {
-                    console.log('passwords does not match');
+            });
+        }
+        else {
+            doc = client_model.findOne({phonenumber : email}, (error) => {
+                if(error) {
+                    console.log(error);
                 }
-            }
-            else {
-                console.log('email does not exist');
-            }
-        });
+            });
+        }
+        return doc
     }
     public updateAccount(id : string) : void {
         connectDB();
@@ -70,7 +110,7 @@ export class Client extends User {
             gender : this.getGender(),
             birthdate : this.getBirthdate(),
             phonenumber : this.getPhonenumber(),
-            address :  this.getAddres(),
+            address :  this.getAddress(),
             coordinate : {
                 latitude : this.getCoordinate()[0],
                 longitude : this.getCoordinate()[1]

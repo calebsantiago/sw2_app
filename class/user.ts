@@ -1,3 +1,7 @@
+import {connectDB} from './../connection';
+import {client_model} from './../schema/client';
+import {provider_model} from './../schema/provider';
+import {DocumentQuery} from 'mongoose';
 import nodemailer from 'nodemailer';
 export abstract class User {
   firstname : string;
@@ -7,10 +11,12 @@ export abstract class User {
   phonenumber : number;
   email : string;
   password : string;
+  confirm_password : string;
   image :  string;
+  account : string;
   address :  string;
   coordinate : [number, number];
-  constructor(firstname : string, lastname : string, gender : string, birthdate : string, phonenumber : number, email : string, password : string, image : string, address :  string, latitude : number, longitude : number) {
+  constructor(firstname : string, lastname : string, gender : string, birthdate : string, phonenumber : number, email : string, password : string, confirm_password : string, image : string, account : string,  address :  string, latitude : number, longitude : number) {
     this.firstname = firstname;
     this.lastname = lastname;
     this.gender = gender;
@@ -18,7 +24,9 @@ export abstract class User {
     this.phonenumber = phonenumber;
     this.email = email;
     this.password = password;
+    this.confirm_password = confirm_password;
     this.image = image;
+    this.account = account;
     this.address = address;
     this.coordinate = [latitude, longitude];
   }
@@ -64,13 +72,25 @@ export abstract class User {
 	public setPassword(password : string) : void {
 		this.password = password;
   }
+  public getConfirm_password() : string {
+		return this.confirm_password;
+	}
+	public setConfirm_password(confirm_password : string) : void {
+		this.confirm_password = confirm_password;
+  }
   public getImage() : string {
 		return this.image;
 	}
 	public setImage(image : string) : void {
 		this.image = image;
+  }
+  public getAccount() : string {
+		return this.account;
 	}
-  public getAddres() : string {
+	public setAccount(account : string) : void {
+		this.account = account;
+  }
+  public getAddress() : string {
 		return this.address;
 	}
 	public setAddress(address : string) : void {
@@ -82,10 +102,55 @@ export abstract class User {
 	public setCoordinate(latitude : number, longitude : number) : void {
 		this.coordinate = [latitude, longitude];
   }
+  public getAge(birthdate : string) : number {
+    let today : Date =  new Date();
+    let age : number = today.getFullYear() - new Date(birthdate).getFullYear();
+    let month : number = today.getMonth() - new Date(birthdate).getMonth();
+    if (month < 0 || (month === 0 && today.getDate() < new Date(birthdate).getDate())) {
+        age--;
+    }
+    return age;
+  }
+  public abstract validateSignUp() : any[]
+  public validateLogIn(email : string, password : string, account : string) : any[] {
+    let email_expression : RegExp = /[^@\s]+@[^@\s]+\.[^@\s]+/;
+    let phone_expression : RegExp = /[0-9]{9}/;
+    let errors : any[] = [];
+    if (email === "" || password === "" || account === "") {
+        errors.push({text : 'you must complete fields.'});
+    }
+    else {
+        if (!email_expression.test(email) && !phone_expression.test(email)) {
+            errors.push({text : 'email or phonenumber is not valid.'});
+        }
+    }
+    return errors;
+  }
+  public anotherAccount() : DocumentQuery<any, any, {}>[] {
+    connectDB();
+    let doc1 = client_model.findOne({'phonenumber' : this.getPhonenumber()}, (error) => {
+      if (error){
+          console.log(error);
+      }
+    });
+    let doc2 = client_model.findOne({'account.email' : this.getEmail()}, (error) => {
+        if (error){
+            console.log(error);
+        }
+    });
+    let doc3 = provider_model.findOne({'phonenumber' : this.getPhonenumber()}, (error) => {
+        if (error){
+            console.log(error);
+        }
+    });
+    let doc4 = provider_model.findOne({'account.email' : this.getEmail()}, (error) => {
+        if (error){
+            console.log(error);
+        }
+    });
+    return [doc1, doc2, doc3, doc4]
+  }
   public abstract createAccount() : void
-  public abstract validateAccount(email : string, password : string) : void
-  public abstract updateAccount(id : string) : void
-  public abstract deleteAccount(id : string) : void
   public sendMail() : void {
     let transporter = nodemailer.createTransport({
       service: 'gmail',
@@ -109,11 +174,10 @@ export abstract class User {
         }
     });
   }
-  public logIn() : void {
-    console.log('log in');
-
-  }
+  public abstract logIn(email : string) : any
   public logOut() : void {
     console.log('log out');
   }
+  public abstract updateAccount(id : string) : void
+  public abstract deleteAccount(id : string) : void
 }

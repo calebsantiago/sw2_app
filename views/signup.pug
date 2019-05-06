@@ -1,0 +1,90 @@
+doctype html
+html(lang = "en")
+    head
+        meta(charset = "UTF-8")
+        meta(name = "viewport" content = "width=device-width, initial-scale=1.0")
+        meta(http-equiv = "X-UA-Compatible" content = "ie=edge")
+        link(rel = "stylesheet" type = "text/css" href = "stylesheets/forms.css")
+        link(rel = "stylesheet" type = "text/css" href = "https://bootswatch.com/4/cosmo/bootstrap.min.css")
+        script(type = "text/javascript" src = "https://maps.googleapis.com/maps/api/js?key=AIzaSyCSRS9SAWe9v2szpbAYACT9F8c1hJThJ7c&sensor=false")
+        script(type = "text/javascript" src = "http://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js")
+        script(type = "text/javascript" src = "javascripts/locationMap.js")
+        script(type = "text/javascript" src = "javascripts/hide.js")
+        script(type = "text/javascript" src = "https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity = "sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin = "anonymous")
+        title CONTACTA
+    body
+        div(class = "signup-title")
+            h1 CONTACTA
+        if errors
+            each error in errors
+                div(class = "alert alert-danger alert-dismissible fade show" role = "alert") #{error.text}
+                    button(type = "button" class = "close" data-dismiss = "alert" aria-label = "Close")
+                        span(aria-hidden = "true") &times;
+        if error_message
+            div(class = "alert alert-danger alert-dismissible fade show" role = "alert") #{error_message}
+                button(type = "button" class = "close" data-dismiss = "alert" aria-label = "Close")
+                    span(aria-hidden = "true") &times;
+        if success_message
+            div(class = "alert alert-success alert-dismissible fade show" role = "alert") #{success_message}
+                button(type = "button" class = "close" data-dismiss = "alert" aria-label = "Close")
+                    span(aria-hidden = "true") &times;            
+        div(class = "signup-form")
+            form(action = "signup" method = "post")
+                h2(class = "signup-form-title") sign up
+                div(class = "signup-form-div")
+                    input(type = "text" id = "firstname" name = "firstname" placeholder = "firstname" value = firstname class = "signup-form-input" autofocus required)
+                    input(type = "text" id = "lastname" name = "lastname" placeholder = "lastname" value = lastname class = "signup-form-input" required)
+                    if gender == "female"
+                        input(type = "radio" id = "gender" name = "gender" value = "male" class = "signup-form-input" required)
+                        | male
+                        input(type = "radio" id = "gender" name = "gender" value = "female" class = "signup-form-input" checked)
+                        | female
+                    else
+                        input(type = "radio" id = "gender" name = "gender" value = "male" class = "signup-form-input" checked)
+                        | male
+                        input(type = "radio" id = "gender" name = "gender" value = "female" class = "signup-form-input" required)
+                        | female
+                    input(type = "date" id = "birthdate" name = "birthdate" value = birthdate class = "signup-form-input" required)
+                    if account == "provider"
+                        input(type = "number" id = "idcard" name = "idcard" placeholder = "idcard" value = idcard class = "signup-form-input" required)
+                    else
+                        input(type = "number" id = "idcard" name = "idcard" placeholder = "idcard" value = idcard class = "signup-form-input" style="display:none;" required disabled)
+                    input(type = "tel" id = "phonenumber" name = "phonenumber" placeholder = "phonenumber" value = phonenumber class = "signup-form-input" required)
+                    input(type = "email" id = "email" name = "email" placeholder = "email" value = email class = "signup-form-input" required)
+                    input(type = "password" id = "password" name = "password" placeholder = "password" value = password class = "signup-form-input" required)
+                    input(type = "password" id = "confirm_password" name = "confirm_password" placeholder = "confirm password" value = confirm_password class = "signup-form-input" required)
+                    input(type = "url" id = "image" name = "image" placeholder = "image link" value = image class = "signup-form-input")
+                    if account == "provider"
+                        input(type = "radio" id = "account" name = "account" value = "client" onclick = "return hide()" class = "signup-form-input" required)
+                        | client
+                        input(type = "radio" id = "account" name = "account" value = "provider" onclick = "return hide()" class = "signup-form-input" checked)
+                        | provider
+                    else 
+                        input(type = "radio" id = "account" name = "account" value = "client" onclick = "return hide()" class = "signup-form-input" checked)
+                        | client
+                        input(type = "radio" id = "account" name = "account" value = "provider" onclick = "return hide()" class = "signup-form-input" required)
+                        | provider
+                    div(id = "map" class = "signup-form-map")
+                    input(type = "text" id = "address" name = "address" placeholder = "address" class = "signup-form-input" readonly)
+                    input(type = "text" id = "latitude" name = "latitude" placeholder = "latitude" class = "signup-form-input" readonly)
+                    input(type = "text" id = "longitude" name = "longitude" placeholder = "longitude" class = "signup-form-input" readonly)
+                    if account == "provider"
+                        input(type = "url" id = "video" name = "video" placeholder = "video link" value = video class = "signup-form-input" required)
+                    else
+                        input(type = "url" id = "video" name = "video" placeholder = "video link" value = video class = "signup-form-input" style="display:none;" required disabled)
+                    if account == "provider"
+                        textarea(id = "description" name = "description" placeholder = "description" class = "signup-form-input" required) #{description}
+                    else
+                        textarea(id = "description" name = "description" placeholder = "description" class = "signup-form-input" style="display:none;" required disabled) #{description}
+                    if account == "provider"
+                        input(type = "url" id = "certificate" name = "certificate" placeholder = "certificate link" value = certificate class = "signup-form-input")
+                    else
+                        input(type = "url" id = "certificate" name = "certificate" placeholder = "certificate link" value = certificate class = "signup-form-input" style="display:none;" disabled)
+                    if account == "provider"
+                        input(type = "text" id = "service" name = "service" placeholder = "service" value = service class = "signup-form-input" required)
+                    else
+                        input(type = "text" id = "service" name = "service" placeholder = "service" value = service class = "signup-form-input" style="display:none;" required disabled)
+                    input(type = "submit" value = "sign up" class = "signup-form-submit")
+            div(class = "signup-form-button")
+                a(href = "/")
+                    button(type = "button" class = "signup-form-return") return index

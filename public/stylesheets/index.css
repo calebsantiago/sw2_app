@@ -7,7 +7,7 @@ body {
     margin: 0;
     background: #204862;
 }
-.index-title {
+.index-title, .main-title {
     color: #000;
     text-align: center;
 }
@@ -31,14 +31,14 @@ body {
     border-radius: 7px 7px 0px 0px;
     border-bottom: 5px solid crimson;
 }
-.index-group-div {
+.index-group-div, .main-group-div {
     padding: 0px 30px 5px 30px;
     display: block;
     flex-wrap: wrap;
     justify-content: space-between;
     text-align: center;
 }
-.index-group-create, .index-group-update  {
+.index-group-signup, .index-group-update  {
     background: deepskyblue;
     color: #fff;
     opacity: 1;
@@ -49,7 +49,7 @@ body {
     border-radius: 10px;
     width: 80%;
 }
-.index-group-show, .index-group-delete {
+.index-group-login, .index-group-delete, .main-group-return {
     background: crimson;
     color: #fff;
     opacity: 1;
@@ -60,10 +60,10 @@ body {
     border-radius: 10px;
     width: 80%;
 }
-.index-group-create:hover, .index-group-show:hover, .index-group-update:hover, .index-group-delete:hover {
+.index-group-signup:hover, .index-group-login:hover, .index-group-update:hover, .index-group-delete:hover, .main-group-return:hover {
     opacity: 0.8;
 }
-.index-group-create:active, .index-group-show:active, .index-group-update:active, .index-group-delete:active {
+.index-group-signup:active, .index-group-login:active, .index-group-update:active, .index-group-delete:active, .main-group-return:active {
     transform: scale(1.05);
 }
 @media(max-width: 768px) {

@@ -3,9 +3,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+var connection_1 = require("./../connection");
+var client_1 = require("./../schema/client");
+var provider_1 = require("./../schema/provider");
 var nodemailer_1 = __importDefault(require("nodemailer"));
 var User = /** @class */ (function () {
-    function User(firstname, lastname, gender, birthdate, phonenumber, email, password, image, address, latitude, longitude) {
+    function User(firstname, lastname, gender, birthdate, phonenumber, email, password, confirm_password, image, account, address, latitude, longitude) {
         this.firstname = firstname;
         this.lastname = lastname;
         this.gender = gender;
@@ -13,7 +16,9 @@ var User = /** @class */ (function () {
         this.phonenumber = phonenumber;
         this.email = email;
         this.password = password;
+        this.confirm_password = confirm_password;
         this.image = image;
+        this.account = account;
         this.address = address;
         this.coordinate = [latitude, longitude];
     }
@@ -59,13 +64,25 @@ var User = /** @class */ (function () {
     User.prototype.setPassword = function (password) {
         this.password = password;
     };
+    User.prototype.getConfirm_password = function () {
+        return this.confirm_password;
+    };
+    User.prototype.setConfirm_password = function (confirm_password) {
+        this.confirm_password = confirm_password;
+    };
     User.prototype.getImage = function () {
         return this.image;
     };
     User.prototype.setImage = function (image) {
         this.image = image;
     };
-    User.prototype.getAddres = function () {
+    User.prototype.getAccount = function () {
+        return this.account;
+    };
+    User.prototype.setAccount = function (account) {
+        this.account = account;
+    };
+    User.prototype.getAddress = function () {
         return this.address;
     };
     User.prototype.setAddress = function (address) {
@@ -76,6 +93,53 @@ var User = /** @class */ (function () {
     };
     User.prototype.setCoordinate = function (latitude, longitude) {
         this.coordinate = [latitude, longitude];
+    };
+    User.prototype.getAge = function (birthdate) {
+        var today = new Date();
+        var age = today.getFullYear() - new Date(birthdate).getFullYear();
+        var month = today.getMonth() - new Date(birthdate).getMonth();
+        if (month < 0 || (month === 0 && today.getDate() < new Date(birthdate).getDate())) {
+            age--;
+        }
+        return age;
+    };
+    User.prototype.validateLogIn = function (email, password, account) {
+        var email_expression = /[^@\s]+@[^@\s]+\.[^@\s]+/;
+        var phone_expression = /[0-9]{9}/;
+        var errors = [];
+        if (email === "" || password === "" || account === "") {
+            errors.push({ text: 'you must complete fields.' });
+        }
+        else {
+            if (!email_expression.test(email) && !phone_expression.test(email)) {
+                errors.push({ text: 'email or phonenumber is not valid.' });
+            }
+        }
+        return errors;
+    };
+    User.prototype.anotherAccount = function () {
+        connection_1.connectDB();
+        var doc1 = client_1.client_model.findOne({ 'phonenumber': this.getPhonenumber() }, function (error) {
+            if (error) {
+                console.log(error);
+            }
+        });
+        var doc2 = client_1.client_model.findOne({ 'account.email': this.getEmail() }, function (error) {
+            if (error) {
+                console.log(error);
+            }
+        });
+        var doc3 = provider_1.provider_model.findOne({ 'phonenumber': this.getPhonenumber() }, function (error) {
+            if (error) {
+                console.log(error);
+            }
+        });
+        var doc4 = provider_1.provider_model.findOne({ 'account.email': this.getEmail() }, function (error) {
+            if (error) {
+                console.log(error);
+            }
+        });
+        return [doc1, doc2, doc3, doc4];
     };
     User.prototype.sendMail = function () {
         var transporter = nodemailer_1.default.createTransport({
@@ -99,9 +163,6 @@ var User = /** @class */ (function () {
                 console.log('Email sent: ' + info.response);
             }
         });
-    };
-    User.prototype.logIn = function () {
-        console.log('log in');
     };
     User.prototype.logOut = function () {
         console.log('log out');
