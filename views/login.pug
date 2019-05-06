@@ -5,6 +5,7 @@ html(lang = "en")
         meta(name = "viewport" content = "width=device-width, initial-scale=1.0")
         meta(http-equiv = "X-UA-Compatible" content = "ie=edge")
         link(rel = "stylesheet" type = "text/css" href = "stylesheets/forms.css")
+        link(rel = "stylesheet" type = "text/css" href = "stylesheets/signin.css")
         link(rel = "stylesheet" type = "text/css" href = "https://bootswatch.com/4/cosmo/bootstrap.min.css")
         script(type = "text/javascript" src = "https://maps.googleapis.com/maps/api/js?key=AIzaSyCSRS9SAWe9v2szpbAYACT9F8c1hJThJ7c&sensor=false")
         script(type = "text/javascript" src = "http://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js")
@@ -13,38 +14,42 @@ html(lang = "en")
         script(type = "text/javascript" src = "https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity = "sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin = "anonymous")
         title CONTACTA
     body
-        div(class = "login-title")
-            h1 CONTACTA
-        if errors
-            each error in errors
-                div(class = "alert alert-danger alert-dismissible fade show" role = "alert") #{error.text}
-                    button(type = "button" class = "close" data-dismiss = "alert" aria-label = "Close")
-                        span(aria-hidden = "true") &times;
-        if error_message
-            div(class = "alert alert-danger alert-dismissible fade show" role = "alert") #{error_message}
-                button(type = "button" class = "close" data-dismiss = "alert" aria-label = "Close")
-                    span(aria-hidden = "true") &times;
-        if success_message
-            div(class = "alert alert-success alert-dismissible fade show" role = "alert") #{success_message}
-                button(type = "button" class = "close" data-dismiss = "alert" aria-label = "Close")
-                    span(aria-hidden = "true") &times; 
-        div(class = "login-form")
+    div(class = "form-signin")
+            div(class = "login-title")
+                if errors
+                    each error in errors
+                        div(class = "alert alert-danger alert-dismissible fade show" role = "alert") #{error.text}
+                            button(type = "button" class = "close" data-dismiss = "alert" aria-label = "Close")
+                                span(aria-hidden = "true") &times;
+                if error_message
+                    div(class = "alert alert-danger alert-dismissible fade show" role = "alert") #{error_message}
+                        button(type = "button" class = "close" data-dismiss = "alert" aria-label = "Close")
+                            span(aria-hidden = "true") &times;
+                if success_message
+                    div(class = "alert alert-success alert-dismissible fade show" role = "alert") #{success_message}
+                        button(type = "button" class = "close" data-dismiss = "alert" aria-label = "Close")
+                            span(aria-hidden = "true") &times; 
+            h1.display-4.text-center Contacta
+            h1.display-4.text-left &iexcl;Bienvenido!
             form(action = "login" method = "post")
-                h2(class = "login-form-title") log in
-                div(class = "login-form-div")
-                    input(type = "text" id = "email" name = "email" placeholder = "email or phonenumber" value = email class = "login-form-input" autofocus required)
-                    input(type = "password" id = "password" name = "password" placeholder = "password" value = password class = "login-form-input" required)
-                    if account == "provider"
-                        input(type = "radio" id = "account" name = "account" value = "client" onclick = "return hide()" class = "login-form-input" required)
-                        | client
-                        input(type = "radio" id = "account" name = "account" value = "provider" onclick = "return hide()" class = "login-form-input" checked)
-                        | provider
-                    else 
-                        input(type = "radio" id = "account" name = "account" value = "client" onclick = "return hide()" class = "login-form-input" checked)
-                        | client
-                        input(type = "radio" id = "account" name = "account" value = "provider" onclick = "return hide()" class = "login-form-input" required)
-                        | provider
-                    input(type = "submit" value = "log in" class = "login-form-submit")
-            div(class = "login-form-button")
-                a(href = "/")
-                    button(type = "button" class = "login-form-return") return index
+                .pricing-header
+                .form-group.text-left
+                label(for='email') Inicia sesi&oacute;n con tu direcci&oacute;n de email o telefono m&oacute;vil!    
+                input(type = "text" id = "email" name = "email" placeholder = "email or phonenumber" value = email class = "login-form-input" autofocus required)
+                .form-group.text-left
+                label(for='password') Contrase&ntilde;a    
+                input(type = "password" id = "password" name = "password" placeholder = "password" value = password class = "login-form-input" required)
+                if account == "provider"
+                    input(type = "radio" id = "account" name = "account" value = "client" onclick = "return hide()" class = "login-form-input" required)
+                    | client
+                    input(type = "radio" id = "account" name = "account" value = "provider" onclick = "return hide()" class = "login-form-input" checked)
+                    | provider
+                else
+                    input(type = "radio" id = "account" name = "account" value = "client" onclick = "return hide()" class = "login-form-input" checked)
+                    | client
+                    input(type = "radio" id = "account" name = "account" value = "provider" onclick = "return hide()" class = "login-form-input" required)
+                    | provider
+                div
+                    button.btn.btn-secondary.btn-lg.btn-block(type = "submit" value = "log in" class = "login-form-submit") INGRESAR
+            div
+                a(href = "/signup") &iquest;No tienes cuenta? Crea una presionando ac&aacute;
