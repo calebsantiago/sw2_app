@@ -117,11 +117,11 @@ export abstract class User {
     let phone_expression : RegExp = /[0-9]{9}/;
     let errors : any[] = [];
     if (email === "" || password === "" || account === "") {
-        errors.push({text : 'you must complete fields.'});
+        errors.push({text : 'debes completar los campos.'});
     }
     else {
         if (!email_expression.test(email) && !phone_expression.test(email)) {
-            errors.push({text : 'email or phonenumber is not valid.'});
+            errors.push({text : 'correo electrónico o número de teléfono no válido.'});
         }
     }
     return errors;
@@ -155,15 +155,15 @@ export abstract class User {
     let transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
-          user: 'contactaulima@gmail.com',
-          pass: 'ulimasw2'
+          user: 'contacta.no.reply@gmail.com',
+          pass: 'contactasw2ulima'
       }
     });
     let mailOptions = {
-        from: 'contactaulima@gmail.com',
+        from: 'contacta.no.reply@gmail.com',
         to: this.getEmail(),
-        subject: 'Asunto',
-        text: 'Hola ' + this.getEmail()
+        subject: 'Contacta',
+        text: 'Hola ' + this.getEmail() + ' te damos la bienvenida a Contacta.'
     };
     transporter.sendMail(mailOptions, (error, info) => {
         if (error) {

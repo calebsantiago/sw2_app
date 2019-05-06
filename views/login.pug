@@ -7,9 +7,7 @@ html(lang = "en")
         link(rel = "stylesheet" type = "text/css" href = "stylesheets/forms.css")
         link(rel = "stylesheet" type = "text/css" href = "stylesheets/signin.css")
         link(rel = "stylesheet" type = "text/css" href = "https://bootswatch.com/4/cosmo/bootstrap.min.css")
-        script(type = "text/javascript" src = "https://maps.googleapis.com/maps/api/js?key=AIzaSyCSRS9SAWe9v2szpbAYACT9F8c1hJThJ7c&sensor=false")
-        script(type = "text/javascript" src = "http://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js")
-        script(type = "text/javascript" src = "javascripts/locationMap.js")
+        script(type = "text/javascript" src = "https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js")
         script(type = "text/javascript" src = "javascripts/hide.js")
         script(type = "text/javascript" src = "https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity = "sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin = "anonymous")
         title CONTACTA
@@ -30,26 +28,25 @@ html(lang = "en")
                         button(type = "button" class = "close" data-dismiss = "alert" aria-label = "Close")
                             span(aria-hidden = "true") &times; 
             h1.display-4.text-center Contacta
-            h1.display-4.text-left &iexcl;Bienvenido!
+            h1.display-4.text-left ¡Bienvenido!
             form(action = "login" method = "post")
                 .pricing-header
-                .form-group.text-left
-                label(for='email') Inicia sesi&oacute;n con tu direcci&oacute;n de email o telefono m&oacute;vil!    
-                input(type = "text" id = "email" name = "email" placeholder = "email or phonenumber" value = email class = "login-form-input" autofocus required)
-                .form-group.text-left
-                label(for='password') Contrase&ntilde;a    
-                input(type = "password" id = "password" name = "password" placeholder = "password" value = password class = "login-form-input" required)
+                .form-group.text-left 
+                input(type = "text" id = "email" name = "email" placeholder = "correo electrónico o número de teléfono" value = email class = "login-form-input" autofocus required)
+                .form-group.text-left  
+                input(type = "password" id = "password" name = "password" placeholder = "contraseña" value = password class = "login-form-input" required)
                 if account == "provider"
                     input(type = "radio" id = "account" name = "account" value = "client" onclick = "return hide()" class = "login-form-input" required)
-                    | client
+                    | cliente
                     input(type = "radio" id = "account" name = "account" value = "provider" onclick = "return hide()" class = "login-form-input" checked)
-                    | provider
+                    | prestador
                 else
                     input(type = "radio" id = "account" name = "account" value = "client" onclick = "return hide()" class = "login-form-input" checked)
-                    | client
+                    | cliente
                     input(type = "radio" id = "account" name = "account" value = "provider" onclick = "return hide()" class = "login-form-input" required)
-                    | provider
+                    | prestador
                 div
-                    button.btn.btn-secondary.btn-lg.btn-block(type = "submit" value = "log in" class = "login-form-submit") INGRESAR
+                    button.btn.btn-secondary.btn-lg.btn-block(type = "submit" value = "log in" class = "login-form-submit") iniciar sesión
             div
-                a(href = "/signup") &iquest;No tienes cuenta? Crea una presionando ac&aacute;
+                label ¿No tienes cuenta? 
+                a(href = "/signup")  Crear cuenta

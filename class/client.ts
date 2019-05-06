@@ -13,33 +13,33 @@ export class Client extends User {
         let url_expression : RegExp = /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+/;
         let errors : any[] = [];
         if (this.getFirstname() === "" || this.getLastname() === "" || this.getGender() === "" || this.getBirthdate() === "" || this.getPhonenumber() === 0 || this.getEmail() === "" || this.getPassword() === "" || this.getConfirm_password() === "" || this.getAccount() === "" || this.getAddress() === "" || this.getCoordinate()[0] === 0 || this.getCoordinate()[1] === 0) {
-            errors.push({text : 'you must complete fields.'});
+            errors.push({text : 'debes completar los campos.'});
         }
         else {
             if (!date_expression.test(this.getBirthdate())) {
-                errors.push({text : 'birthdate is not valid.'});
+                errors.push({text : 'fecha de nacimiento no válido.'});
             }
             if (this.getAge(this.getBirthdate()) < 18) {
-                errors.push({text : 'you are under 18 years old.'});
+                errors.push({text : 'eres menor de 18 años.'});
             }
             if (!phone_expression.test(this.getPhonenumber().toString())) {
-                errors.push({text : 'phonenumber is not valid.'});
+                errors.push({text : 'número de teléfono no válido.'});
             }
             if (!email_expression.test(this.getEmail())) {
-                errors.push({text : 'email is not valid.'});
+                errors.push({text : 'correo electrónico no válido.'});
             }
             if (this.getPassword() != this.getConfirm_password()) {
-                errors.push({text : 'passwords do not match.'});
+                errors.push({text : 'contraseñas no coinciden.'});
             }
             if (!isFinite(this.getCoordinate()[0])) {
-                errors.push({text : 'latitude is not valid.'});
+                errors.push({text : 'latitud no válido.'});
             }
             if (!isFinite(this.getCoordinate()[1])) {
-                errors.push({text : 'longitude is not valid.'});
+                errors.push({text : 'longitud no válido.'});
             }
             if (this.getImage() != "") {
                 if (!url_expression.test(this.getImage())) {
-                    errors.push({text : 'image is not valid.'});
+                    errors.push({text : 'link imagen no válido.'});
                 }
             }
         }

@@ -118,12 +118,12 @@ var main = function () {
                     doc4 = _d.sent();
                     docs = [doc1, doc2, doc3, doc4];
                     if (!(docs[0] || docs[2])) return [3 /*break*/, 6];
-                    request.flash('info', 'phonenumber is already in use.');
+                    request.flash('info', 'número de teléfono ya existe.');
                     response.render('signup', { error_message: request.flash('info'), firstname: firstname, lastname: lastname, gender: gender, birthdate: birthdate, phonenumber: phonenumber, email: email, password: password, confirm_password: confirm_password, image: image, account: account });
                     return [3 /*break*/, 10];
                 case 6:
                     if (!(docs[1] || docs[3])) return [3 /*break*/, 7];
-                    request.flash('info', 'email is already in use.');
+                    request.flash('info', 'correo electrónico ya existe.');
                     response.render('signup', { error_message: request.flash('info'), firstname: firstname, lastname: lastname, gender: gender, birthdate: birthdate, phonenumber: phonenumber, email: email, password: password, confirm_password: confirm_password, image: image, account: account });
                     return [3 /*break*/, 10];
                 case 7:
@@ -160,7 +160,7 @@ var main = function () {
                         })];
                 case 9:
                     _d.sent();
-                    request.flash('info', 'you are registered.');
+                    request.flash('info', 'estas registrado.');
                     response.render('login', { success_message: request.flash('info') });
                     user.sendMail();
                     _d.label = 10;
@@ -203,12 +203,12 @@ var main = function () {
                     doc4 = _d.sent();
                     docs = [doc1, doc2, doc3, doc4];
                     if (!(docs[0] || docs[2])) return [3 /*break*/, 17];
-                    request.flash('info', 'phonenumber is already in use.');
+                    request.flash('info', 'número de teléfono ya existe.');
                     response.render('signup', { error_message: request.flash('info'), firstname: firstname, lastname: lastname, gender: gender, birthdate: birthdate, idcard: idcard, phonenumber: phonenumber, email: email, password: password, confirm_password: confirm_password, image: image, account: account, video: video, description: description, certificate: certificate, service: service });
                     return [3 /*break*/, 21];
                 case 17:
                     if (!(docs[1] || docs[3])) return [3 /*break*/, 18];
-                    request.flash('info', 'email is already in use.');
+                    request.flash('info', 'correo electrónico ya existe.');
                     response.render('signup', { error_message: request.flash('info'), firstname: firstname, lastname: lastname, gender: gender, birthdate: birthdate, idcard: idcard, phonenumber: phonenumber, email: email, password: password, confirm_password: confirm_password, image: image, account: account, video: video, description: description, certificate: certificate, service: service });
                     return [3 /*break*/, 21];
                 case 18:
@@ -252,7 +252,7 @@ var main = function () {
                         })];
                 case 20:
                     _d.sent();
-                    request.flash('info', 'you are registered.');
+                    request.flash('info', 'estas registrado.');
                     response.render('login', { success_message: request.flash('info') });
                     user.sendMail();
                     _d.label = 21;
@@ -298,18 +298,18 @@ var main = function () {
                     _b.label = 5;
                 case 5:
                     if (!!doc) return [3 /*break*/, 6];
-                    request.flash('info', 'email or phonenumber does not exist.');
+                    request.flash('info', 'correo electrónico o número de teléfono no existe.');
                     response.render('login', { error_message: request.flash('info'), email: email, password: password, account: account });
                     return [3 /*break*/, 8];
                 case 6: return [4 /*yield*/, doc.matchPassword(password)];
                 case 7:
                     match = _b.sent();
                     if (match) {
-                        request.flash('info', 'welcome ' + email + '.');
+                        request.flash('info', 'bienvenido ' + email + '.');
                         response.render('main', { success_message: request.flash('info'), email: email, password: password, account: account });
                     }
                     else {
-                        request.flash('info', 'passwords do not match.');
+                        request.flash('info', 'contraseña incorrecta.');
                         response.render('login', { error_message: request.flash('info'), email: email, password: password, account: account });
                     }
                     _b.label = 8;
@@ -343,18 +343,18 @@ var main = function () {
                     _b.label = 14;
                 case 14:
                     if (!!doc) return [3 /*break*/, 15];
-                    request.flash('info', 'email or phonenumber does not exist.');
+                    request.flash('info', 'correo electrónico o número de teléfono no existe.');
                     response.render('login', { error_message: request.flash('info'), email: email, password: password, account: account });
                     return [3 /*break*/, 17];
                 case 15: return [4 /*yield*/, doc.matchPassword(password)];
                 case 16:
                     match = _b.sent();
                     if (match) {
-                        request.flash('info', 'welcome ' + email + '.');
+                        request.flash('info', 'bienvenido ' + email + '.');
                         response.render('main', { success_message: request.flash('info'), email: email, password: password, account: account });
                     }
                     else {
-                        request.flash('info', 'passwords do not match.');
+                        request.flash('info', 'contraseña incorrecta.');
                         response.render('login', { error_message: request.flash('info'), email: email, password: password, account: account });
                     }
                     _b.label = 17;
@@ -364,7 +364,7 @@ var main = function () {
     }); });
     app.get('/logout', function (request, response) {
         request.logout();
-        request.flash('info', 'bye.');
+        request.flash('info', 'hasta luego.');
         response.render('index', { success_message: request.flash('info') });
     });
     module.exports = app;

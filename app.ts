@@ -65,11 +65,11 @@ let main = () => {
                 });
                 let docs : DocumentQuery<any, any, {}>[] = [doc1, doc2, doc3, doc4];
                 if (docs[0] || docs[2]) {
-                    request.flash('info', 'phonenumber is already in use.');
+                    request.flash('info', 'número de teléfono ya existe.');
                     response.render('signup', {error_message: request.flash('info'), firstname, lastname, gender, birthdate, phonenumber, email, password, confirm_password, image, account});
                 }
                 else if (docs[1] || docs[3]) {
-                    request.flash('info', 'email is already in use.');
+                    request.flash('info', 'correo electrónico ya existe.');
                     response.render('signup', {error_message: request.flash('info'), firstname, lastname, gender, birthdate, phonenumber, email, password, confirm_password, image, account});
                 }
                 else {
@@ -101,7 +101,7 @@ let main = () => {
                             console.log(error);
                         }
                     });
-                    request.flash('info', 'you are registered.');
+                    request.flash('info', 'estas registrado.');
                     response.render('login', {success_message: request.flash('info')});
                     user.sendMail();
                 }
@@ -137,11 +137,11 @@ let main = () => {
                 });
                 let docs : DocumentQuery<any, any, {}>[] = [doc1, doc2, doc3, doc4];
                 if (docs[0] || docs[2]) {
-                    request.flash('info', 'phonenumber is already in use.');
+                    request.flash('info', 'número de teléfono ya existe.');
                     response.render('signup', {error_message: request.flash('info'), firstname, lastname, gender, birthdate, idcard, phonenumber, email, password, confirm_password, image, account, video, description, certificate, service});
                 }
                 else if (docs[1] || docs[3]) {
-                    request.flash('info', 'email is already in use.');
+                    request.flash('info', 'correo electrónico ya existe.');
                     response.render('signup', {error_message: request.flash('info'), firstname, lastname, gender, birthdate, idcard, phonenumber, email, password, confirm_password, image, account, video, description, certificate, service});
                 }
                 else {
@@ -180,7 +180,7 @@ let main = () => {
                             console.log(error);
                         }
                     });
-                    request.flash('info', 'you are registered.');
+                    request.flash('info', 'estas registrado.');
                     response.render('login', {success_message: request.flash('info')});
                     user.sendMail();
                 }
@@ -217,17 +217,17 @@ let main = () => {
                     });
                 }
                 if (!doc) {
-                    request.flash('info', 'email or phonenumber does not exist.');
+                    request.flash('info', 'correo electrónico o número de teléfono no existe.');
                     response.render('login', {error_message: request.flash('info'), email, password, account});
                 } 
                 else {
                     let match = await doc.matchPassword(password);
                     if (match) {
-                        request.flash('info', 'welcome ' + email+'.');
+                        request.flash('info', 'bienvenido ' + email+'.');
                         response.render('main', {success_message: request.flash('info'), email, password, account});
                     } 
                     else {
-                        request.flash('info', 'passwords do not match.');
+                        request.flash('info', 'contraseña incorrecta.');
                         response.render('login', {error_message: request.flash('info'), email, password, account});
                     }
                 }
@@ -258,17 +258,17 @@ let main = () => {
                     });
                 }
                 if (!doc) {
-                    request.flash('info', 'email or phonenumber does not exist.');
+                    request.flash('info', 'correo electrónico o número de teléfono no existe.');
                     response.render('login', {error_message: request.flash('info'), email, password, account});
                 } 
                 else {
                     let match = await doc.matchPassword(password);
                     if (match) {
-                        request.flash('info', 'welcome ' + email+'.');
+                        request.flash('info', 'bienvenido ' + email+'.');
                         response.render('main', {success_message: request.flash('info'), email, password, account});
                     } 
                     else {
-                        request.flash('info', 'passwords do not match.');
+                        request.flash('info', 'contraseña incorrecta.');
                         response.render('login', {error_message: request.flash('info'), email, password, account});
                     }
                 }
@@ -277,7 +277,7 @@ let main = () => {
     });
     app.get('/logout', (request, response) => {
         request.logout();
-        request.flash('info', 'bye.');
+        request.flash('info', 'hasta luego.');
         response.render('index', {success_message: request.flash('info')});
     });
     module.exports = app;

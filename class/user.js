@@ -108,11 +108,11 @@ var User = /** @class */ (function () {
         var phone_expression = /[0-9]{9}/;
         var errors = [];
         if (email === "" || password === "" || account === "") {
-            errors.push({ text: 'you must complete fields.' });
+            errors.push({ text: 'debes completar los campos.' });
         }
         else {
             if (!email_expression.test(email) && !phone_expression.test(email)) {
-                errors.push({ text: 'email or phonenumber is not valid.' });
+                errors.push({ text: 'correo electrónico o número de teléfono no válido.' });
             }
         }
         return errors;
@@ -145,15 +145,15 @@ var User = /** @class */ (function () {
         var transporter = nodemailer_1.default.createTransport({
             service: 'gmail',
             auth: {
-                user: 'contactaulima@gmail.com',
-                pass: 'ulimasw2'
+                user: 'contacta.no.reply@gmail.com',
+                pass: 'contactasw2ulima'
             }
         });
         var mailOptions = {
-            from: 'contactaulima@gmail.com',
+            from: 'contacta.no.reply@gmail.com',
             to: this.getEmail(),
-            subject: 'Asunto',
-            text: 'Hola ' + this.getEmail()
+            subject: 'Contacta',
+            text: 'Hola ' + this.getEmail() + ' te damos la bienvenida a Contacta.'
         };
         transporter.sendMail(mailOptions, function (error, info) {
             if (error) {
