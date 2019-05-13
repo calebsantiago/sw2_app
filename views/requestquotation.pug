@@ -4,7 +4,7 @@ html(lang = "en")
         meta(charset = "UTF-8")
         meta(name = "viewport" content = "width=device-width, initial-scale=1.0")
         meta(http-equiv = "X-UA-Compatible" content = "ie=edge")
-        link(rel = "stylesheet" type = "text/css" href = "stylesheets/index.css")
+        link(rel = "stylesheet" type = "text/css" href = "stylesheets/forms.css")
         link(rel = "stylesheet" type = "text/css" href = "https://bootswatch.com/4/cosmo/bootstrap.min.css")
         script(type = "text/javascript" src = "https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js")
         script(type = "text/javascript" src = "https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity = "sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin = "anonymous")
@@ -25,9 +25,11 @@ html(lang = "en")
             div(class = "alert alert-success alert-dismissible fade show" role = "alert") #{success_message}
                 button(type = "button" class = "close" data-dismiss = "alert" aria-label = "Close")
                     span(aria-hidden = "true") &times;
-        div(class = "main-group-div")
+        form(action = user._id+"?_method=put" method = "post")
+            textarea(id = "description" name = "description" placeholder = "descripción" class = "" autofocus required) #{description}
+            input(type = "date" id = "date" name = "date" placeholder = "fecha" value = date class = "" required)
+            input(type = "url" id = "image" name = "image" placeholder = "link imagen" value = image class = "")
+            input(type = "submit" value = "cotizar servicio" class = "")
             a(href = "/searchservice")
-                button(type = "button" class = "btn btn-secondary btn-lg btn-block") buscar servicio 
-        div(class = "main-group-div")
-            a(href = "/logout")
-                button(type = "button" class = "btn btn-secondary btn-lg btn-block") cerrar sesión
+                    button(type = "button" class = "") cancelar
+            

@@ -280,6 +280,36 @@ let main = () => {
         request.flash('info', 'hasta luego.');
         response.render('index', {success_message: request.flash('info')});
     });
+    app.get('/searchservice', (request, response) => {
+        response.render('searchservice');
+    });
+    app.post('/searchservice', (request, response) => {
+        let {service} = request.body;
+            connectDB();
+            provider_model.find({'service.title' : service}, (error, document) => {
+                if(error) {
+                    console.log(error);
+                }
+                if(!document.length) {
+                    request.flash('info', 'servicio no existe.');
+                    response.render('searchservice', {error_message: request.flash('info'), service});
+                }
+                else {
+                    response.render('searchservice', {users : document, service});
+                }
+            });
+    });
+    app.get('/requestquotation/:id', (request, response) => {
+        connectDB();
+        let {id} = request.params.id;
+        provider_model.findOne({id : id}, (error, document) => {
+            if(error) {
+                console.log(error);
+            }
+            console.log(document);
+            response.render('requestquotation', {user : document});
+        });
+    });
     module.exports = app;
 };
 main();

@@ -367,6 +367,36 @@ var main = function () {
         request.flash('info', 'hasta luego.');
         response.render('index', { success_message: request.flash('info') });
     });
+    app.get('/searchservice', function (request, response) {
+        response.render('searchservice');
+    });
+    app.post('/searchservice', function (request, response) {
+        var service = request.body.service;
+        connection_1.connectDB();
+        provider_2.provider_model.find({ 'service.title': service }, function (error, document) {
+            if (error) {
+                console.log(error);
+            }
+            if (!document.length) {
+                request.flash('info', 'servicio no existe.');
+                response.render('searchservice', { error_message: request.flash('info'), service: service });
+            }
+            else {
+                response.render('searchservice', { users: document, service: service });
+            }
+        });
+    });
+    app.get('/requestquotation/:id', function (request, response) {
+        connection_1.connectDB();
+        var id = request.params.id.id;
+        provider_2.provider_model.findOne({ id: id }, function (error, document) {
+            if (error) {
+                console.log(error);
+            }
+            console.log(document);
+            response.render('requestquotation', { user: document });
+        });
+    });
     module.exports = app;
 };
 main();
