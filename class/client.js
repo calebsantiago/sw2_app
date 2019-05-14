@@ -154,6 +154,9 @@ var Client = /** @class */ (function (_super) {
     Client.prototype.requestQuotation = function () {
         console.log('request quotation');
     };
+    Client.prototype.checkQuotations = function () {
+        console.log('check quotations');
+    };
     Client.prototype.responseQuotation = function () {
         console.log('response quotation');
     };

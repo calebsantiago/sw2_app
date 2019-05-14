@@ -50,6 +50,7 @@ var client_1 = require("./class/client");
 var client_2 = require("./schema/client");
 var provider_1 = require("./class/provider");
 var provider_2 = require("./schema/provider");
+var quotation_1 = require("./schema/quotation");
 var mongoose_1 = __importDefault(require("mongoose"));
 var main = function () {
     var app = express_1.default();
@@ -62,12 +63,22 @@ var main = function () {
     app.use(method_override_1.default('_method'));
     app.use(express_session_1.default({
         secret: 'secret',
-        resave: true,
-        saveUninitialized: true
+        resave: false,
+        saveUninitialized: false
     }));
     app.use(passport_1.default.initialize());
     app.use(passport_1.default.session());
     app.use(connect_flash_1.default());
+    /*app.use((request, response, next) => {
+        if(request.session != undefined) {
+            if(!request.session.user_id) {
+                response.render('login');
+            }
+            else {
+                next();
+            }
+        }
+    });*/
     app.get('/', function (request, response) {
         response.render('index');
     });
@@ -305,8 +316,11 @@ var main = function () {
                 case 7:
                     match = _b.sent();
                     if (match) {
-                        request.flash('info', 'bienvenido ' + email + '.');
-                        response.render('main', { success_message: request.flash('info'), email: email, password: password, account: account });
+                        if (request.session != undefined) {
+                            request.session.user_id = doc._id;
+                            request.flash('info', 'bienvenido ' + email + '.');
+                            response.render('main', { success_message: request.flash('info'), email: email, password: password, account: account });
+                        }
                     }
                     else {
                         request.flash('info', 'contraseña incorrecta.');
@@ -350,8 +364,11 @@ var main = function () {
                 case 16:
                     match = _b.sent();
                     if (match) {
-                        request.flash('info', 'bienvenido ' + email + '.');
-                        response.render('main', { success_message: request.flash('info'), email: email, password: password, account: account });
+                        if (request.session != undefined) {
+                            request.session.user_id = doc._id;
+                            request.flash('info', 'bienvenido ' + email + '.');
+                            response.render('main', { success_message: request.flash('info'), email: email, password: password, account: account });
+                        }
                     }
                     else {
                         request.flash('info', 'contraseña incorrecta.');
@@ -366,6 +383,13 @@ var main = function () {
         request.logout();
         request.flash('info', 'hasta luego.');
         response.render('index', { success_message: request.flash('info') });
+        if (request.session != undefined) {
+            request.session.destroy(function (error) {
+                if (error) {
+                    console.log(error);
+                }
+            });
+        }
     });
     app.get('/searchservice', function (request, response) {
         response.render('searchservice');
@@ -386,16 +410,73 @@ var main = function () {
             }
         });
     });
-    app.get('/requestquotation/:id', function (request, response) {
+    app.get('/searchservice/requestquotation/:id', function (request, response) {
+        var id = mongoose_1.default.Types.ObjectId(request.params.id);
         connection_1.connectDB();
-        var id = request.params.id.id;
-        provider_2.provider_model.findOne({ id: id }, function (error, document) {
+        provider_2.provider_model.findOne({ _id: id }, function (error, document) {
             if (error) {
                 console.log(error);
             }
-            console.log(document);
             response.render('requestquotation', { user: document });
         });
+    });
+    app.post('/searchservice/requestquotation/:id', function (request, response) {
+        var _a = request.body, provider = _a.provider, service = _a.service, date = _a.date, description = _a.description, image = _a.image;
+        if (request.session != undefined) {
+            connection_1.connectDB();
+            var model = new quotation_1.quotation_model({
+                _id: new mongoose_1.default.Types.ObjectId(),
+                _id_client: request.session.user_id,
+                _id_provider: provider,
+                service: service,
+                date: date,
+                description: description,
+                cost: 0,
+                status: "pendiente",
+                image: image
+            });
+            model.save(function (error) {
+                if (error) {
+                    console.log(error);
+                }
+            });
+            response.redirect('/searchservice');
+        }
+    });
+    app.get('/checkquotations', function (request, response) {
+        if (request.session != undefined) {
+            var id = mongoose_1.default.Types.ObjectId(request.session.user_id);
+            connection_1.connectDB();
+            quotation_1.quotation_model.aggregate([{
+                    $lookup: {
+                        from: "providers",
+                        localField: "_id_provider",
+                        foreignField: "_id",
+                        as: "fromProviders"
+                    }
+                },
+                {
+                    $match: { _id_client: id }
+                },
+                {
+                    $replaceRoot: { newRoot: { $mergeObjects: [{ $arrayElemAt: ["$fromProviders", 0] }, "$$ROOT"] } }
+                },
+                {
+                    $project: { account: 0, gender: 0, birthdate: 0, idcard: 0, phonenumber: 0, address: 0, coordinate: 0, video: 0, certificate: 0, __v: 0, fromProviders: 0 }
+                }], function (error, document) {
+                if (error) {
+                    console.log(error);
+                }
+                if (!document.length) {
+                    request.flash('info', 'no tienes cotizaciones.');
+                    response.render('checkquotations', { error_message: request.flash('info') });
+                }
+                else {
+                    console.log(document);
+                    response.render('checkquotations', { quotations: document });
+                }
+            });
+        }
     });
     module.exports = app;
 };

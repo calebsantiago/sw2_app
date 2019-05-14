@@ -6,10 +6,7 @@ html(lang = "en")
         meta(http-equiv = "X-UA-Compatible" content = "ie=edge")
         link(rel = "stylesheet" type = "text/css" href = "stylesheets/forms.css")
         link(rel = "stylesheet" type = "text/css" href = "https://bootswatch.com/4/cosmo/bootstrap.min.css")
-        script(type = "text/javascript" src = "javascripts/searchMap.js")
-        script(type = "text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCSRS9SAWe9v2szpbAYACT9F8c1hJThJ7c&callback=searchMap" async defer)
         script(type = "text/javascript" src = "https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js")
-        script(type = "text/javascript" src = "javascripts/show.js")
         script(type = "text/javascript" src = "https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity = "sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin = "anonymous")
         title CONTACTA
     body
@@ -29,25 +26,27 @@ html(lang = "en")
                 button(type = "button" class = "close" data-dismiss = "alert" aria-label = "Close")
                     span(aria-hidden = "true") &times;
         form(action = "searchservice" method = "post")
-            input(type = "text" id = "service" name = "service" placeholder = "servicio" value = service class = "" autofocus required)
-            input(type = "submit" value = "buscar servicio" class = "")
-            button(type = "button" onclick = "return show()" class = "") ubicación
-            div(id = "map" class = "signup-form-map" style = "display:none;" disabled)
-            if users    
+            if quotations    
                 table
                     tr
-                        td nombre
-                        td apellido
+                        td prestador
                         td servicio
+                        td fecha
                         td descripción
-                        td cotizar servicio
-                    each user in users
+                        td costo
+                        td estado
+                        td cancelar cotizacion
+                    each quotation in quotations
                         tr
-                            td #{user.name.firstname}
-                            td #{user.name.lastname}
-                            td #{user.service.title}
-                            td #{user.description}
+                            td #{quotation.name.firstname + " " + quotation.name.lastname}
+                            td #{quotation.service}
+                            td #{quotation.date}
+                            td #{quotation.description}
+                            td #{quotation.cost}
+                            td #{quotation.status}
                             td
-                                a(href = "searchservice/requestquotation/" + user._id)
-                                    button(type = "button" class = "") cotizar
-            
+                                a(href = "searchservice/requestquotation/" + quotation._id)
+                                if quotation.status == "pendiente" || quotation.status == "rechazado"
+                                        button(type = "button" class = "" disabled) cancelar
+                                else 
+                                        button(type = "button" class = "") cancelar

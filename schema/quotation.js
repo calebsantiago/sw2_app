@@ -9,9 +9,11 @@ var quotation_schema = new schema({
     _id: mongoose_1.default.Schema.Types.ObjectId,
     _id_client: mongoose_1.default.Schema.Types.ObjectId,
     _id_provider: mongoose_1.default.Schema.Types.ObjectId,
+    service: { type: String, required: true },
     date: { type: String, required: true },
     description: { type: String, required: true },
-    cost: Number,
+    cost: { type: Number, required: true },
+    status: { type: String, required: true },
     image: String
 });
 exports.quotation_model = mongoose_1.default.model('quotations', quotation_schema);

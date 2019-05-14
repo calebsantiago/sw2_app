@@ -9,6 +9,7 @@ import {Client} from './class/client';
 import {client_model} from './schema/client';
 import {Provider} from './class/provider';
 import {provider_model} from './schema/provider';
+import {quotation_model} from './schema/quotation';
 import mongoose, {DocumentQuery} from 'mongoose';
 let main = () => {
     let app : express.Application = express();
@@ -21,12 +22,22 @@ let main = () => {
     app.use(method_override('_method'));
     app.use(session({
         secret: 'secret',
-        resave: true,
-        saveUninitialized: true
+        resave: false,
+        saveUninitialized: false
     }));
     app.use(passport.initialize());
     app.use(passport.session());
     app.use(flash());
+    /*app.use((request, response, next) => {
+        if(request.session != undefined) {
+            if(!request.session.user_id) {
+                response.render('login');
+            }
+            else {
+                next();
+            }
+        }
+    });*/
     app.get('/', (request, response) => {
         response.render('index');
     });
@@ -223,8 +234,11 @@ let main = () => {
                 else {
                     let match = await doc.matchPassword(password);
                     if (match) {
-                        request.flash('info', 'bienvenido ' + email+'.');
-                        response.render('main', {success_message: request.flash('info'), email, password, account});
+                        if(request.session != undefined) {
+                            request.session.user_id = doc._id;
+                            request.flash('info', 'bienvenido ' + email + '.');
+                            response.render('main', {success_message: request.flash('info'), email, password, account});
+                        }
                     } 
                     else {
                         request.flash('info', 'contraseña incorrecta.');
@@ -264,8 +278,11 @@ let main = () => {
                 else {
                     let match = await doc.matchPassword(password);
                     if (match) {
-                        request.flash('info', 'bienvenido ' + email+'.');
-                        response.render('main', {success_message: request.flash('info'), email, password, account});
+                        if(request.session != undefined) {
+                            request.session.user_id = doc._id;
+                            request.flash('info', 'bienvenido ' + email + '.');
+                            response.render('main', {success_message: request.flash('info'), email, password, account});
+                        }
                     } 
                     else {
                         request.flash('info', 'contraseña incorrecta.');
@@ -279,6 +296,13 @@ let main = () => {
         request.logout();
         request.flash('info', 'hasta luego.');
         response.render('index', {success_message: request.flash('info')});
+        if(request.session != undefined) {
+            request.session.destroy((error) => {
+                if(error) {
+                    console.log(error);
+                }
+            });
+        }
     });
     app.get('/searchservice', (request, response) => {
         response.render('searchservice');
@@ -299,16 +323,73 @@ let main = () => {
                 }
             });
     });
-    app.get('/requestquotation/:id', (request, response) => {
+    app.get('/searchservice/requestquotation/:id', (request, response) => {
+        let id = mongoose.Types.ObjectId(request.params.id);
         connectDB();
-        let {id} = request.params.id;
-        provider_model.findOne({id : id}, (error, document) => {
+        provider_model.findOne({_id : id}, (error, document) => {
             if(error) {
                 console.log(error);
             }
-            console.log(document);
             response.render('requestquotation', {user : document});
         });
+    });
+    app.post('/searchservice/requestquotation/:id', (request, response) => {
+        let {provider, service, date, description, image} = request.body;
+        if (request.session != undefined) {
+            connectDB();
+            let model = new quotation_model({
+                _id: new mongoose.Types.ObjectId(),
+                _id_client : request.session.user_id,
+                _id_provider : provider,
+                service : service,
+                date : date,
+                description : description,
+                cost : 0,
+                status : "pendiente",
+                image : image
+            });
+            model.save((error : any) => {
+                if (error) {
+                    console.log(error);
+                }
+            });
+            response.redirect('/searchservice');
+        }
+    });
+    app.get('/checkquotations', (request, response) => {
+        if(request.session != undefined) {
+            let id = mongoose.Types.ObjectId(request.session.user_id);
+            connectDB();
+            quotation_model.aggregate([{
+                $lookup : {
+                   from : "providers",
+                   localField : "_id_provider",
+                   foreignField : "_id",
+                   as : "fromProviders"
+                }
+                },
+                { 
+                    $match : { _id_client : id } 
+                },
+                {
+                    $replaceRoot : { newRoot : { $mergeObjects : [ { $arrayElemAt : [ "$fromProviders", 0 ] }, "$$ROOT" ] } }
+                },
+                { 
+                    $project : { account : 0, gender : 0, birthdate : 0, idcard : 0, phonenumber : 0, address : 0, coordinate : 0, video : 0, certificate : 0, __v : 0, fromProviders : 0 } 
+                }], (error : any, document : any) => {
+                if(error) {
+                    console.log(error);
+                }
+                if(!document.length) {
+                    request.flash('info', 'no tienes cotizaciones.');
+                    response.render('checkquotations', {error_message: request.flash('info')});
+                }
+                else {
+                    console.log(document);
+                    response.render('checkquotations', {quotations: document});
+                }
+            });
+        }
     });
     module.exports = app;
 };

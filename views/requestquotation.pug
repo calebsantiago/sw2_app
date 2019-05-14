@@ -25,9 +25,11 @@ html(lang = "en")
             div(class = "alert alert-success alert-dismissible fade show" role = "alert") #{success_message}
                 button(type = "button" class = "close" data-dismiss = "alert" aria-label = "Close")
                     span(aria-hidden = "true") &times;
-        form(action = user._id+"?_method=put" method = "post")
-            textarea(id = "description" name = "description" placeholder = "descripción" class = "" autofocus required) #{description}
+        form(action = user._id method = "post")
+            input(type = "text" id = "provider" name = "provider" placeholder = "provider" value = user._id class = "" style = "display:none;" required)
+            input(type = "text" id = "service" name = "service" placeholder = "service" value = user.service.title class = "" style = "display:none;" required)
             input(type = "date" id = "date" name = "date" placeholder = "fecha" value = date class = "" required)
+            textarea(id = "description" name = "description" placeholder = "descripción" class = "" autofocus required) #{description}
             input(type = "url" id = "image" name = "image" placeholder = "link imagen" value = image class = "")
             input(type = "submit" value = "cotizar servicio" class = "")
             a(href = "/searchservice")

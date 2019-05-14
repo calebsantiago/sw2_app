@@ -240,6 +240,9 @@ var Provider = /** @class */ (function (_super) {
             this.service.splice(index, 1);
         }
     };
+    Provider.prototype.checkQuotations = function () {
+        console.log('check quotations');
+    };
     Provider.prototype.quoteService = function () {
         console.log('quote service');
     };

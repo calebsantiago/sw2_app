@@ -135,6 +135,9 @@ export class Client extends User {
     public requestQuotation() : void {
         console.log('request quotation');
     }
+    public checkQuotations() : void {
+        console.log('check quotations');
+    }
     public responseQuotation() : void {
         console.log('response quotation');
     }

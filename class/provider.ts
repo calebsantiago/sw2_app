@@ -225,6 +225,9 @@ export class Provider extends User {
             this.service.splice(index,1);
         }
     }
+    public checkQuotations() : void {
+        console.log('check quotations');
+    }
     public quoteService() : void {
         console.log('quote service');
     }
