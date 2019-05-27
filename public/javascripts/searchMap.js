@@ -54,7 +54,7 @@ function searchMap() {
         map: map,
         draggable: false,
         icon: image,
-        title: "¡Estás aquí!"
+        title: "Mi dirección"
     });
     var infowindow = new google.maps.InfoWindow({
         content: marker.title

@@ -356,36 +356,70 @@ let main = () => {
     app.get('/checkquotations', (request, response) => {
         if(request.session != undefined) {
             let id = mongoose.Types.ObjectId(request.session.user_id);
+            let account = request.session.account;
             connectDB();
-            quotation_model.aggregate([{
-                $lookup : {
-                   from : "providers",
-                   localField : "_id_provider",
-                   foreignField : "_id",
-                   as : "fromProviders"
-                }
-                },
-                { 
-                    $match : { _id_client : id } 
-                },
-                {
-                    $replaceRoot : { newRoot : { $mergeObjects : [ { $arrayElemAt : [ "$fromProviders", 0 ] }, "$$ROOT" ] } }
-                },
-                { 
-                    $project : { account : 0, gender : 0, birthdate : 0, idcard : 0, phonenumber : 0, address : 0, coordinate : 0, video : 0, certificate : 0, __v : 0, fromProviders : 0 } 
-                }], (error : any, document : any) => {
-                if(error) {
-                    console.log(error);
-                }
-                if(!document.length) {
-                    request.flash('info', 'no tienes cotizaciones.');
-                    response.render('checkquotations', {error_message: request.flash('info')});
-                }
-                else {
-                    console.log(document);
-                    response.render('checkquotations', {quotations: document});
-                }
-            });
+            if(account == "client") {
+                quotation_model.aggregate([{
+                    $lookup : {
+                       from : "providers",
+                       localField : "_id_provider",
+                       foreignField : "_id",
+                       as : "fromProviders"
+                    }
+                    },
+                    { 
+                        $match : { _id_client : id } 
+                    },
+                    {
+                        $replaceRoot : { newRoot : { $mergeObjects : [ { $arrayElemAt : [ "$fromProviders", 0 ] }, "$$ROOT" ] } }
+                    },
+                    { 
+                        $project : { account : 0, gender : 0, birthdate : 0, idcard : 0, phonenumber : 0, address : 0, coordinate : 0, video : 0, certificate : 0, __v : 0, fromProviders : 0 } 
+                    }], (error : any, document : any) => {
+                    if(error) {
+                        console.log(error);
+                    }
+                    if(!document.length) {
+                        request.flash('info', 'no tienes cotizaciones.');
+                        response.render('checkquotations', {error_message : request.flash('info'), account : account});
+                    }
+                    else {
+                        console.log(document);
+                        response.render('checkquotations', {account : account, quotations : document});
+                    }
+                });
+            }
+            else {
+                quotation_model.aggregate([{
+                    $lookup : {
+                       from : "clients",
+                       localField : "_id_client",
+                       foreignField : "_id",
+                       as : "fromClients"
+                    }
+                    },
+                    { 
+                        $match : { _id_provider : id } 
+                    },
+                    {
+                        $replaceRoot : { newRoot : { $mergeObjects : [ { $arrayElemAt : [ "$fromClients", 0 ] }, "$$ROOT" ] } }
+                    },
+                    { 
+                        $project : { account : 0, gender : 0, birthdate : 0, phonenumber : 0, address : 0, coordinate : 0, __v : 0, fromClients : 0 } 
+                    }], (error : any, document : any) => {
+                    if(error) {
+                        console.log(error);
+                    }
+                    if(!document.length) {
+                        request.flash('info', 'no tienes cotizaciones.');
+                        response.render('checkquotations', {error_message : request.flash('info'), account : account});
+                    }
+                    else {
+                        console.log(document);
+                        response.render('checkquotations', {account : account, quotations : document});
+                    }
+                });
+            }
         }
     });
     app.get('/checkhistory', (request, response) => {

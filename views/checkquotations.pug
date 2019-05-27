@@ -25,30 +25,64 @@ html(lang = "en")
             div(class = "alert alert-success alert-dismissible fade show" role = "alert") #{success_message}
                 button(type = "button" class = "close" data-dismiss = "alert" aria-label = "Close")
                     span(aria-hidden = "true") &times;
-        form(action = "searchservice" method = "post")
-            if quotations    
-                table
-                    tr
-                        td prestador
-                        td servicio
-                        td fecha
-                        td descripción
-                        td costo
-                        td estado
-                        td cancelar cotizacion
-                    each quotation in quotations
+        if account == "client"
+            form(action = "searchservice" method = "post")
+                if quotations    
+                    table
                         tr
-                            td #{quotation.name.firstname + " " + quotation.name.lastname}
-                            td #{quotation.service}
-                            td #{quotation.date}
-                            td #{quotation.description}
-                            td #{quotation.cost}
-                            td #{quotation.status}
-                            td
-                                a(href = "searchservice/requestquotation/" + quotation._id)
-                                if quotation.status == "pendiente" || quotation.status == "rechazado"
-                                        button(type = "button" class = "" disabled) cancelar
-                                else 
-                                        button(type = "button" class = "") cancelar
+                            td prestador
+                            td servicio
+                            td fecha
+                            td descripción
+                            td costo
+                            td estado
+                            td cancelar cotizacion
+                        each quotation in quotations
+                            tr
+                                td #{quotation.name.firstname + " " + quotation.name.lastname}
+                                td #{quotation.service}
+                                td #{quotation.date}
+                                td #{quotation.description}
+                                td #{quotation.cost}
+                                td #{quotation.status}
+                                td
+                                    a(href = "searchservice/requestquotation/" + quotation._id)
+                                    if quotation.status == "pendiente" || quotation.status == "rechazado"
+                                            button(type = "button" class = "" disabled) cancelar
+                                    else 
+                                            button(type = "button" class = "") cancelar
+        else
+            form(action = "searchservice" method = "post")
+                if quotations    
+                    table
+                        tr
+                            td cliente
+                            td servicio
+                            td fecha
+                            td descripción
+                            td costo
+                            td estado
+                            td cotizar servicio
+                            td cancelar servicio
+                        each quotation in quotations
+                            tr
+                                td #{quotation.name.firstname + " " + quotation.name.lastname}
+                                td #{quotation.service}
+                                td #{quotation.date}
+                                td #{quotation.description}
+                                td #{quotation.cost}
+                                td #{quotation.status}
+                                td
+                                    a(href = "searchservice/requestquotation/" + quotation._id)
+                                    if quotation.status == "aceptado" || quotation.status == "rechazado"
+                                            button(type = "button" class = "" disabled) cotizar
+                                    else 
+                                            button(type = "button" class = "") cotizar
+                                td
+                                    a(href = "searchservice/requestquotation/" + quotation._id)
+                                    if quotation.status == "pendiente" || quotation.status == "rechazado"
+                                            button(type = "button" class = "" disabled) cancelar
+                                    else 
+                                            button(type = "button" class = "") cancelar
         a(href = "/main")
             button(type = "button" class = "") volver

@@ -452,36 +452,70 @@ var main = function () {
     app.get('/checkquotations', function (request, response) {
         if (request.session != undefined) {
             var id = mongoose_1.default.Types.ObjectId(request.session.user_id);
+            var account_1 = request.session.account;
             connection_1.connectDB();
-            quotation_1.quotation_model.aggregate([{
-                    $lookup: {
-                        from: "providers",
-                        localField: "_id_provider",
-                        foreignField: "_id",
-                        as: "fromProviders"
+            if (account_1 == "client") {
+                quotation_1.quotation_model.aggregate([{
+                        $lookup: {
+                            from: "providers",
+                            localField: "_id_provider",
+                            foreignField: "_id",
+                            as: "fromProviders"
+                        }
+                    },
+                    {
+                        $match: { _id_client: id }
+                    },
+                    {
+                        $replaceRoot: { newRoot: { $mergeObjects: [{ $arrayElemAt: ["$fromProviders", 0] }, "$$ROOT"] } }
+                    },
+                    {
+                        $project: { account: 0, gender: 0, birthdate: 0, idcard: 0, phonenumber: 0, address: 0, coordinate: 0, video: 0, certificate: 0, __v: 0, fromProviders: 0 }
+                    }], function (error, document) {
+                    if (error) {
+                        console.log(error);
                     }
-                },
-                {
-                    $match: { _id_client: id }
-                },
-                {
-                    $replaceRoot: { newRoot: { $mergeObjects: [{ $arrayElemAt: ["$fromProviders", 0] }, "$$ROOT"] } }
-                },
-                {
-                    $project: { account: 0, gender: 0, birthdate: 0, idcard: 0, phonenumber: 0, address: 0, coordinate: 0, video: 0, certificate: 0, __v: 0, fromProviders: 0 }
-                }], function (error, document) {
-                if (error) {
-                    console.log(error);
-                }
-                if (!document.length) {
-                    request.flash('info', 'no tienes cotizaciones.');
-                    response.render('checkquotations', { error_message: request.flash('info') });
-                }
-                else {
-                    console.log(document);
-                    response.render('checkquotations', { quotations: document });
-                }
-            });
+                    if (!document.length) {
+                        request.flash('info', 'no tienes cotizaciones.');
+                        response.render('checkquotations', { error_message: request.flash('info'), account: account_1 });
+                    }
+                    else {
+                        console.log(document);
+                        response.render('checkquotations', { account: account_1, quotations: document });
+                    }
+                });
+            }
+            else {
+                quotation_1.quotation_model.aggregate([{
+                        $lookup: {
+                            from: "clients",
+                            localField: "_id_client",
+                            foreignField: "_id",
+                            as: "fromClients"
+                        }
+                    },
+                    {
+                        $match: { _id_provider: id }
+                    },
+                    {
+                        $replaceRoot: { newRoot: { $mergeObjects: [{ $arrayElemAt: ["$fromClients", 0] }, "$$ROOT"] } }
+                    },
+                    {
+                        $project: { account: 0, gender: 0, birthdate: 0, phonenumber: 0, address: 0, coordinate: 0, __v: 0, fromClients: 0 }
+                    }], function (error, document) {
+                    if (error) {
+                        console.log(error);
+                    }
+                    if (!document.length) {
+                        request.flash('info', 'no tienes cotizaciones.');
+                        response.render('checkquotations', { error_message: request.flash('info'), account: account_1 });
+                    }
+                    else {
+                        console.log(document);
+                        response.render('checkquotations', { account: account_1, quotations: document });
+                    }
+                });
+            }
         }
     });
     app.get('/checkhistory', function (request, response) {
