@@ -103,11 +103,11 @@ var User = /** @class */ (function () {
         }
         return age;
     };
-    User.prototype.validateLogIn = function (email, password, account) {
+    User.prototype.validateLogIn = function (email, password) {
         var email_expression = /[^@\s]+@[^@\s]+\.[^@\s]+/;
         var phone_expression = /[0-9]{9}/;
         var errors = [];
-        if (email === "" || password === "" || account === "") {
+        if (email === "" || password === "") {
             errors.push({ text: 'debes completar los campos.' });
         }
         else {

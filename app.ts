@@ -202,92 +202,66 @@ let main = () => {
         response.render('login');
     });
     app.post('/login', async (request, response) => {
-        let {email, password, account} = request.body;
-        if (account === 'client') {
-            let user : Client = new Client("", "", "", "", 0, "", "", "", "", "", "", 0, 0);     
-            let errors : any[] = user.validateLogIn(email,password,account);
-            if (errors.length > 0) {
-                response.render('login', {errors, email, password, account});
-            }
-            else {
-                connectDB();
-                let email_expression : RegExp = /[^@\s]+@[^@\s]+\.[^@\s]+/;
-                let doc;
-                if (email_expression.test(email)) {
-                    doc = await client_model.findOne({'account.email' : email}, (error) => {
-                        if(error) {
-                            console.log(error);
-                        }
-                    });
-                }
-                else {
-                    doc = await client_model.findOne({phonenumber : email}, (error) => {
-                        if(error) {
-                            console.log(error);
-                        }
-                    });
-                }
-                if (!doc) {
-                    request.flash('info', 'correo electrónico o número de teléfono no existe.');
-                    response.render('login', {error_message: request.flash('info'), email, password, account});
-                } 
-                else {
-                    let match = await doc.matchPassword(password);
-                    if (match) {
-                        if(request.session != undefined) {
-                            request.session.user_id = doc._id;
-                            request.flash('info', 'bienvenido ' + email + '.');
-                            response.render('main', {success_message: request.flash('info'), email, password, account});
-                        }
-                    } 
-                    else {
-                        request.flash('info', 'contraseña incorrecta.');
-                        response.render('login', {error_message: request.flash('info'), email, password, account});
-                    }
-                }
-            }
+        let {email, password} = request.body;
+        let user : Client = new Client("", "", "", "", 0, "", "", "", "", "", "", 0, 0);
+        let account : string = ""     
+        let errors : any[] = user.validateLogIn(email,password);
+        if (errors.length > 0) {
+            response.render('login', {errors, email, password});
         }
         else {
-            let user : Provider = new Provider("", "", "", "", 0, "", "", "", "", "", "", 0, 0, 0, "", "", "", "");
-            let errors : any[] = user.validateLogIn(email, password, account);
-            if (errors.length > 0) {
-                response.render('login', {errors, email, password, account});
-            }
-            else {
-                connectDB();
-                let email_expression : RegExp = /[^@\s]+@[^@\s]+\.[^@\s]+/;
-                let doc;
-                if (email_expression.test(email)) {
+            connectDB();
+            let email_expression : RegExp = /[^@\s]+@[^@\s]+\.[^@\s]+/;
+            let doc;
+            if (email_expression.test(email)) {
+                doc = await client_model.findOne({'account.email' : email}, (error) => {
+                    if(error) {
+                        console.log(error);
+                    }
+                    account = "client";
+                });
+                if (!doc) {
                     doc = await provider_model.findOne({'account.email' : email}, (error) => {
                         if(error) {
                             console.log(error);
                         }
+                        account = "provider";
                     });
                 }
-                else {
+            }
+            else {
+                doc = await client_model.findOne({phonenumber : email}, (error) => {
+                    if(error) {
+                        console.log(error);
+                    }
+                    account = "client";
+                });
+                if (!doc) {
                     doc = await provider_model.findOne({phonenumber : email}, (error) => {
                         if(error) {
                             console.log(error);
                         }
+                        account = "provider";
                     });
                 }
-                if (!doc) {
-                    request.flash('info', 'correo electrónico o número de teléfono no existe.');
-                    response.render('login', {error_message: request.flash('info'), email, password, account});
+            }
+            if (!doc) {
+                request.flash('info', 'correo electrónico o número de teléfono no existe.');
+                response.render('login', {error_message: request.flash('info'), email, password});
+            } 
+            else {
+                let match = await doc.matchPassword(password);
+                if (match) {
+                    if(request.session != undefined) {
+                        request.session.user_id = doc._id;
+                        request.session.account = account;
+                        request.flash('info', 'bienvenido ' + email + '.');
+                        response.render('main', {success_message: request.flash('info'), account: request.session.account});
+                    }
                 } 
                 else {
-                    let match = await doc.matchPassword(password);
-                    if (match) {
-                        if(request.session != undefined) {
-                            request.session.user_id = doc._id;
-                            request.flash('info', 'bienvenido ' + email + '.');
-                            response.render('main', {success_message: request.flash('info'), email, password, account});
-                        }
-                    } 
-                    else {
-                        request.flash('info', 'contraseña incorrecta.');
-                        response.render('login', {error_message: request.flash('info'), email, password, account});
-                    }
+                    request.flash('info', 'contraseña incorrecta.');
+                    response.render('login', {error_message: request.flash('info'), email, password});
                 }
             }
         }
@@ -304,22 +278,45 @@ let main = () => {
             });
         }
     });
+    app.get('/main', (request, response) => {
+        if(request.session != undefined) {
+            response.render('main', {account: request.session.account});
+        }
+    });
     app.get('/searchservice', (request, response) => {
-        response.render('searchservice');
+        if(request.session != undefined) {
+            let id = mongoose.Types.ObjectId(request.session.user_id);
+            connectDB();
+            client_model.findOne({_id : id}, (error, document) => {
+                if(error) {
+                    console.log(error);
+                }
+                response.render('searchservice', {user : document});
+            });
+        }
     });
     app.post('/searchservice', (request, response) => {
         let {service} = request.body;
             connectDB();
-            provider_model.find({'service.title' : service}, (error, document) => {
+            provider_model.find({'service.title' : service}, async (error, document) => {
                 if(error) {
                     console.log(error);
                 }
-                if(!document.length) {
-                    request.flash('info', 'servicio no existe.');
-                    response.render('searchservice', {error_message: request.flash('info'), service});
-                }
-                else {
-                    response.render('searchservice', {users : document, service});
+                if(request.session != undefined) {
+                    let id = mongoose.Types.ObjectId(request.session.user_id);
+                    connectDB();
+                    let doc = await client_model.findOne({_id : id}, (error) => {
+                        if(error) {
+                            console.log(error);
+                        }
+                    });
+                    if(!document.length) {
+                        request.flash('info', 'servicio no existe.');
+                        response.render('searchservice', {error_message: request.flash('info'), user : doc, service});
+                    }
+                    else {
+                        response.render('searchservice', {user : doc, users : document, service});
+                    }
                 }
             });
     });
@@ -390,6 +387,15 @@ let main = () => {
                 }
             });
         }
+    });
+    app.get('/checkhistory', (request, response) => {
+        response.render('checkhistory');
+    });
+    app.get('/updateaccount', (request, response) => {
+        response.render('updateaccount');
+    });
+    app.get('/deleteaccount', (request, response) => {
+        response.render('deleteaccount');
     });
     module.exports = app;
 };

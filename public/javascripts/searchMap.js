@@ -15,11 +15,12 @@ function CloseControl(controlDiv, map) {
     var controlText = document.createElement('div');
     controlText.style.color = 'rgb(25,25,25)';
     controlText.style.fontFamily = 'Roboto,Arial,sans-serif';
-    controlText.style.fontSize = '16px';
-    controlText.style.lineHeight = '16px';
-    controlText.style.paddingLeft = '0px';
-    controlText.style.paddingRight = '0px';
-    controlText.innerHTML = 'X';
+    controlText.style.fontSize = '25px';
+    controlText.style.lineHeight = '25px';
+    controlText.style.paddingBottom = '3px';
+    controlText.style.paddingLeft = '3px';
+    controlText.style.paddingRight = '3px';
+    controlText.innerHTML = 'x';
     controlUI.appendChild(controlText);
     controlUI.addEventListener('click', function() {
         document.getElementById("map").disabled = true;
@@ -27,7 +28,44 @@ function CloseControl(controlDiv, map) {
     });
 }
 
+var latitude;
+var longitude;
+
+function setCoords(latitude, longitude) {
+    this.latitude = latitude;
+    this.longitude = longitude;
+}
+
 function searchMap() {
+    var myLatlng = new google.maps.LatLng(latitude, longitude);
+    var mapOptions = {
+        zoom: 16,
+        center: myLatlng,
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+    };
+    var map = new google.maps.Map(document.getElementById("map"), mapOptions);
+    var closeControlDiv = document.createElement('div');
+    var closeControl = new CloseControl(closeControlDiv, map);
+    closeControlDiv.index = 1;
+    map.controls[google.maps.ControlPosition.TOP_RIGHT].push(closeControlDiv);
+    var image = 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png';
+    var marker = new google.maps.Marker({
+        position: myLatlng,
+        map: map,
+        draggable: false,
+        icon: image,
+        title: "¡Estás aquí!"
+    });
+    var infowindow = new google.maps.InfoWindow({
+        content: marker.title
+    });
+    infowindow.open(map, marker);
+    marker.addListener('click', function() {
+        infowindow.open(map, marker);
+    });
+}
+
+/*function searchMap() {
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(function(position){
             var myLatlng = new google.maps.LatLng(position.coords.latitude,position.coords.longitude);
@@ -75,4 +113,4 @@ function searchMap() {
             });
         });
     }
-}
+}*/

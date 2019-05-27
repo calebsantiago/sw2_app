@@ -35,16 +35,6 @@ html(lang = "en")
                 input(type = "text" id = "email" name = "email" placeholder = "correo electrónico o número de teléfono" value = email class = "login-form-input" autofocus required)
                 .form-group.text-left  
                 input(type = "password" id = "password" name = "password" placeholder = "contraseña" value = password class = "login-form-input" required)
-                if account == "provider"
-                    input(type = "radio" id = "account" name = "account" value = "client" onclick = "return hide()" class = "login-form-input" required)
-                    | cliente
-                    input(type = "radio" id = "account" name = "account" value = "provider" onclick = "return hide()" class = "login-form-input" checked)
-                    | prestador
-                else
-                    input(type = "radio" id = "account" name = "account" value = "client" onclick = "return hide()" class = "login-form-input" checked)
-                    | cliente
-                    input(type = "radio" id = "account" name = "account" value = "provider" onclick = "return hide()" class = "login-form-input" required)
-                    | prestador
                 div
                     button.btn.btn-secondary.btn-lg.btn-block(type = "submit" value = "log in" class = "login-form-submit") iniciar sesión
             div

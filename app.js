@@ -275,107 +275,81 @@ var main = function () {
         response.render('login');
     });
     app.post('/login', function (request, response) { return __awaiter(_this, void 0, void 0, function () {
-        var _a, email, password, account, user, errors, email_expression, doc, match, user, errors, email_expression, doc, match;
+        var _a, email, password, user, account, errors, email_expression, doc, match;
         return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
-                    _a = request.body, email = _a.email, password = _a.password, account = _a.account;
-                    if (!(account === 'client')) return [3 /*break*/, 9];
+                    _a = request.body, email = _a.email, password = _a.password;
                     user = new client_1.Client("", "", "", "", 0, "", "", "", "", "", "", 0, 0);
-                    errors = user.validateLogIn(email, password, account);
+                    account = "";
+                    errors = user.validateLogIn(email, password);
                     if (!(errors.length > 0)) return [3 /*break*/, 1];
-                    response.render('login', { errors: errors, email: email, password: password, account: account });
-                    return [3 /*break*/, 8];
+                    response.render('login', { errors: errors, email: email, password: password });
+                    return [3 /*break*/, 11];
                 case 1:
                     connection_1.connectDB();
                     email_expression = /[^@\s]+@[^@\s]+\.[^@\s]+/;
                     doc = void 0;
-                    if (!email_expression.test(email)) return [3 /*break*/, 3];
+                    if (!email_expression.test(email)) return [3 /*break*/, 5];
                     return [4 /*yield*/, client_2.client_model.findOne({ 'account.email': email }, function (error) {
                             if (error) {
                                 console.log(error);
                             }
+                            account = "client";
                         })];
                 case 2:
                     doc = _b.sent();
-                    return [3 /*break*/, 5];
-                case 3: return [4 /*yield*/, client_2.client_model.findOne({ phonenumber: email }, function (error) {
-                        if (error) {
-                            console.log(error);
-                        }
-                    })];
-                case 4:
-                    doc = _b.sent();
-                    _b.label = 5;
-                case 5:
-                    if (!!doc) return [3 /*break*/, 6];
-                    request.flash('info', 'correo electrónico o número de teléfono no existe.');
-                    response.render('login', { error_message: request.flash('info'), email: email, password: password, account: account });
-                    return [3 /*break*/, 8];
-                case 6: return [4 /*yield*/, doc.matchPassword(password)];
-                case 7:
-                    match = _b.sent();
-                    if (match) {
-                        if (request.session != undefined) {
-                            request.session.user_id = doc._id;
-                            request.flash('info', 'bienvenido ' + email + '.');
-                            response.render('main', { success_message: request.flash('info'), email: email, password: password, account: account });
-                        }
-                    }
-                    else {
-                        request.flash('info', 'contraseña incorrecta.');
-                        response.render('login', { error_message: request.flash('info'), email: email, password: password, account: account });
-                    }
-                    _b.label = 8;
-                case 8: return [3 /*break*/, 17];
-                case 9:
-                    user = new provider_1.Provider("", "", "", "", 0, "", "", "", "", "", "", 0, 0, 0, "", "", "", "");
-                    errors = user.validateLogIn(email, password, account);
-                    if (!(errors.length > 0)) return [3 /*break*/, 10];
-                    response.render('login', { errors: errors, email: email, password: password, account: account });
-                    return [3 /*break*/, 17];
-                case 10:
-                    connection_1.connectDB();
-                    email_expression = /[^@\s]+@[^@\s]+\.[^@\s]+/;
-                    doc = void 0;
-                    if (!email_expression.test(email)) return [3 /*break*/, 12];
+                    if (!!doc) return [3 /*break*/, 4];
                     return [4 /*yield*/, provider_2.provider_model.findOne({ 'account.email': email }, function (error) {
                             if (error) {
                                 console.log(error);
                             }
+                            account = "provider";
                         })];
-                case 11:
+                case 3:
                     doc = _b.sent();
-                    return [3 /*break*/, 14];
-                case 12: return [4 /*yield*/, provider_2.provider_model.findOne({ phonenumber: email }, function (error) {
+                    _b.label = 4;
+                case 4: return [3 /*break*/, 8];
+                case 5: return [4 /*yield*/, client_2.client_model.findOne({ phonenumber: email }, function (error) {
                         if (error) {
                             console.log(error);
                         }
+                        account = "client";
                     })];
-                case 13:
+                case 6:
                     doc = _b.sent();
-                    _b.label = 14;
-                case 14:
-                    if (!!doc) return [3 /*break*/, 15];
+                    if (!!doc) return [3 /*break*/, 8];
+                    return [4 /*yield*/, provider_2.provider_model.findOne({ phonenumber: email }, function (error) {
+                            if (error) {
+                                console.log(error);
+                            }
+                            account = "provider";
+                        })];
+                case 7:
+                    doc = _b.sent();
+                    _b.label = 8;
+                case 8:
+                    if (!!doc) return [3 /*break*/, 9];
                     request.flash('info', 'correo electrónico o número de teléfono no existe.');
-                    response.render('login', { error_message: request.flash('info'), email: email, password: password, account: account });
-                    return [3 /*break*/, 17];
-                case 15: return [4 /*yield*/, doc.matchPassword(password)];
-                case 16:
+                    response.render('login', { error_message: request.flash('info'), email: email, password: password });
+                    return [3 /*break*/, 11];
+                case 9: return [4 /*yield*/, doc.matchPassword(password)];
+                case 10:
                     match = _b.sent();
                     if (match) {
                         if (request.session != undefined) {
                             request.session.user_id = doc._id;
+                            request.session.account = account;
                             request.flash('info', 'bienvenido ' + email + '.');
-                            response.render('main', { success_message: request.flash('info'), email: email, password: password, account: account });
+                            response.render('main', { success_message: request.flash('info'), account: request.session.account });
                         }
                     }
                     else {
                         request.flash('info', 'contraseña incorrecta.');
-                        response.render('login', { error_message: request.flash('info'), email: email, password: password, account: account });
+                        response.render('login', { error_message: request.flash('info'), email: email, password: password });
                     }
-                    _b.label = 17;
-                case 17: return [2 /*return*/];
+                    _b.label = 11;
+                case 11: return [2 /*return*/];
             }
         });
     }); });
@@ -391,24 +365,56 @@ var main = function () {
             });
         }
     });
+    app.get('/main', function (request, response) {
+        if (request.session != undefined) {
+            response.render('main', { account: request.session.account });
+        }
+    });
     app.get('/searchservice', function (request, response) {
-        response.render('searchservice');
+        if (request.session != undefined) {
+            var id = mongoose_1.default.Types.ObjectId(request.session.user_id);
+            connection_1.connectDB();
+            client_2.client_model.findOne({ _id: id }, function (error, document) {
+                if (error) {
+                    console.log(error);
+                }
+                response.render('searchservice', { user: document });
+            });
+        }
     });
     app.post('/searchservice', function (request, response) {
         var service = request.body.service;
         connection_1.connectDB();
-        provider_2.provider_model.find({ 'service.title': service }, function (error, document) {
-            if (error) {
-                console.log(error);
-            }
-            if (!document.length) {
-                request.flash('info', 'servicio no existe.');
-                response.render('searchservice', { error_message: request.flash('info'), service: service });
-            }
-            else {
-                response.render('searchservice', { users: document, service: service });
-            }
-        });
+        provider_2.provider_model.find({ 'service.title': service }, function (error, document) { return __awaiter(_this, void 0, void 0, function () {
+            var id, doc;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        if (error) {
+                            console.log(error);
+                        }
+                        if (!(request.session != undefined)) return [3 /*break*/, 2];
+                        id = mongoose_1.default.Types.ObjectId(request.session.user_id);
+                        connection_1.connectDB();
+                        return [4 /*yield*/, client_2.client_model.findOne({ _id: id }, function (error) {
+                                if (error) {
+                                    console.log(error);
+                                }
+                            })];
+                    case 1:
+                        doc = _a.sent();
+                        if (!document.length) {
+                            request.flash('info', 'servicio no existe.');
+                            response.render('searchservice', { error_message: request.flash('info'), user: doc, service: service });
+                        }
+                        else {
+                            response.render('searchservice', { user: doc, users: document, service: service });
+                        }
+                        _a.label = 2;
+                    case 2: return [2 /*return*/];
+                }
+            });
+        }); });
     });
     app.get('/searchservice/requestquotation/:id', function (request, response) {
         var id = mongoose_1.default.Types.ObjectId(request.params.id);
@@ -477,6 +483,15 @@ var main = function () {
                 }
             });
         }
+    });
+    app.get('/checkhistory', function (request, response) {
+        response.render('checkhistory');
+    });
+    app.get('/updateaccount', function (request, response) {
+        response.render('updateaccount');
+    });
+    app.get('/deleteaccount', function (request, response) {
+        response.render('deleteaccount');
     });
     module.exports = app;
 };

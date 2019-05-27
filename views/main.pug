@@ -25,12 +25,38 @@ html(lang = "en")
             div(class = "alert alert-success alert-dismissible fade show" role = "alert") #{success_message}
                 button(type = "button" class = "close" data-dismiss = "alert" aria-label = "Close")
                     span(aria-hidden = "true") &times;
-        div(class = "main-group-div")
-            a(href = "/searchservice")
-                button(type = "button" class = "btn btn-secondary btn-lg btn-block") buscar servicio
-        div(class = "main-group-div")
-            a(href = "/checkquotations")
-                button(type = "button" class = "btn btn-secondary btn-lg btn-block") verificar cotizaciones 
-        div(class = "main-group-div")
-            a(href = "/logout")
-                button(type = "button" class = "btn btn-secondary btn-lg btn-block") cerrar sesión
+        if account == "client"
+            div(class = "main-group-div")
+                a(href = "/searchservice")
+                    button(type = "button" class = "btn btn-secondary btn-lg btn-block") buscar servicio
+            div(class = "main-group-div")
+                a(href = "/checkquotations")
+                    button(type = "button" class = "btn btn-secondary btn-lg btn-block") verificar cotizaciones
+            div(class = "main-group-div")
+                a(href = "/checkhistory")
+                    button(type = "button" class = "btn btn-secondary btn-lg btn-block") historial de servicios
+            div(class = "main-group-div")
+                a(href = "/updateaccount")
+                    button(type = "button" class = "btn btn-secondary btn-lg btn-block") editar perfil
+            div(class = "main-group-div")
+                a(href = "/deleteaccount")
+                    button(type = "button" class = "btn btn-secondary btn-lg btn-block") eliminar cuenta       
+            div(class = "main-group-div")
+                a(href = "/logout")
+                    button(type = "button" class = "btn btn-secondary btn-lg btn-block") cerrar sesión
+        else
+            div(class = "main-group-div")
+                a(href = "/checkquotations")
+                    button(type = "button" class = "btn btn-secondary btn-lg btn-block") verificar cotizaciones
+            div(class = "main-group-div")
+                a(href = "/checkhistory")
+                    button(type = "button" class = "btn btn-secondary btn-lg btn-block") historial de servicios
+            div(class = "main-group-div")
+                a(href = "/updateaccount")
+                    button(type = "button" class = "btn btn-secondary btn-lg btn-block") editar perfil
+            div(class = "main-group-div")
+                a(href = "/deleteaccount")
+                    button(type = "button" class = "btn btn-secondary btn-lg btn-block") eliminar cuenta       
+            div(class = "main-group-div")
+                a(href = "/logout")
+                    button(type = "button" class = "btn btn-secondary btn-lg btn-block") cerrar sesión

@@ -112,11 +112,11 @@ export abstract class User {
     return age;
   }
   public abstract validateSignUp() : any[]
-  public validateLogIn(email : string, password : string, account : string) : any[] {
+  public validateLogIn(email : string, password : string) : any[] {
     let email_expression : RegExp = /[^@\s]+@[^@\s]+\.[^@\s]+/;
     let phone_expression : RegExp = /[0-9]{9}/;
     let errors : any[] = [];
-    if (email === "" || password === "" || account === "") {
+    if (email === "" || password === "") {
         errors.push({text : 'debes completar los campos.'});
     }
     else {
