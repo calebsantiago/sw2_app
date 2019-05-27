@@ -11,11 +11,7 @@
     "@types/express": "^4.16.1",
     "@types/express-session": "^1.15.12",
     "@types/method-override": "0.0.31",
-<<<<<<< HEAD
     "@types/mongoose": "^5.5.3",
-=======
-    "@types/mongoose": "^5.5.0",
->>>>>>> ea880d6e4ffb600fbf74bfcb251a28e850a2975d
     "@types/nodemailer": "^4.6.8",
     "@types/passport": "^1.0.0",
     "bcryptjs": "^2.4.3",
@@ -27,11 +23,7 @@
     "express-session": "^1.16.1",
     "http-errors": "~1.6.2",
     "method-override": "^3.0.0",
-<<<<<<< HEAD
     "mongoose": "^5.5.11",
-=======
-    "mongoose": "^5.5.7",
->>>>>>> ea880d6e4ffb600fbf74bfcb251a28e850a2975d
     "morgan": "~1.9.0",
     "nodemailer": "^6.2.1",
     "passport": "^0.4.0",

@@ -33,7 +33,6 @@ html(lang = "en")
                     span(aria-hidden = "true") &times;
         form(action = "searchservice" method = "post" class = "jumbotron text-center")
             h6(align = "middle") Busca tu servicio:
-<<<<<<< HEAD
             input(type = "text" id = "service" name = "service" placeholder = "servicio" value = service class = "my-2" autofocus required)
             div
             input(type = "submit" value = "buscar servicio" class = "btn btn-primary my-2 mr-sm-2" style = "margin: 5px;")
@@ -48,22 +47,6 @@ html(lang = "en")
                             td servicio
                             td descripción
                             td cotizar servicio
-=======
-            input(type = "text" id = "service" name = "service" placeholder = "servicio" value = service class = "my-2"   autofocus required)
-            div
-            input(type = "submit" value = "buscar servicio" class = "btn btn-primary my-2 mr-sm-2" style='margin: 5px;' )                  
-            button(type = "button" onclick = "return show()"  class = "btn btn-primary my-2 mr-sm-2" style='margin: 5px;' ) ubicación
-            div(align = "middle")
-                div(id = "map" class = "signup-form-map"  disabled )
-                if users    
-                    table(style='margin: 20px;text-align:center;"' border = '1px solid black;')
-                        tr
-                            td Nombre
-                            td Apellido
-                            td Servicio
-                            td Descripción
-                            td Cotizar servicio
->>>>>>> ea880d6e4ffb600fbf74bfcb251a28e850a2975d
                         each user in users
                             tr
                                 td #{user.name.firstname}
@@ -73,8 +56,5 @@ html(lang = "en")
                                 td
                                     a(href = "searchservice/requestquotation/" + user._id)
                                         button(type = "button" class = "") cotizar
-<<<<<<< HEAD
             a(href = "/main")
                 button(type = "button" class = "btn btn-primary my-2 mr-sm-2" style = "margin: 5px;") volver
-=======
->>>>>>> ea880d6e4ffb600fbf74bfcb251a28e850a2975d
