@@ -71,8 +71,25 @@ body {
         width: 75%;
     }
 }
+.container{
+    width: 100%;
+    max-width: 1000px;
+}
+.img1{
+    width: 90%;   
+}
 @media(max-width: 480px) {
     .index-group {
         width: 95%;
+    }
+    .col{
+        text-align: center; 
+    }
+    .mt-5{
+        text-align: center;
+    }
+    form{
+        margin:0 auto;
+
     }
 }
