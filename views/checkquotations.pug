@@ -77,7 +77,7 @@ html(lang = "en")
                                     if quotation.status == "aceptado" || quotation.status == "rechazado"
                                             button(type = "button" class = "" disabled) cotizar
                                     else 
-                                            button(type = "button" class = "") cotizar
+                                            button(type = "button" class = "" disabled) cotizar
                                 td
                                     a(href = "searchservice/requestquotation/" + quotation._id)
                                     if quotation.status == "pendiente" || quotation.status == "rechazado"
