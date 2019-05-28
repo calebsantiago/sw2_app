@@ -7,8 +7,10 @@ html(lang = "en")
         link(rel = "stylesheet" type = "text/css" href = "stylesheets/forms.css")
         link(rel = "stylesheet" type = "text/css" href = "https://bootswatch.com/4/cosmo/bootstrap.min.css")
         script(type = "text/javascript" src = "javascripts/searchMap.js")
-        if user != undefined
-            script(type = "text/javascript") setCoords(#{user.coordinate.latitude}, #{user.coordinate.longitude})            
+        script(type = "text/javascript") setCoords(#{user.coordinate.latitude}, #{user.coordinate.longitude})
+        if providers
+            each provider in providers
+                script(type = "text/javascript") addProvider("#{provider._id}", "#{provider.name.firstname}", "#{provider.name.lastname}", "#{provider.service.title}", "#{provider.description}", #{provider.coordinate.latitude}, #{provider.coordinate.longitude})
         script(type = "text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCSRS9SAWe9v2szpbAYACT9F8c1hJThJ7c&callback=searchMap" async defer)
         script(type = "text/javascript" src = "https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js")
         script(type = "text/javascript" src = "javascripts/show.js")

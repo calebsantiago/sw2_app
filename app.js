@@ -371,21 +371,8 @@ var main = function () {
         }
     });
     app.get('/searchservice', function (request, response) {
-        if (request.session != undefined) {
-            var id = mongoose_1.default.Types.ObjectId(request.session.user_id);
-            connection_1.connectDB();
-            client_2.client_model.findOne({ _id: id }, function (error, document) {
-                if (error) {
-                    console.log(error);
-                }
-                response.render('searchservice', { user: document });
-            });
-        }
-    });
-    app.post('/searchservice', function (request, response) {
-        var service = request.body.service;
         connection_1.connectDB();
-        provider_2.provider_model.find({ 'service.title': service }, function (error, document) { return __awaiter(_this, void 0, void 0, function () {
+        provider_2.provider_model.find(function (error, document) { return __awaiter(_this, void 0, void 0, function () {
             var id, doc;
             return __generator(this, function (_a) {
                 switch (_a.label) {
@@ -403,15 +390,55 @@ var main = function () {
                             })];
                     case 1:
                         doc = _a.sent();
-                        if (!document.length) {
-                            request.flash('info', 'servicio no existe.');
-                            response.render('searchservice', { error_message: request.flash('info'), user: doc, service: service });
-                        }
-                        else {
-                            response.render('searchservice', { user: doc, users: document, service: service });
-                        }
+                        response.render('searchservice', { user: doc, providers: document });
                         _a.label = 2;
                     case 2: return [2 /*return*/];
+                }
+            });
+        }); });
+    });
+    app.post('/searchservice', function (request, response) {
+        var service = request.body.service;
+        connection_1.connectDB();
+        provider_2.provider_model.find({ 'service.title': service }, function (error, document) { return __awaiter(_this, void 0, void 0, function () {
+            var id, doc, pro;
+            var _this = this;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        if (error) {
+                            console.log(error);
+                        }
+                        if (!(request.session != undefined)) return [3 /*break*/, 3];
+                        id = mongoose_1.default.Types.ObjectId(request.session.user_id);
+                        connection_1.connectDB();
+                        return [4 /*yield*/, client_2.client_model.findOne({ _id: id }, function (error) {
+                                if (error) {
+                                    console.log(error);
+                                }
+                            })];
+                    case 1:
+                        doc = _a.sent();
+                        connection_1.connectDB();
+                        return [4 /*yield*/, provider_2.provider_model.find(function (error) { return __awaiter(_this, void 0, void 0, function () {
+                                return __generator(this, function (_a) {
+                                    if (error) {
+                                        console.log(error);
+                                    }
+                                    return [2 /*return*/];
+                                });
+                            }); })];
+                    case 2:
+                        pro = _a.sent();
+                        if (!document.length) {
+                            request.flash('info', 'servicio no existe.');
+                            response.render('searchservice', { error_message: request.flash('info'), user: doc, providers: pro, service: service });
+                        }
+                        else {
+                            response.render('searchservice', { user: doc, providers: pro, users: document, service: service });
+                        }
+                        _a.label = 3;
+                    case 3: return [2 /*return*/];
                 }
             });
         }); });

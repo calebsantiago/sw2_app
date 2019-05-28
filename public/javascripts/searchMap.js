@@ -30,10 +30,28 @@ function CloseControl(controlDiv, map) {
 
 var latitude;
 var longitude;
+var providers = [];
 
 function setCoords(latitude, longitude) {
     this.latitude = latitude;
     this.longitude = longitude;
+}
+
+class Provider {
+    constructor(id, firstname, lastname, title, description, latitude, longitude) {
+        this.id = id;
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.title = title;
+        this.description = description;
+        this.latitude = latitude;
+        this.longitude = longitude;
+    }
+}
+
+function addProvider(id, firstname, lastname, title, description, latitude, longitude) {
+    var provider = new Provider(id, firstname, lastname, title, description, latitude, longitude);
+    this.providers.push(provider);
 }
 
 function searchMap() {
@@ -48,6 +66,58 @@ function searchMap() {
     var closeControl = new CloseControl(closeControlDiv, map);
     closeControlDiv.index = 1;
     map.controls[google.maps.ControlPosition.TOP_RIGHT].push(closeControlDiv);
+    var markers = [providers.length];
+    var infowindows = [providers.length];
+    for (var i = 0; i < providers.length; i++) {
+        markers[i] = new google.maps.Marker({
+            position: new google.maps.LatLng(providers[i].latitude, providers[i].longitude),
+            map: map,
+            draggable: false,
+            title: providers[i].title
+        });
+        infowindows[i] = new google.maps.InfoWindow({
+            content: markers[i].title
+        });
+        infowindows[i].open(map, markers[i]);
+    }
+    /*for (var i = 0; i < providers.length; i++) {
+        markers[i].addListener('click', function() {
+            var contentString = '<form action = /searchservice/requestquotation/'+ providers[i].id +' method = "post" class = "">'+
+                                '<h3>'+providers[i].title+'</h3>'+
+                                '<p>'+providers[i].firstname+' '+providers[i].lastname+'</p>'+
+                                '<p>'+providers[i].description+'</p>'+                        
+                                '<input type = "text" id = "provider" name = "provider" placeholder = "provider" value = '+ providers[i].id +' style = "display:none;" required>'+
+                                '<input type = "text" id = "service" name = "service" placeholder = "service" value = '+ providers[i].title +' style = "display:none;" required>'+
+                                '<input type = "date" id = "date" name = "date" placeholder = "fecha" autofocus required>'+
+                                '</p>'+
+                                '<textarea id = "description" name = "description" placeholder = "descripción" required></textarea>'+
+                                '</p>'+
+                                '<input type = "url" id = "image" name = "image" placeholder = "link imagen">'+
+                                '</p>'+
+                                '<input type = "submit" value = "cotizar servicio">'+
+                            '</form>';
+            infowindows[i].setContent(contentString);
+            infowindows[i].open(map, markers[i]);
+        });
+    }*/
+    markers[2].addListener('click', function() {
+        var contentString = '<form action = /searchservice/requestquotation/'+ providers[2].id +' method = "post" class = "">'+
+                            '<h3>'+providers[2].title+'</h3>'+
+                            '<p>'+providers[2].firstname+' '+providers[2].lastname+'</p>'+
+                            '<p>'+providers[2].description+'</p>'+                        
+                            '<input type = "text" id = "provider" name = "provider" placeholder = "provider" value = '+ providers[2].id +' style = "display:none;" required>'+
+                            '<input type = "text" id = "service" name = "service" placeholder = "service" value = '+ providers[2].title +' style = "display:none;" required>'+
+                            '<input type = "date" id = "date" name = "date" placeholder = "fecha" autofocus required>'+
+                            '</p>'+
+                            '<textarea id = "description" name = "description" placeholder = "descripción" required></textarea>'+
+                            '</p>'+
+                            '<input type = "url" id = "image" name = "image" placeholder = "link imagen">'+
+                            '</p>'+
+                            '<input type = "submit" value = "cotizar servicio">'+
+                        '</form>';
+        infowindows[2].setContent(contentString);
+        infowindows[2].open(map, markers[2]);
+    });
     var image = 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png';
     var marker = new google.maps.Marker({
         position: myLatlng,

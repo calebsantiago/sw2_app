@@ -284,16 +284,22 @@ let main = () => {
         }
     });
     app.get('/searchservice', (request, response) => {
-        if(request.session != undefined) {
-            let id = mongoose.Types.ObjectId(request.session.user_id);
-            connectDB();
-            client_model.findOne({_id : id}, (error, document) => {
-                if(error) {
-                    console.log(error);
-                }
-                response.render('searchservice', {user : document});
-            });
-        }
+        connectDB();
+        provider_model.find(async (error, document) => {
+            if(error) {
+                console.log(error);
+            }
+            if(request.session != undefined) {
+                let id = mongoose.Types.ObjectId(request.session.user_id);
+                connectDB();
+                let doc = await client_model.findOne({_id : id}, (error) => {
+                    if(error) {
+                        console.log(error);
+                    }
+                });
+                response.render('searchservice', {user : doc, providers : document});
+            }
+        });
     });
     app.post('/searchservice', (request, response) => {
         let {service} = request.body;
@@ -310,12 +316,18 @@ let main = () => {
                             console.log(error);
                         }
                     });
+                    connectDB();
+                    let pro = await provider_model.find(async (error) => {
+                        if(error) {
+                            console.log(error);
+                        }
+                    });
                     if(!document.length) {
                         request.flash('info', 'servicio no existe.');
-                        response.render('searchservice', {error_message: request.flash('info'), user : doc, service});
+                        response.render('searchservice', {error_message: request.flash('info'), user : doc, providers : pro, service});
                     }
                     else {
-                        response.render('searchservice', {user : doc, users : document, service});
+                        response.render('searchservice', {user : doc, providers : pro, users : document, service});
                     }
                 }
             });

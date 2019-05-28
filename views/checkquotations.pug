@@ -50,7 +50,7 @@ html(lang = "en")
                                     if quotation.status == "pendiente" || quotation.status == "rechazado"
                                             button(type = "button" class = "" disabled) cancelar
                                     else 
-                                            button(type = "button" class = "") cancelar
+                                            button(type = "button" class = "" disabled) cancelar
         else
             form(action = "searchservice" method = "post")
                 if quotations    
@@ -83,6 +83,6 @@ html(lang = "en")
                                     if quotation.status == "pendiente" || quotation.status == "rechazado"
                                             button(type = "button" class = "" disabled) cancelar
                                     else 
-                                            button(type = "button" class = "") cancelar
+                                            button(type = "button" class = "" disabled) cancelar
         a(href = "/main")
             button(type = "button" class = "") volver
