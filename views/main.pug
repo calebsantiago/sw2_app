@@ -5,8 +5,10 @@ html(lang = "en")
         meta(name = "viewport" content = "width=device-width, initial-scale=1.0")
         meta(http-equiv = "X-UA-Compatible" content = "ie=edge")
         link(rel = "stylesheet" type = "text/css" href = "stylesheets/index.css")
-        link(rel = "stylesheet" type = "text/css" href = "https://bootswatch.com/4/cosmo/bootstrap.min.css")
+        //link(rel = "stylesheet" type = "text/css" href = "https://bootswatch.com/4/cosmo/bootstrap.min.css")
+        link(rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css' integrity='sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T' crossorigin='anonymous')
         script(type = "text/javascript" src = "https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js")
+        script(type = "text/javascript" src = "javascripts/hide.js")
         script(type = "text/javascript" src = "https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity = "sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin = "anonymous")
         title CONTACTA
     body
@@ -26,24 +28,33 @@ html(lang = "en")
                 button(type = "button" class = "close" data-dismiss = "alert" aria-label = "Close")
                     span(aria-hidden = "true") &times;
         if account == "client"
-            div(class = "main-group-div")
-                a(href = "/searchservice")
-                    button(type = "button" class = "btn btn-secondary btn-lg btn-block") buscar servicio
-            div(class = "main-group-div")
-                a(href = "/checkquotations")
-                    button(type = "button" class = "btn btn-secondary btn-lg btn-block") verificar cotizaciones
-            div(class = "main-group-div")
-                a(href = "/checkhistory")
-                    button(type = "button" class = "btn btn-secondary btn-lg btn-block") historial de servicios
-            div(class = "main-group-div")
-                a(href = "/updateaccount")
-                    button(type = "button" class = "btn btn-secondary btn-lg btn-block") editar perfil
-            div(class = "main-group-div")
-                a(href = "/deleteaccount")
-                    button(type = "button" class = "btn btn-secondary btn-lg btn-block") eliminar cuenta       
-            div(class = "main-group-div")
-                a(href = "/logout")
-                    button(type = "button" class = "btn btn-secondary btn-lg btn-block") cerrar sesión
+            div(class = "container")
+                div(class = "col")
+                    div(class = "row")
+                        div(class = "col")
+                            img(src="https://www.jamf.com/jamf-nation/img/default-avatars/generic-user-purple.png", alt="")
+                        div(class = "col")
+                            h2.lead Usuario       
+                div(class = "col")
+                    div(class = "row")
+                        div(class = "main-group-div col")
+                            a(href = "/searchservice")
+                                button(type = "button" class = "btn btn-primary my-2 mr-sm-2 btn-block") buscar servicio
+                        div(class = "main-group-div col")
+                            a(href = "/checkquotations")
+                                button(type = "button" class = "btn btn-primary my-2 mr-sm-2 btn-block") cotizaciones
+                        div(class = "main-group-div col")
+                            a(href = "/checkhistory")
+                                button(type = "button" class = "btn btn-primary my-2 mr-sm-2 btn-block") servicios
+                        div(class = "main-group-div col")
+                            a(href = "/updateaccount")
+                                button(type = "button" class = "btn btn-primary my-2 mr-sm-2 btn-block") editar perfil
+                        div(class = "main-group-div col")
+                            a(href = "/deleteaccount")
+                                button(type = "button" class = "btn btn-primary my-2 mr-sm-2 btn-block") eliminar cuenta       
+                        div(class = "main-group-div col")
+                            a(href = "/logout")
+                                button(type = "button" class = "btn btn-primary my-2 mr-sm-2 btn-block") cerrar sesión
         else
             div(class = "main-group-div")
                 a(href = "/checkquotations")
