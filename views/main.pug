@@ -56,18 +56,27 @@ html(lang = "en")
                             a(href = "/logout")
                                 button(type = "button" class = "btn btn-primary my-2 mr-sm-2 btn-block") cerrar sesión
         else
-            div(class = "main-group-div")
-                a(href = "/checkquotations")
-                    button(type = "button" class = "btn btn-secondary btn-lg btn-block") verificar cotizaciones
-            div(class = "main-group-div")
-                a(href = "/checkhistory")
-                    button(type = "button" class = "btn btn-secondary btn-lg btn-block") historial de servicios
-            div(class = "main-group-div")
-                a(href = "/updateaccount")
-                    button(type = "button" class = "btn btn-secondary btn-lg btn-block") editar perfil
-            div(class = "main-group-div")
-                a(href = "/deleteaccount")
-                    button(type = "button" class = "btn btn-secondary btn-lg btn-block") eliminar cuenta       
-            div(class = "main-group-div")
-                a(href = "/logout")
-                    button(type = "button" class = "btn btn-secondary btn-lg btn-block") cerrar sesión
+            div(class = "container")
+                div(class = "col")
+                    div(class = "row")
+                        div(class = "col")
+                            img(src="https://www.jamf.com/jamf-nation/img/default-avatars/generic-user-purple.png", alt="")
+                        div(class = "col")
+                            h2.lead Prestador      
+                div(class = "col")
+                    div(class = "row")                        
+                        div(class = "main-group-div col")
+                            a(href = "/checkquotations")
+                                button(type = "button" class = "btn btn-primary my-2 mr-sm-2 btn-block") cotizaciones
+                        div(class = "main-group-div col")
+                            a(href = "/checkhistory")
+                                button(type = "button" class = "btn btn-primary my-2 mr-sm-2 btn-block") servicios
+                        div(class = "main-group-div col")
+                            a(href = "/updateaccount")
+                                button(type = "button" class = "btn btn-primary my-2 mr-sm-2 btn-block") editar perfil
+                        div(class = "main-group-div col")
+                            a(href = "/deleteaccount")
+                                button(type = "button" class = "btn btn-primary my-2 mr-sm-2 btn-block") eliminar cuenta       
+                        div(class = "main-group-div col")
+                            a(href = "/logout")
+                                button(type = "button" class = "btn btn-primary my-2 mr-sm-2 btn-block") cerrar sesión
