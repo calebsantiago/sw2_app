@@ -11,7 +11,6 @@ html(lang = "en")
         if providers
             each provider in providers
                 script(type = "text/javascript") addProvider("#{provider._id}", "#{provider.name.firstname}", "#{provider.name.lastname}", "#{provider.service.title}", "#{provider.description}", #{provider.coordinate.latitude}, #{provider.coordinate.longitude})
-        script(type = "text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCSRS9SAWe9v2szpbAYACT9F8c1hJThJ7c&callback=searchMap" async defer)
         script(type = "text/javascript" src = "https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js")
         script(type = "text/javascript" src = "javascripts/show.js")
         script(type = "text/javascript" src = "javascripts/selectOption.js")
@@ -67,3 +66,4 @@ html(lang = "en")
             a(href = "/main")
                 button(type = "button" class = "btn btn-primary my-2 mr-sm-2" style = "margin: 5px;") volver
         script(type = "text/javascript") selectOption("#{service}")
+        script(type = "text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCSRS9SAWe9v2szpbAYACT9F8c1hJThJ7c&callback=searchMap" async defer)
