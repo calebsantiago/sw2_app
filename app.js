@@ -340,7 +340,7 @@ var main = function () {
                         if (request.session != undefined) {
                             request.session.user_id = doc._id;
                             request.session.account = account;
-                            request.flash('info', 'bienvenido ' + email + '.');
+                            request.flash('info', email + '.');
                             response.render('main', { success_message: request.flash('info'), account: request.session.account });
                         }
                     }
