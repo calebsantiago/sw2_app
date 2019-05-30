@@ -105,7 +105,6 @@ let main = () => {
                             longitude : user.getCoordinate()[1]
                         }
                     });
-                    console.log(model);
                     model.account.password = await model.encryptPassword(password);
                     await model.save((error : any) => {
                         if (error) {
@@ -184,7 +183,6 @@ let main = () => {
                             title : user.getService()[0]
                         }
                     });
-                    console.log(model);
                     model.account.password = await model.encryptPassword(password);
                     await model.save((error : any) => {
                         if (error) {
@@ -396,7 +394,6 @@ let main = () => {
                         response.render('checkquotations', {error_message : request.flash('info'), account : account});
                     }
                     else {
-                        console.log(document);
                         response.render('checkquotations', {account : account, quotations : document});
                     }
                 });
@@ -427,7 +424,6 @@ let main = () => {
                         response.render('checkquotations', {error_message : request.flash('info'), account : account});
                     }
                     else {
-                        console.log(document);
                         response.render('checkquotations', {account : account, quotations : document});
                     }
                 });

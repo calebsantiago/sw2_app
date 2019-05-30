@@ -159,7 +159,6 @@ var main = function () {
                             longitude: user.getCoordinate()[1]
                         }
                     });
-                    console.log(model);
                     _b = model.account;
                     return [4 /*yield*/, model.encryptPassword(password)];
                 case 8:
@@ -251,7 +250,6 @@ var main = function () {
                             title: user.getService()[0]
                         }
                     });
-                    console.log(model);
                     _c = model.account;
                     return [4 /*yield*/, model.encryptPassword(password)];
                 case 19:
@@ -507,7 +505,6 @@ var main = function () {
                         response.render('checkquotations', { error_message: request.flash('info'), account: account_1 });
                     }
                     else {
-                        console.log(document);
                         response.render('checkquotations', { account: account_1, quotations: document });
                     }
                 });
@@ -538,7 +535,6 @@ var main = function () {
                         response.render('checkquotations', { error_message: request.flash('info'), account: account_1 });
                     }
                     else {
-                        console.log(document);
                         response.render('checkquotations', { account: account_1, quotations: document });
                     }
                 });
