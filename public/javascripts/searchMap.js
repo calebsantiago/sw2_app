@@ -53,6 +53,27 @@ function addProvider(id, firstname, lastname, title, description, latitude, long
     var provider = new Provider(id, firstname, lastname, title, description, latitude, longitude);
     this.providers.push(provider);
 }
+//..
+function _newGoogleMapsMarker(param) {
+    var r = new google.maps.Marker({
+        map: param._map,
+        position: new google.maps.LatLng(param._lat, param._lng),
+        title: param._head
+    });
+    if (param._data) {
+        google.maps.event.addListener(r, 'click', function() {
+            // this -> the marker on which the onclick event is being attached
+            if (!this.getMap()._infoWindow) {
+                this.getMap()._infoWindow = new google.maps.InfoWindow();
+            }
+            this.getMap()._infoWindow.close();
+            this.getMap()._infoWindow.setContent(param._data);
+            this.getMap()._infoWindow.open(this.getMap(), this);
+        });
+    }
+    return r;
+}
+//..
 
 function searchMap() {
     var myLatlng = new google.maps.LatLng(latitude, longitude);
@@ -78,10 +99,54 @@ function searchMap() {
         infowindows[i] = new google.maps.InfoWindow({
             content: markers[i].title
         });
-        infowindows[i].open(map, markers[i]);
+        infowindows[i].open(map, markers[i]);        
     }
+    //..
+    var mO = {
+        center: new google.maps.LatLng(-12.046374, -77.042793),
+        zoom: zoomLimit,
+        streetViewControl: false,
+        mapTypeControl: false,
+        navigationControlOptions: {
+            style: google.maps.NavigationControlStyle.SMALL
+        },
+        mapTypeId: google.maps.MapTypeId.HYBRID
+    };
+    map = new google.maps.Map(document.getElementById("map"), mO);
+    for (var a = 0; a < providers.length; a++) {
+        var tmpLat = providers[a].latitude;
+        var tmpLng = providers[a].longitude;
+        var tmpId = providers[a].id;
+        var tmpTitle = providers[a].title;
+        var tmpFirstname = providers[a].firstname;
+        var tmpLastname = providers[a].lastname;
+        var tmpDesc = providers[a].description
+        var marker = _newGoogleMapsMarker({
+            _map: map,
+            _lat: tmpLat,
+            _lng: tmpLng,
+            _head: '|' + new google.maps.LatLng(tmpLat, tmpLng),
+            _data: '<form action = /searchservice/requestquotation/'+ tmpId +' method = "post" class = "">'+
+        '<h3>'+tmpTitle+'</h3>'+
+        '<p>'+tmpFirstname+' '+tmpLastname+'</p>'+
+        '<p>'+tmpDesc+'</p>'+                        
+        '<input type = "text" id = "provider" name = "provider" placeholder = "provider" value = '+ tmpId +' style = "display:none;" required>'+
+        '<input type = "text" id = "service" name = "service" placeholder = "service" value = '+ tmpTitle +' style = "display:none;" required>'+
+        '<input type = "date" id = "date" name = "date" placeholder = "fecha" autofocus required>'+
+        '</p>'+
+        '<textarea id = "description" name = "description" placeholder = "descripción" required></textarea>'+
+        '</p>'+
+        '<input type = "url" id = "image" name = "image" placeholder = "link imagen">'+
+        '</p>'+
+        '<input type = "submit" value = "cotizar servicio">'+
+        '</form>'
+        });
+    }
+    //..
+    //http://jsfiddle.net/salman/bhSmf/       
     /*for (var i = 0; i < providers.length; i++) {
-        markers[i].addListener('click', function() {
+        google.maps.event.addListener(marker,'click', function() {
+            var marker = this.markers
             var contentString = '<form action = /searchservice/requestquotation/'+ providers[i].id +' method = "post" class = "">'+
                                 '<h3>'+providers[i].title+'</h3>'+
                                 '<p>'+providers[i].firstname+' '+providers[i].lastname+'</p>'+
@@ -100,7 +165,7 @@ function searchMap() {
             infowindows[i].open(map, markers[i]);
         });
     }*/
-    markers[2].addListener('click', function() {
+    /*markers[2].addListener('click', function() {
         var contentString = '<form action = /searchservice/requestquotation/'+ providers[2].id +' method = "post" class = "">'+
                             '<h3>'+providers[2].title+'</h3>'+
                             '<p>'+providers[2].firstname+' '+providers[2].lastname+'</p>'+
@@ -117,7 +182,7 @@ function searchMap() {
                         '</form>';
         infowindows[2].setContent(contentString);
         infowindows[2].open(map, markers[2]);
-    });
+    });*/
     var image = 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png';
     var marker = new google.maps.Marker({
         position: myLatlng,
@@ -134,6 +199,8 @@ function searchMap() {
         infowindow.open(map, marker);
     });
 }
+
+window.onclick = init;
 
 /*function searchMap() {
     if (navigator.geolocation) {
