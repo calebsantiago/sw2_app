@@ -23,8 +23,8 @@ function CloseControl(controlDiv, map) {
     controlText.innerHTML = 'x';
     controlUI.appendChild(controlText);
     controlUI.addEventListener('click', function() {
-        document.getElementById("map").disabled = true;
-        document.getElementById("map").style.display = "none";
+        document.getElementById('map').disabled = true;
+        document.getElementById('map').style.display = 'none';
     });
 }
 var latitude;
@@ -57,7 +57,7 @@ function searchMap() {
         center: myLatlng,
         mapTypeId: google.maps.MapTypeId.ROADMAP
     };
-    var map = new google.maps.Map(document.getElementById("map"), mapOptions);
+    var map = new google.maps.Map(document.getElementById('map'), mapOptions);
     var closeControlDiv = document.createElement('div');
     var closeControl = new CloseControl(closeControlDiv, map);
     closeControlDiv.index = 1;
@@ -75,20 +75,29 @@ function searchMap() {
             description: providers[i].description
         });
         markers[i].addListener('click', function() {
-            var contentString = '<form action = /searchservice/requestquotation/'+ this.id +' method = "post" class = "">'+
-                            '<h3>'+this.title+'</h3>'+
-                            '<p>'+this.firstname+' '+this.lastname+'</p>'+
-                            '<p>'+this.description+'</p>'+                        
-                            '<input type = "text" id = "provider" name = "provider" placeholder = "provider" value = '+ this.id +' style = "display:none;" required>'+
-                            '<input type = "text" id = "service" name = "service" placeholder = "service" value = '+ this.title +' style = "display:none;" required>'+
-                            '<input type = "date" id = "date" name = "date" placeholder = "fecha" autofocus required>'+
-                            '</p>'+
-                            '<textarea id = "description" name = "description" placeholder = "descripción" required></textarea>'+
-                            '</p>'+
-                            '<input type = "url" id = "image" name = "image" placeholder = "link imagen">'+
-                            '</p>'+
-                            '<input type = "submit" value = "cotizar servicio">'+
-                        '</form>';
+            var contentString = '<div id = "container" class = "p-1 m-0">'+
+                                    '<form id = "form" action = /searchservice/requestquotation/'+ this.id +' method = "post" class = "" onsubmit = "return validateQuotation()">'+
+                                        '<h4 class = "display-5 text-center p-0 m-1">'+this.title+'</h3>'+
+                                        '<p class = "text-center p-0 m-1">'+this.firstname+' '+this.lastname+'</p>'+
+                                        '<p class = "text-center p-0 m-1">'+this.description+'</p>'+                        
+                                        '<input type = "text" id = "provider" name = "provider" placeholder = "provider" value = '+ this.id +' style = "display:none;" required>'+
+                                        '<input type = "text" id = "service" name = "service" placeholder = "service" value = '+ this.title +' style = "display:none;" required>'+
+                                        '<div class = "form-group p-0 m-1" style = "display:block;">'+
+                                            '<input type = "date" id = "date" name = "date" placeholder = "fecha" class = "form-control form-control-sm" autofocus required>'+
+                                            '<small class = "form-text text-muted">* campo obligatorio</small>'+
+                                        '</div>'+
+                                        '<div class = "form-group p-0 m-1" style = "display:block;">'+
+                                            '<textarea id = "description" name = "description" placeholder = "descripción" class = "form-control form-control-sm" required></textarea>'+
+                                            '<small class = "form-text text-muted">* campo obligatorio</small>'+
+                                        '</div>'+
+                                        '<div class = "form-group p-0 m-1" style = "display:block;">'+
+                                            '<input type = "url" id = "image" name = "image" placeholder = "link imagen" class = "form-control form-control-sm">'+
+                                        '</div>'+
+                                        '<div class = "form-group p-0 m-1" style = "display:block;">'+
+                                            '<input type = "submit" value = "cotizar servicio" class = "btn btn-primary btn-sm btn-block">'+
+                                        '</div>'+
+                                    '</form>'+
+                                '</div>';
             infowindow.close();
             infowindow.setContent(contentString);
             infowindow.open(map, this);
@@ -100,7 +109,7 @@ function searchMap() {
         map: map,
         draggable: false,
         icon: image,
-        title: "Mi dirección"
+        title: 'Mi dirección'
     });
     infowindow.setContent(marker.title);
     infowindow.open(map, marker);

@@ -1,78 +1,188 @@
-function validate() {
-    var firstname = document.getElementById("firstname").value;
-    var lastname = document.getElementById("lastname").value;
-    var gender = document.getElementById("gender").value;
-    var idcard = document.getElementById("idcard").value;
-    var birthdate = document.getElementById("birthdate").value;
-    var phonenumber = document.getElementById("phonenumber").value;
-    var email = document.getElementById("email").value;
-    var password = document.getElementById("password").value;
-    var image = document.getElementById("image").value;
-    var account = document.getElementById("account").value;
-    var address = document.getElementById("address").value;
-    var latitude = document.getElementById("latitude").value;
-    var longitude = document.getElementById("longitude").value;
-    var video = document.getElementById("video").value;
-    var description = document.getElementById("description").value;
-    var certificate = document.getElementById("certificate").value;
-    var service = document.getElementById("service").value;
-    var url_expression = /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+/;
-    var id_expression = /[0-9]{8}/;
+function createErrors(text) {
+    var container = document.getElementById('container');
+    if(document.getElementById('errors') != null) {
+        container.removeChild(document.getElementById('errors'));
+    }
+    var errors = document.createElement('div'); 
+    errors.setAttribute('id', 'errors');
+    errors.setAttribute('class', 'alert alert-danger alert-dismissible fade show');
+    errors.setAttribute('role', 'alert');
+    errors.innerHTML = text;
+    var button = document.createElement('button');
+    button.setAttribute('type', 'button');
+    button.setAttribute('class', 'close');
+    button.setAttribute('data-dismiss', 'alert');
+    button.setAttribute('aria-label', 'Close');
+    var span = document.createElement('span');
+    span.setAttribute('aria-hidden', 'true');
+    span.innerHTML = '&times;'
+    button.appendChild(span);
+    errors.appendChild(button);
+    var form = document.getElementById('form');
+    container.insertBefore(errors, form);
+}
+
+function getAge(birthdate) {
+    var today =  new Date();
+    let age = today.getFullYear() - new Date(birthdate).getFullYear();
+    let month = today.getMonth() - new Date(birthdate).getMonth();
+    if (month < 0 || (month === 0 && today.getDate() < new Date(birthdate).getDate())) {
+        age--;
+    }
+    return age;
+}
+
+function validateSignUp() {
+    var firstname = document.getElementById('firstname').value;
+    var lastname = document.getElementById('lastname').value;
+    var gender = document.getElementById('gender').value;
+    var birthdate = document.getElementById('birthdate').value;
+    var idcard = document.getElementById('idcard').value;
+    var phonenumber = document.getElementById('phonenumber').value;
+    var email = document.getElementById('email').value;
+    var password = document.getElementById('password').value;
+    var confirm_password = document.getElementById('confirm_password').value;
+    var image = document.getElementById('image').value;
+    var account = document.getElementById('account').value;
+    var address = document.getElementById('address').value;
+    var latitude = document.getElementById('latitude').value;
+    var longitude = document.getElementById('longitude').value;
+    var video = document.getElementById('video').value;
+    var description = document.getElementById('description').value;
+    var certificate = document.getElementById('certificate').value;
+    var service = document.getElementById('service').value;
     var date_expression = /[0-9]{4}-[0-9]{2}-[0-9]{2}/;
+    var id_expression = /[0-9]{8}/;
     var phone_expression = /[0-9]{9}/;
     var email_expression = /[^@\s]+@[^@\s]+\.[^@\s]+/;
-    if(firstname === "" || lastname === "" || gender === "" || birthdate === "" || phonenumber === "" || email === "" || password === "" || account === "" || address === "" || latitude === "" || longitude === "") {
-        alert("you must complete fields");
+    var url_expression = /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+/;
+    if (firstname === '' || lastname === '' || gender === '' || birthdate === '' || phonenumber === '' || email === '' || password === '' || confirm_password === '' || address === '' || latitude === '' || longitude === '') {
+        createErrors('debes completar los campos.');
         return false;
     }
     if (!date_expression.test(birthdate)) {
-        alert("birthdate is not valid");
+        createErrors('fecha de nacimiento no válido.');
+        return false;
+    }
+    if (getAge(birthdate) < 18) {
+        createErrors('eres menor de 18 años.');
         return false;
     }
     if (!phone_expression.test(phonenumber)) {
-        alert("phonenumber is not valid");
+        createErrors('número de teléfono no válido.');
         return false;
     }
-    if(!email_expression.test(email)) {
-        alert("email is not valid");
+    if (!email_expression.test(email)) {
+        createErrors('correo electrónico no válido.');
+        return false;
+    }
+    if (password != confirm_password) {
+        createErrors('contraseñas no coinciden.');
         return false;
     }
     if (!isFinite(latitude)) {
-        alert("latitude is not valid");
+        createErrors('latitud no válido.');
         return false;
     }
     if (!isFinite(longitude)) {
-        alert("longitude is not valid");
+        createErrors('longitud no válido.');
         return false;
     }
-    if (image != "") {
+    if (image != '') {
         if (!url_expression.test(image)) {
-            alert("image is not valid");
+            createErrors('link imagen no válido.');
             return false;
         }
     }
-    if (account === "provider") {
-        if(idcard === "" || video === "" || description === "" || service === "") {
-            alert("you must complete fields");
+    if (account === 'provider') {
+        if(idcard === '' || video === '' || description === '' || service === '') {
+            createErrors('debes completar los campos.');
             return false;
         }
     }
-    if (idcard != "") {
+    if (idcard != '') {
         if (!id_expression.test(idcard)) {
-            alert("idcard is not valid");
+            createErrors('dni no válido.');
             return false;
         }
     }
-    if (video != "") {
+    if (video != '') {
         if (!url_expression.test(video)) {
-            alert("video is not valid");
+            createErrors('link video no válido.');
             return false;
         }
     }
-    if (certificate != "") {
+    if (certificate != '') {
         if (!url_expression.test(certificate)) {
-            alert("certificate is not valid");
+            createErrors('link certificado no válido.');
             return false;
+        }
+    }
+}
+
+function validateLogIn() {
+    var email = document.getElementById('email').value;
+    var password = document.getElementById('password').value;
+    var email_expression = /[^@\s]+@[^@\s]+\.[^@\s]+/;
+    let phone_expression = /[0-9]{9}/;
+    if (email === '' || password === '') {
+        createErrors('debes completar los campos.');
+        return false;
+    }
+    else {
+        if (!email_expression.test(email) && !phone_expression.test(email)) {
+            createErrors('correo electrónico o número de teléfono no válido.');
+            return false;
+        }
+    }
+}
+
+function validateSearchService() {
+    var services = document.getElementById('services').value;
+    if (services === '') {
+        createErrors('debes completar los campos.');
+        return false;
+    }
+}
+
+function testDate(date) {
+    var status = false;
+    var today =  new Date();
+    var year = new Date(date).getFullYear() - today.getFullYear();
+    var month = new Date(date).getMonth() - today.getMonth();
+    var day = new Date(date).getDate() + 1 - today.getDate();
+    if(year >= 0 && month >= 0 && day >= 0) {
+        status = true;
+    }
+    return status;
+}
+
+function validateQuotation() {
+    var provider = document.getElementById('provider').value;
+    var service = document.getElementById('service').value;
+    var date = document.getElementById('date').value;
+    var description = document.getElementById('description').value;
+    var image = document.getElementById('image').value;
+    var date_expression = /[0-9]{4}-[0-9]{2}-[0-9]{2}/;
+    var url_expression = /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+/;
+    if (provider === '' || service === '' || date === '' || description === '') {
+        createErrors('debes completar los campos.');
+        return false;
+    }
+    else {
+        if (!date_expression.test(date)) {
+            createErrors('fecha de cotización no válido.');
+            return false;
+        }
+        if (!testDate(date)) {
+            createErrors('fecha de cotización es menor a la fecha actual.');
+            return false;
+        }
+        if (image != '') {
+            if (!url_expression.test(image)) {
+                createErrors('link imagen no válido.');
+                return false;
+            }
         }
     }
 }

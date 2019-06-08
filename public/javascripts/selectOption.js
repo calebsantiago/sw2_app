@@ -1,5 +1,5 @@
-function selectOption(service) {
-    if (service != "") {
-        document.getElementById(service).selected = "true";
+function selectOption(services) {
+    if (services != '') {
+        document.getElementById(services).selected = 'true';
     }
 }

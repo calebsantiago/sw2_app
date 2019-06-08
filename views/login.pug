@@ -1,42 +1,23 @@
-doctype html
-html(lang = "en")
+extends layout
+block content
     head
-        meta(charset = "UTF-8")
-        meta(name = "viewport" content = "width=device-width, initial-scale=1.0")
-        meta(http-equiv = "X-UA-Compatible" content = "ie=edge")
-        link(rel = "stylesheet" type = "text/css" href = "stylesheets/forms.css")
-        link(rel = "stylesheet" type = "text/css" href = "stylesheets/signin.css")
-        link(rel = "stylesheet" type = "text/css" href = "https://bootswatch.com/4/cosmo/bootstrap.min.css")
-        script(type = "text/javascript" src = "https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js")
-        script(type = "text/javascript" src = "javascripts/hide.js")
-        script(type = "text/javascript" src = "https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity = "sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin = "anonymous")
-        title CONTACTA
-    body
-    div(class = "form-signin")
-            div(class = "login-title")
-                if errors
-                    each error in errors
-                        div(class = "alert alert-danger alert-dismissible fade show" role = "alert") #{error.text}
-                            button(type = "button" class = "close" data-dismiss = "alert" aria-label = "Close")
-                                span(aria-hidden = "true") &times;
-                if error_message
-                    div(class = "alert alert-danger alert-dismissible fade show" role = "alert") #{error_message}
-                        button(type = "button" class = "close" data-dismiss = "alert" aria-label = "Close")
-                            span(aria-hidden = "true") &times;
-                if success_message
-                    div(class = "alert alert-success alert-dismissible fade show" role = "alert") #{success_message}
-                        button(type = "button" class = "close" data-dismiss = "alert" aria-label = "Close")
-                            span(aria-hidden = "true") &times; 
-            h1.display-4.text-center Contacta
-            h1.display-4.text-left ¡Bienvenido!
-            form(action = "login" method = "post")
-                .pricing-header
-                .form-group.text-left 
-                input(type = "text" id = "email" name = "email" placeholder = "correo electrónico o número de teléfono" value = email class = "login-form-input" autofocus required)
-                .form-group.text-left  
-                input(type = "password" id = "password" name = "password" placeholder = "contraseña" value = password class = "login-form-input" required)
-                div
-                    button.btn.btn-secondary.btn-lg.btn-block(type = "submit" value = "log in" class = "login-form-submit") iniciar sesión
-            div
-                label ¿No tienes cuenta? 
-                a(href = "/signup")  Crear cuenta
+        include head
+        script(type = 'text/javascript' src = '/javascripts/validate.js')
+    body(style = 'height: 100%;')
+        div(class = 'container h-100')
+            div(class = 'row align-items-center h-100')
+                div(class = 'col-xs-12 col-sm-10 col-lg-7 mx-auto')
+                    div(id = 'container' class = 'jumbotron')
+                        div(class = 'page-header')
+                            h1(class = 'display-5 text-center') Contacta
+                            h1(class = 'display-5 text-left') ¡Bienvenido!
+                        include messages
+                        form(id = 'form' action = 'login' method = 'post' onsubmit = 'return validateLogIn()')
+                            fieldset
+                                div(class = 'form-group')
+                                    input(type = 'text' id = 'email' name = 'email' placeholder = 'correo electrónico o número de teléfono' value = email class = 'form-control' autofocus required) 
+                                div(class = 'form-group')
+                                    input(type = 'password' id = 'password' name = 'password' placeholder = 'contraseña' value = password class = 'form-control' required)
+                                button(type = 'submit' class='btn btn-primary btn-lg btn-block') iniciar sesión
+                                p ¿No tienes cuenta? 
+                                    a(href = '/signup') Crear cuenta

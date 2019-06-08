@@ -48,11 +48,11 @@ let main = () => {
         let {firstname, lastname, gender, birthdate, idcard, phonenumber, email, password, confirm_password, image, account, address, latitude, longitude, video, description, certificate, service} = request.body;    
         if (account === 'client') {
             let user : Client = new Client(firstname, lastname, gender, birthdate, Number(phonenumber), email, password, confirm_password, image, account, address, Number(latitude), Number(longitude));   
-            let errors : any[] = user.validateSignUp();
+            /*let errors : any[] = user.validateSignUp();
             if (errors.length > 0) {
                 response.render('signup', {errors, firstname, lastname, gender, birthdate, phonenumber, email, password, confirm_password, image, account});
             }
-            else {
+            else {*/
                 connectDB();
                 let doc1 = await client_model.findOne({'phonenumber' : user.getPhonenumber()}, (error) => {
                     if (error){
@@ -115,15 +115,15 @@ let main = () => {
                     response.render('login', {success_message: request.flash('info')});
                     user.sendMail();
                 }
-            }
+            //}
         }
         else {
             let user : Provider = new Provider(firstname, lastname, gender, birthdate, Number(phonenumber), email, password, confirm_password, image, account, address, Number(latitude), Number(longitude), Number(idcard), video, description, certificate, service);
-            let errors : DocumentQuery<any, any, {}>[] = user.validateSignUp();
+            /*let errors : DocumentQuery<any, any, {}>[] = user.validateSignUp();
             if (errors.length > 0) {
                 response.render('signup', {errors, firstname, lastname, gender, birthdate, idcard, phonenumber, email, password, confirm_password, image, account, video, description, certificate, service});
             }
-            else {
+            else {*/
                 connectDB();
                 let doc1 = await client_model.findOne({'phonenumber' : user.getPhonenumber()}, (error) => {
                     if (error){
@@ -193,7 +193,7 @@ let main = () => {
                     response.render('login', {success_message: request.flash('info')});
                     user.sendMail();
                 }
-            }
+            //}
         }
     });
     app.get('/login', (request, response) => {
@@ -201,66 +201,59 @@ let main = () => {
     });
     app.post('/login', async (request, response) => {
         let {email, password} = request.body;
-        let user : Client = new Client("", "", "", "", 0, "", "", "", "", "", "", 0, 0);
         let account : string = ""     
-        let errors : any[] = user.validateLogIn(email,password);
-        if (errors.length > 0) {
-            response.render('login', {errors, email, password});
+        connectDB();
+        let email_expression : RegExp = /[^@\s]+@[^@\s]+\.[^@\s]+/;
+        let doc;
+        if (email_expression.test(email)) {
+            doc = await client_model.findOne({'account.email' : email}, (error) => {
+                if(error) {
+                    console.log(error);
+                }
+                account = "client";
+            });
+            if (!doc) {
+                doc = await provider_model.findOne({'account.email' : email}, (error) => {
+                    if(error) {
+                        console.log(error);
+                    }
+                    account = "provider";
+                });
+            }
         }
         else {
-            connectDB();
-            let email_expression : RegExp = /[^@\s]+@[^@\s]+\.[^@\s]+/;
-            let doc;
-            if (email_expression.test(email)) {
-                doc = await client_model.findOne({'account.email' : email}, (error) => {
-                    if(error) {
-                        console.log(error);
-                    }
-                    account = "client";
-                });
-                if (!doc) {
-                    doc = await provider_model.findOne({'account.email' : email}, (error) => {
-                        if(error) {
-                            console.log(error);
-                        }
-                        account = "provider";
-                    });
+            doc = await client_model.findOne({phonenumber : email}, (error) => {
+                if(error) {
+                    console.log(error);
                 }
-            }
-            else {
-                doc = await client_model.findOne({phonenumber : email}, (error) => {
-                    if(error) {
-                        console.log(error);
-                    }
-                    account = "client";
-                });
-                if (!doc) {
-                    doc = await provider_model.findOne({phonenumber : email}, (error) => {
-                        if(error) {
-                            console.log(error);
-                        }
-                        account = "provider";
-                    });
-                }
-            }
+                account = "client";
+            });
             if (!doc) {
-                request.flash('info', 'correo electrónico o número de teléfono no existe.');
-                response.render('login', {error_message: request.flash('info'), email, password});
+                doc = await provider_model.findOne({phonenumber : email}, (error) => {
+                    if(error) {
+                        console.log(error);
+                    }
+                    account = "provider";
+                });
+            }
+        }
+        if (!doc) {
+            request.flash('info', 'correo electrónico o número de teléfono no existe.');
+            response.render('login', {error_message: request.flash('info'), email, password});
+        } 
+        else {
+            let match = await doc.matchPassword(password);
+            if (match) {
+                if(request.session != undefined) {
+                    request.session.user_id = doc._id;
+                    request.session.account = account;
+                    //request.flash('info', email + '.');
+                    response.render('main', {/*success_message: request.flash('info'),*/ user : doc, account: request.session.account}); 
+                }
             } 
             else {
-                let match = await doc.matchPassword(password);
-                if (match) {
-                    if(request.session != undefined) {
-                        request.session.user_id = doc._id;
-                        request.session.account = account;
-                        request.flash('info', email + '.');
-                        response.render('main', {success_message: request.flash('info'), account: request.session.account});
-                    }
-                } 
-                else {
-                    request.flash('info', 'contraseña incorrecta.');
-                    response.render('login', {error_message: request.flash('info'), email, password});
-                }
+                request.flash('info', 'contraseña incorrecta.');
+                response.render('login', {error_message: request.flash('info'), email, password});
             }
         }
     });
@@ -278,7 +271,25 @@ let main = () => {
     });
     app.get('/main', (request, response) => {
         if(request.session != undefined) {
-            response.render('main', {account: request.session.account});
+            let id = mongoose.Types.ObjectId(request.session.user_id);
+            let account = request.session.account;
+            connectDB();
+            if(account == 'client') {
+                client_model.findOne({_id : id}, (error, document) => {
+                    if(error) {
+                        console.log(error);
+                    }
+                    response.render('main', {user : document, account : account});
+                });
+            }
+            else {
+                provider_model.findOne({_id : id}, (error, document) => {
+                    if(error) {
+                        console.log(error);
+                    }
+                    response.render('main', {user : document, account : account});
+                });
+            }
         }
     });
     app.get('/searchservice', (request, response) => {
@@ -300,9 +311,9 @@ let main = () => {
         });
     });
     app.post('/searchservice', (request, response) => {
-        let {service} = request.body;
+        let {services} = request.body;
             connectDB();
-            provider_model.find({'service.title' : service}, async (error, document) => {
+            provider_model.find({'service.title' : services}, async (error, document) => {
                 if(error) {
                     console.log(error);
                 }
@@ -322,10 +333,10 @@ let main = () => {
                     });
                     if(!document.length) {
                         request.flash('info', 'servicio no existe.');
-                        response.render('searchservice', {error_message: request.flash('info'), user : doc, providers : pro, service});
+                        response.render('searchservice', {error_message: request.flash('info'), user : doc, providers : pro, services});
                     }
                     else {
-                        response.render('searchservice', {user : doc, providers : pro, users : document, service});
+                        response.render('searchservice', {user : doc, providers : pro, users : document, services});
                     }
                 }
             });
@@ -343,24 +354,24 @@ let main = () => {
     app.post('/searchservice/requestquotation/:id', (request, response) => {
         let {provider, service, date, description, image} = request.body;
         if (request.session != undefined) {
-            connectDB();
-            let model = new quotation_model({
-                _id: new mongoose.Types.ObjectId(),
-                _id_client : request.session.user_id,
-                _id_provider : provider,
-                service : service,
-                date : date,
-                description : description,
-                cost : 0,
-                status : "pendiente",
-                image : image
-            });
-            model.save((error : any) => {
-                if (error) {
-                    console.log(error);
-                }
-            });
-            response.redirect('/searchservice');
+                connectDB();
+                let model = new quotation_model({
+                    _id: new mongoose.Types.ObjectId(),
+                    _id_client : request.session.user_id,
+                    _id_provider : provider,
+                    service : service,
+                    date : date,
+                    description : description,
+                    cost : 0,
+                    status : "pendiente",
+                    image : image
+                });
+                model.save((error : any) => {
+                    if (error) {
+                        console.log(error);
+                    }
+                });
+                response.redirect('/searchservice');
         }
     });
     app.get('/checkquotations', (request, response) => {
@@ -431,13 +442,19 @@ let main = () => {
         }
     });
     app.get('/checkhistory', (request, response) => {
-        response.render('checkhistory');
+        if(request.session != undefined) {
+            response.render('checkhistory', {account: request.session.account});
+        }
     });
     app.get('/updateaccount', (request, response) => {
-        response.render('updateaccount');
+        if(request.session != undefined) {
+            response.render('updateaccount', {account: request.session.account});
+        }
     });
     app.get('/deleteaccount', (request, response) => {
-        response.render('deleteaccount');
+        if(request.session != undefined) {
+            response.render('deleteaccount', {account: request.session.account});
+        }
     });
     module.exports = app;
 };

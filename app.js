@@ -86,58 +86,58 @@ var main = function () {
         response.render('signup');
     });
     app.post('/signup', function (request, response) { return __awaiter(_this, void 0, void 0, function () {
-        var _a, firstname, lastname, gender, birthdate, idcard, phonenumber, email, password, confirm_password, image, account, address, latitude, longitude, video, description, certificate, service, user, errors, doc1, doc2, doc3, doc4, docs, model, _b, user, errors, doc1, doc2, doc3, doc4, docs, model, _c;
+        var _a, firstname, lastname, gender, birthdate, idcard, phonenumber, email, password, confirm_password, image, account, address, latitude, longitude, video, description, certificate, service, user, doc1, doc2, doc3, doc4, docs, model, _b, user, doc1, doc2, doc3, doc4, docs, model, _c;
         return __generator(this, function (_d) {
             switch (_d.label) {
                 case 0:
                     _a = request.body, firstname = _a.firstname, lastname = _a.lastname, gender = _a.gender, birthdate = _a.birthdate, idcard = _a.idcard, phonenumber = _a.phonenumber, email = _a.email, password = _a.password, confirm_password = _a.confirm_password, image = _a.image, account = _a.account, address = _a.address, latitude = _a.latitude, longitude = _a.longitude, video = _a.video, description = _a.description, certificate = _a.certificate, service = _a.service;
-                    if (!(account === 'client')) return [3 /*break*/, 11];
+                    if (!(account === 'client')) return [3 /*break*/, 10];
                     user = new client_1.Client(firstname, lastname, gender, birthdate, Number(phonenumber), email, password, confirm_password, image, account, address, Number(latitude), Number(longitude));
-                    errors = user.validateSignUp();
-                    if (!(errors.length > 0)) return [3 /*break*/, 1];
-                    response.render('signup', { errors: errors, firstname: firstname, lastname: lastname, gender: gender, birthdate: birthdate, phonenumber: phonenumber, email: email, password: password, confirm_password: confirm_password, image: image, account: account });
-                    return [3 /*break*/, 10];
-                case 1:
+                    /*let errors : any[] = user.validateSignUp();
+                    if (errors.length > 0) {
+                        response.render('signup', {errors, firstname, lastname, gender, birthdate, phonenumber, email, password, confirm_password, image, account});
+                    }
+                    else {*/
                     connection_1.connectDB();
                     return [4 /*yield*/, client_2.client_model.findOne({ 'phonenumber': user.getPhonenumber() }, function (error) {
                             if (error) {
                                 console.log(error);
                             }
                         })];
-                case 2:
+                case 1:
                     doc1 = _d.sent();
                     return [4 /*yield*/, client_2.client_model.findOne({ 'account.email': user.getEmail() }, function (error) {
                             if (error) {
                                 console.log(error);
                             }
                         })];
-                case 3:
+                case 2:
                     doc2 = _d.sent();
                     return [4 /*yield*/, provider_2.provider_model.findOne({ 'phonenumber': user.getPhonenumber() }, function (error) {
                             if (error) {
                                 console.log(error);
                             }
                         })];
-                case 4:
+                case 3:
                     doc3 = _d.sent();
                     return [4 /*yield*/, provider_2.provider_model.findOne({ 'account.email': user.getEmail() }, function (error) {
                             if (error) {
                                 console.log(error);
                             }
                         })];
-                case 5:
+                case 4:
                     doc4 = _d.sent();
                     docs = [doc1, doc2, doc3, doc4];
-                    if (!(docs[0] || docs[2])) return [3 /*break*/, 6];
+                    if (!(docs[0] || docs[2])) return [3 /*break*/, 5];
                     request.flash('info', 'número de teléfono ya existe.');
                     response.render('signup', { error_message: request.flash('info'), firstname: firstname, lastname: lastname, gender: gender, birthdate: birthdate, phonenumber: phonenumber, email: email, password: password, confirm_password: confirm_password, image: image, account: account });
-                    return [3 /*break*/, 10];
-                case 6:
-                    if (!(docs[1] || docs[3])) return [3 /*break*/, 7];
+                    return [3 /*break*/, 9];
+                case 5:
+                    if (!(docs[1] || docs[3])) return [3 /*break*/, 6];
                     request.flash('info', 'correo electrónico ya existe.');
                     response.render('signup', { error_message: request.flash('info'), firstname: firstname, lastname: lastname, gender: gender, birthdate: birthdate, phonenumber: phonenumber, email: email, password: password, confirm_password: confirm_password, image: image, account: account });
-                    return [3 /*break*/, 10];
-                case 7:
+                    return [3 /*break*/, 9];
+                case 6:
                     connection_1.connectDB();
                     model = new client_2.client_model({
                         _id: new mongoose_1.default.Types.ObjectId(),
@@ -161,67 +161,67 @@ var main = function () {
                     });
                     _b = model.account;
                     return [4 /*yield*/, model.encryptPassword(password)];
-                case 8:
+                case 7:
                     _b.password = _d.sent();
                     return [4 /*yield*/, model.save(function (error) {
                             if (error) {
                                 console.log(error);
                             }
                         })];
-                case 9:
+                case 8:
                     _d.sent();
                     request.flash('info', 'estas registrado.');
                     response.render('login', { success_message: request.flash('info') });
                     user.sendMail();
-                    _d.label = 10;
-                case 10: return [3 /*break*/, 21];
-                case 11:
+                    _d.label = 9;
+                case 9: return [3 /*break*/, 19];
+                case 10:
                     user = new provider_1.Provider(firstname, lastname, gender, birthdate, Number(phonenumber), email, password, confirm_password, image, account, address, Number(latitude), Number(longitude), Number(idcard), video, description, certificate, service);
-                    errors = user.validateSignUp();
-                    if (!(errors.length > 0)) return [3 /*break*/, 12];
-                    response.render('signup', { errors: errors, firstname: firstname, lastname: lastname, gender: gender, birthdate: birthdate, idcard: idcard, phonenumber: phonenumber, email: email, password: password, confirm_password: confirm_password, image: image, account: account, video: video, description: description, certificate: certificate, service: service });
-                    return [3 /*break*/, 21];
-                case 12:
+                    /*let errors : DocumentQuery<any, any, {}>[] = user.validateSignUp();
+                    if (errors.length > 0) {
+                        response.render('signup', {errors, firstname, lastname, gender, birthdate, idcard, phonenumber, email, password, confirm_password, image, account, video, description, certificate, service});
+                    }
+                    else {*/
                     connection_1.connectDB();
                     return [4 /*yield*/, client_2.client_model.findOne({ 'phonenumber': user.getPhonenumber() }, function (error) {
                             if (error) {
                                 console.log(error);
                             }
                         })];
-                case 13:
+                case 11:
                     doc1 = _d.sent();
                     return [4 /*yield*/, client_2.client_model.findOne({ 'account.email': user.getEmail() }, function (error) {
                             if (error) {
                                 console.log(error);
                             }
                         })];
-                case 14:
+                case 12:
                     doc2 = _d.sent();
                     return [4 /*yield*/, provider_2.provider_model.findOne({ 'phonenumber': user.getPhonenumber() }, function (error) {
                             if (error) {
                                 console.log(error);
                             }
                         })];
-                case 15:
+                case 13:
                     doc3 = _d.sent();
                     return [4 /*yield*/, provider_2.provider_model.findOne({ 'account.email': user.getEmail() }, function (error) {
                             if (error) {
                                 console.log(error);
                             }
                         })];
-                case 16:
+                case 14:
                     doc4 = _d.sent();
                     docs = [doc1, doc2, doc3, doc4];
-                    if (!(docs[0] || docs[2])) return [3 /*break*/, 17];
+                    if (!(docs[0] || docs[2])) return [3 /*break*/, 15];
                     request.flash('info', 'número de teléfono ya existe.');
                     response.render('signup', { error_message: request.flash('info'), firstname: firstname, lastname: lastname, gender: gender, birthdate: birthdate, idcard: idcard, phonenumber: phonenumber, email: email, password: password, confirm_password: confirm_password, image: image, account: account, video: video, description: description, certificate: certificate, service: service });
-                    return [3 /*break*/, 21];
-                case 17:
-                    if (!(docs[1] || docs[3])) return [3 /*break*/, 18];
+                    return [3 /*break*/, 19];
+                case 15:
+                    if (!(docs[1] || docs[3])) return [3 /*break*/, 16];
                     request.flash('info', 'correo electrónico ya existe.');
                     response.render('signup', { error_message: request.flash('info'), firstname: firstname, lastname: lastname, gender: gender, birthdate: birthdate, idcard: idcard, phonenumber: phonenumber, email: email, password: password, confirm_password: confirm_password, image: image, account: account, video: video, description: description, certificate: certificate, service: service });
-                    return [3 /*break*/, 21];
-                case 18:
+                    return [3 /*break*/, 19];
+                case 16:
                     connection_1.connectDB();
                     model = new provider_2.provider_model({
                         _id: new mongoose_1.default.Types.ObjectId(),
@@ -252,20 +252,20 @@ var main = function () {
                     });
                     _c = model.account;
                     return [4 /*yield*/, model.encryptPassword(password)];
-                case 19:
+                case 17:
                     _c.password = _d.sent();
                     return [4 /*yield*/, model.save(function (error) {
                             if (error) {
                                 console.log(error);
                             }
                         })];
-                case 20:
+                case 18:
                     _d.sent();
                     request.flash('info', 'estas registrado.');
                     response.render('login', { success_message: request.flash('info') });
                     user.sendMail();
-                    _d.label = 21;
-                case 21: return [2 /*return*/];
+                    _d.label = 19;
+                case 19: return [2 /*return*/];
             }
         });
     }); });
@@ -273,81 +273,74 @@ var main = function () {
         response.render('login');
     });
     app.post('/login', function (request, response) { return __awaiter(_this, void 0, void 0, function () {
-        var _a, email, password, user, account, errors, email_expression, doc, match;
+        var _a, email, password, account, email_expression, doc, match;
         return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
                     _a = request.body, email = _a.email, password = _a.password;
-                    user = new client_1.Client("", "", "", "", 0, "", "", "", "", "", "", 0, 0);
                     account = "";
-                    errors = user.validateLogIn(email, password);
-                    if (!(errors.length > 0)) return [3 /*break*/, 1];
-                    response.render('login', { errors: errors, email: email, password: password });
-                    return [3 /*break*/, 11];
-                case 1:
                     connection_1.connectDB();
                     email_expression = /[^@\s]+@[^@\s]+\.[^@\s]+/;
-                    doc = void 0;
-                    if (!email_expression.test(email)) return [3 /*break*/, 5];
+                    if (!email_expression.test(email)) return [3 /*break*/, 4];
                     return [4 /*yield*/, client_2.client_model.findOne({ 'account.email': email }, function (error) {
                             if (error) {
                                 console.log(error);
                             }
                             account = "client";
                         })];
-                case 2:
+                case 1:
                     doc = _b.sent();
-                    if (!!doc) return [3 /*break*/, 4];
+                    if (!!doc) return [3 /*break*/, 3];
                     return [4 /*yield*/, provider_2.provider_model.findOne({ 'account.email': email }, function (error) {
                             if (error) {
                                 console.log(error);
                             }
                             account = "provider";
                         })];
-                case 3:
+                case 2:
                     doc = _b.sent();
-                    _b.label = 4;
-                case 4: return [3 /*break*/, 8];
-                case 5: return [4 /*yield*/, client_2.client_model.findOne({ phonenumber: email }, function (error) {
+                    _b.label = 3;
+                case 3: return [3 /*break*/, 7];
+                case 4: return [4 /*yield*/, client_2.client_model.findOne({ phonenumber: email }, function (error) {
                         if (error) {
                             console.log(error);
                         }
                         account = "client";
                     })];
-                case 6:
+                case 5:
                     doc = _b.sent();
-                    if (!!doc) return [3 /*break*/, 8];
+                    if (!!doc) return [3 /*break*/, 7];
                     return [4 /*yield*/, provider_2.provider_model.findOne({ phonenumber: email }, function (error) {
                             if (error) {
                                 console.log(error);
                             }
                             account = "provider";
                         })];
-                case 7:
+                case 6:
                     doc = _b.sent();
-                    _b.label = 8;
-                case 8:
-                    if (!!doc) return [3 /*break*/, 9];
+                    _b.label = 7;
+                case 7:
+                    if (!!doc) return [3 /*break*/, 8];
                     request.flash('info', 'correo electrónico o número de teléfono no existe.');
                     response.render('login', { error_message: request.flash('info'), email: email, password: password });
-                    return [3 /*break*/, 11];
-                case 9: return [4 /*yield*/, doc.matchPassword(password)];
-                case 10:
+                    return [3 /*break*/, 10];
+                case 8: return [4 /*yield*/, doc.matchPassword(password)];
+                case 9:
                     match = _b.sent();
                     if (match) {
                         if (request.session != undefined) {
                             request.session.user_id = doc._id;
                             request.session.account = account;
-                            request.flash('info', email + '.');
-                            response.render('main', { success_message: request.flash('info'), account: request.session.account });
+                            //request.flash('info', email + '.');
+                            response.render('main', { /*success_message: request.flash('info'),*/ user: doc, account: request.session.account });
                         }
                     }
                     else {
                         request.flash('info', 'contraseña incorrecta.');
                         response.render('login', { error_message: request.flash('info'), email: email, password: password });
                     }
-                    _b.label = 11;
-                case 11: return [2 /*return*/];
+                    _b.label = 10;
+                case 10: return [2 /*return*/];
             }
         });
     }); });
@@ -365,7 +358,25 @@ var main = function () {
     });
     app.get('/main', function (request, response) {
         if (request.session != undefined) {
-            response.render('main', { account: request.session.account });
+            var id = mongoose_1.default.Types.ObjectId(request.session.user_id);
+            var account_1 = request.session.account;
+            connection_1.connectDB();
+            if (account_1 == 'client') {
+                client_2.client_model.findOne({ _id: id }, function (error, document) {
+                    if (error) {
+                        console.log(error);
+                    }
+                    response.render('main', { user: document, account: account_1 });
+                });
+            }
+            else {
+                provider_2.provider_model.findOne({ _id: id }, function (error, document) {
+                    if (error) {
+                        console.log(error);
+                    }
+                    response.render('main', { user: document, account: account_1 });
+                });
+            }
         }
     });
     app.get('/searchservice', function (request, response) {
@@ -396,9 +407,9 @@ var main = function () {
         }); });
     });
     app.post('/searchservice', function (request, response) {
-        var service = request.body.service;
+        var services = request.body.services;
         connection_1.connectDB();
-        provider_2.provider_model.find({ 'service.title': service }, function (error, document) { return __awaiter(_this, void 0, void 0, function () {
+        provider_2.provider_model.find({ 'service.title': services }, function (error, document) { return __awaiter(_this, void 0, void 0, function () {
             var id, doc, pro;
             var _this = this;
             return __generator(this, function (_a) {
@@ -430,10 +441,10 @@ var main = function () {
                         pro = _a.sent();
                         if (!document.length) {
                             request.flash('info', 'servicio no existe.');
-                            response.render('searchservice', { error_message: request.flash('info'), user: doc, providers: pro, service: service });
+                            response.render('searchservice', { error_message: request.flash('info'), user: doc, providers: pro, services: services });
                         }
                         else {
-                            response.render('searchservice', { user: doc, providers: pro, users: document, service: service });
+                            response.render('searchservice', { user: doc, providers: pro, users: document, services: services });
                         }
                         _a.label = 3;
                     case 3: return [2 /*return*/];
@@ -477,9 +488,9 @@ var main = function () {
     app.get('/checkquotations', function (request, response) {
         if (request.session != undefined) {
             var id = mongoose_1.default.Types.ObjectId(request.session.user_id);
-            var account_1 = request.session.account;
+            var account_2 = request.session.account;
             connection_1.connectDB();
-            if (account_1 == "client") {
+            if (account_2 == "client") {
                 quotation_1.quotation_model.aggregate([{
                         $lookup: {
                             from: "providers",
@@ -502,10 +513,10 @@ var main = function () {
                     }
                     if (!document.length) {
                         request.flash('info', 'no tienes cotizaciones.');
-                        response.render('checkquotations', { error_message: request.flash('info'), account: account_1 });
+                        response.render('checkquotations', { error_message: request.flash('info'), account: account_2 });
                     }
                     else {
-                        response.render('checkquotations', { account: account_1, quotations: document });
+                        response.render('checkquotations', { account: account_2, quotations: document });
                     }
                 });
             }
@@ -532,23 +543,29 @@ var main = function () {
                     }
                     if (!document.length) {
                         request.flash('info', 'no tienes cotizaciones.');
-                        response.render('checkquotations', { error_message: request.flash('info'), account: account_1 });
+                        response.render('checkquotations', { error_message: request.flash('info'), account: account_2 });
                     }
                     else {
-                        response.render('checkquotations', { account: account_1, quotations: document });
+                        response.render('checkquotations', { account: account_2, quotations: document });
                     }
                 });
             }
         }
     });
     app.get('/checkhistory', function (request, response) {
-        response.render('checkhistory');
+        if (request.session != undefined) {
+            response.render('checkhistory', { account: request.session.account });
+        }
     });
     app.get('/updateaccount', function (request, response) {
-        response.render('updateaccount');
+        if (request.session != undefined) {
+            response.render('updateaccount', { account: request.session.account });
+        }
     });
     app.get('/deleteaccount', function (request, response) {
-        response.render('deleteaccount');
+        if (request.session != undefined) {
+            response.render('deleteaccount', { account: request.session.account });
+        }
     });
     module.exports = app;
 };

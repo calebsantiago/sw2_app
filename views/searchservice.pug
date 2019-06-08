@@ -1,69 +1,67 @@
-doctype html
-html(lang = "en")
+extends layout
+block content
     head
-        meta(charset = "UTF-8")
-        meta(name = "viewport" content = "width=device-width, initial-scale=1.0")
-        meta(http-equiv = "X-UA-Compatible" content = "ie=edge")
-        link(rel = "stylesheet" type = "text/css" href = "stylesheets/forms.css")
-        link(rel = "stylesheet" type = "text/css" href = "https://bootswatch.com/4/cosmo/bootstrap.min.css")
-        script(type = "text/javascript" src = "javascripts/searchMap.js")
-        script(type = "text/javascript") setCoords(#{user.coordinate.latitude}, #{user.coordinate.longitude})
+        include head
+        script(type = 'text/javascript' src = 'javascripts/searchMap.js')
+        script(type = 'text/javascript') setCoords(#{user.coordinate.latitude}, #{user.coordinate.longitude})
         if providers
             each provider in providers
-                script(type = "text/javascript") addProvider("#{provider._id}", "#{provider.name.firstname}", "#{provider.name.lastname}", "#{provider.service.title}", "#{provider.description}", #{provider.coordinate.latitude}, #{provider.coordinate.longitude})
-        script(type = "text/javascript" src = "https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js")
-        script(type = "text/javascript" src = "javascripts/show.js")
-        script(type = "text/javascript" src = "javascripts/selectOption.js")
-        script(type = "text/javascript" src = "https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity = "sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin = "anonymous")
-        title CONTACTA
-    body
-        div(class = "jumbotron text-center")
-            h1 Contacta
-            h2 El servicio que quieras, cuando quieras.
-        if errors
-            each error in errors
-                div(class = "alert alert-danger alert-dismissible fade show" role = "alert") #{error.text}
-                    button(type = "button" class = "close" data-dismiss = "alert" aria-label = "Close")
-                        span(aria-hidden = "true") &times;
-        if error_message
-            div(class = "alert alert-danger alert-dismissible fade show" role = "alert") #{error_message}
-                button(type = "button" class = "close" data-dismiss = "alert" aria-label = "Close")
-                    span(aria-hidden = "true") &times;
-        if success_message
-            div(class = "alert alert-success alert-dismissible fade show" role = "alert") #{success_message}
-                button(type = "button" class = "close" data-dismiss = "alert" aria-label = "Close")
-                    span(aria-hidden = "true") &times;
-        form(action = "searchservice" method = "post" class = "jumbotron text-center")
-            h6(align = "middle") Busca tu servicio:
-            select(id = "service" name = "service" class = "my-2" autofocus required)
-                option(value = "" select hidden) servicio
-                option(id = "gasfitería" name = "gasfitería" value = "gasfitería") gasfitería
-                option(id = "guardería" name = "guardería" value = "guardería") guardería
-                option(id = "movilidad" name = "movilidad" value = "movilidad") movilidad
-                option(id = "panadería" name = "panadería" value = "panadería") panadería
-            div
-            input(type = "submit" value = "buscar servicio" class = "btn btn-primary my-2 mr-sm-2" style = "margin: 5px;")
-            button(type = "button" onclick = "return show()" class = "btn btn-primary my-2 mr-sm-2" style = "margin: 5px;") ubicación
-            div(align = "middle")
-                div(id = "map" class = "signup-form-map" style = "display:none;" disabled)
-                if users    
-                    table(style = "margin: 20px;text-align:center;" border = "1px solid black;")
-                        tr
-                            td nombre
-                            td apellido
-                            td servicio
-                            td descripción
-                            td cotizar servicio
-                        each user in users
-                            tr
-                                td #{user.name.firstname}
-                                td #{user.name.lastname}
-                                td #{user.service.title}
-                                td #{user.description}
-                                td
-                                    a(href = "searchservice/requestquotation/" + user._id)
-                                        button(type = "button" class = "") cotizar
-            a(href = "/main")
-                button(type = "button" class = "btn btn-primary my-2 mr-sm-2" style = "margin: 5px;") volver
-        script(type = "text/javascript") selectOption("#{service}")
-        script(type = "text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCSRS9SAWe9v2szpbAYACT9F8c1hJThJ7c&callback=searchMap" async defer)
+                script(type = 'text/javascript') addProvider('#{provider._id}', '#{provider.name.firstname}', '#{provider.name.lastname}', '#{provider.service.title}', '#{provider.description}', #{provider.coordinate.latitude}, #{provider.coordinate.longitude})
+        script(type = 'text/javascript' src = 'javascripts/validate.js')
+        script(type = 'text/javascript' src = 'javascripts/show.js')
+        script(type = 'text/javascript' src = 'javascripts/selectOption.js')
+    body(style = 'padding-top: 50px;')
+        div(class = 'navbar navbar-expand-lg fixed-top navbar-dark bg-primary')
+            div(class = 'container')
+                a(href = '/main' class = 'navbar-brand') Contacta
+                button(type = 'button' class = 'navbar-toggler' data-toggle = 'collapse' data-target = '#navbarResponsive' aria-controls = 'navbarResponsive' aria-expanded = 'false' aria-label = 'Toggle navigation')
+                    span(class = 'navbar-toggler-icon')
+                div(id = 'navbarResponsive' class = 'navbar-collapse collapse')
+                    ul(class = 'navbar-nav')
+                        li(class = 'nav-item')
+                            a(class = 'nav-link' href = '/searchservice') buscar servicio
+                        li(class = 'nav-item')
+                            a(class = 'nav-link' href = '/checkquotations') cotizaciones
+                        li(class = 'nav-item')
+                            a(class = 'nav-link' href = '/checkhistory') servicios
+                        li(class = 'nav-item')
+                            a(class = 'nav-link' href = '/updateaccount') editar perfil
+                        li(class = 'nav-item')
+                            a(class = 'nav-link' href = '/deleteaccount') eliminar cuenta
+                        li(class = 'nav-item')
+                            a(class = 'nav-link' href = '/logout') cerrar sesión
+        div(class = 'container')
+            div(class = 'bs-docs-section')
+                div(class = 'row jumbotron')
+                    div(id = 'container' class = 'col-lg-12')
+                        include messages
+                        form(id = 'form' action = 'searchservice' method = 'post' class = 'form-inline justify-content-center' onsubmit = 'return validateSearchService()')
+                            select(id = 'services' name = 'services' class = 'form-control m-2' autofocus required)
+                                option(value = '' select hidden) servicio
+                                option(id = 'gasfitería' name = 'gasfitería' value = 'gasfitería') gasfitería
+                                option(id = 'guardería' name = 'guardería' value = 'guardería') guardería
+                                option(id = 'movilidad' name = 'movilidad' value = 'movilidad') movilidad
+                                option(id = 'panadería' name = 'panadería' value = 'panadería') panadería
+                            input(type = 'submit' value = 'buscar servicio' class = 'btn btn-primary m-2')
+                            button(type = 'button' onclick = 'return show()' class = 'btn btn-primary m-2') ubicación
+                            div(id = 'map' style = 'height: 350px; width: 1046px; display: none;' disabled)
+                            if users
+                                div(class = 'table-responsive')
+                                    table(class = 'table table-hover')
+                                        thead
+                                            tr(class = 'table-light')
+                                                td(class = 'text-center align-middle' scope = 'col') prestador
+                                                td(class = 'text-center align-middle' scope = 'col') servicio
+                                                td(class = 'text-center align-middle' scope = 'col') descripción
+                                                td(class = 'text-center align-middle' scope = 'col') cotizar servicio
+                                        tbody
+                                            each user in users
+                                                tr(class = 'table-primary')
+                                                    td(class = 'text-center align-middle') #{user.name.firstname + ' ' + user.name.lastname}
+                                                    td(class = 'text-center align-middle') #{user.service.title}
+                                                    td(class = 'text-center align-middle') #{user.description}
+                                                    td(class = 'text-center align-middle')
+                                                        a(href = 'searchservice/requestquotation/' + user._id)
+                                                            button(type = 'button' class = 'btn btn-primary') cotizar
+        script(type = 'text/javascript') selectOption('#{services}')
+        script(type = 'text/javascript' src='https://maps.googleapis.com/maps/api/js?key=AIzaSyCSRS9SAWe9v2szpbAYACT9F8c1hJThJ7c&callback=searchMap' async defer)

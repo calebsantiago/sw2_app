@@ -1,41 +1,46 @@
-doctype html
-html(lang = "en")
+extends layout
+block content
     head
-        meta(charset = "UTF-8")
-        meta(name = "viewport" content = "width=device-width, initial-scale=1.0")
-        meta(http-equiv = "X-UA-Compatible" content = "ie=edge")
-        link(rel = "stylesheet" type = "text/css" href = "/stylesheets/forms.css")
-        link(rel = "stylesheet" type = "text/css" href = "https://bootswatch.com/4/cosmo/bootstrap.min.css")
-        script(type = "text/javascript" src = "https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js")
-        script(type = "text/javascript" src = "https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity = "sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin = "anonymous")
-        title CONTACTA
-    body
-        div(class = "jumbotron text-center")
-            h1 Contacta
-            h2 El servicio que quieras, cuando quieras.
-        if errors
-            each error in errors
-                div(class = "alert alert-danger alert-dismissible fade show" role = "alert") #{error.text}
-                    button(type = "button" class = "close" data-dismiss = "alert" aria-label = "Close")
-                        span(aria-hidden = "true") &times;
-        if error_message
-            div(class = "alert alert-danger alert-dismissible fade show" role = "alert") #{error_message}
-                button(type = "button" class = "close" data-dismiss = "alert" aria-label = "Close")
-                    span(aria-hidden = "true") &times;
-        if success_message
-            div(class = "alert alert-success alert-dismissible fade show" role = "alert") #{success_message}
-                button(type = "button" class = "close" data-dismiss = "alert" aria-label = "Close")
-                    span(aria-hidden = "true") &times;
-        form(action = user._id method = "post" class = "jumbotron text-center")
-            input(type = "text" id = "provider" name = "provider" placeholder = "provider" value = user._id class = "" style = "display:none;" required)
-            input(type = "text" id = "service" name = "service" placeholder = "service" value = user.service.title class = "" style = "display:none;" required)
-            input(type = "date" id = "date" name = "date" placeholder = "fecha" value = date class = "" autofocus required)
-            div
-            textarea(id = "description" name = "description" placeholder = "descripción" class = "" style = "margin: 25px;" required) #{description}
-            div
-            input(type = "url" id = "image" name = "image" placeholder = "link imagen" value = image class = "" style = "margin: 25px;")
-            div
-            input(type = "submit" value = "cotizar servicio" class = "" style = "margin: 25px;")
-            a(href = "/searchservice")
-                    button(type = "button" class = "" style = "margin: 25px;") cancelar
-            
+        include head
+        script(type = 'text/javascript' src = '/javascripts/validate.js')
+    body(style = 'padding-top: 50px;')
+        div(class = 'navbar navbar-expand-lg fixed-top navbar-dark bg-primary')
+            div(class = 'container')
+                a(href = '/main' class = 'navbar-brand') Contacta
+                button(type = 'button' class = 'navbar-toggler' data-toggle = 'collapse' data-target = '#navbarResponsive' aria-controls = 'navbarResponsive' aria-expanded = 'false' aria-label = 'Toggle navigation')
+                    span(class = 'navbar-toggler-icon')
+                div(id = 'navbarResponsive' class = 'navbar-collapse collapse')
+                    ul(class = 'navbar-nav')
+                        li(class = 'nav-item')
+                            a(class = 'nav-link' href = '/searchservice') buscar servicio
+                        li(class = 'nav-item')
+                            a(class = 'nav-link' href = '/checkquotations') cotizaciones
+                        li(class = 'nav-item')
+                            a(class = 'nav-link' href = '/checkhistory') servicios
+                        li(class = 'nav-item')
+                            a(class = 'nav-link' href = '/updateaccount') editar perfil
+                        li(class = 'nav-item')
+                            a(class = 'nav-link' href = '/deleteaccount') eliminar cuenta
+                        li(class = 'nav-item')
+                            a(class = 'nav-link' href = '/logout') cerrar sesión
+        div(class = 'container')
+            div(class = 'bs-docs-section')
+                div(class = 'row align-items-center h-100')
+                    div(class = 'col-xs-12 col-sm-10 col-lg-7 mx-auto')
+                        div(id = 'container' class = 'jumbotron')
+                            form(id = 'form' action = user._id method = 'post' onsubmit = 'return validateQuotation()')
+                                fieldset
+                                    h1(class = 'display-5 text-center') #{user.service.title}
+                                    p(class = 'lead text-center') #{user.name.firstname} #{user.name.lastname}
+                                    p(class = 'lead text-center') #{user.description}
+                                    input(type = 'text' id = 'provider' name = 'provider' placeholder = 'provider' value = user._id style = 'display: none;' required)
+                                    input(type = 'text' id = 'service' name = 'service' placeholder = 'service' value = user.service.title style = 'display: none;' required)
+                                    div(class = 'form-group')
+                                        input(type = 'date' id = 'date' name = 'date' placeholder = 'fecha' class = 'form-control' autofocus required)
+                                        small(class = 'form-text text-muted') * campo obligatorio
+                                    div(class = 'form-group')
+                                        textarea(id = 'description' name = 'description' placeholder = 'descripción' class = 'form-control' required)
+                                        small(class = 'form-text text-muted') * campo obligatorio
+                                    div(class = 'form-group')
+                                        input(type = 'url' id = 'image' name = 'image' placeholder = 'link imagen' class = 'form-control')
+                                    input(type = 'submit' value = 'cotizar servicio' class = 'btn btn-primary btn-lg btn-block')
