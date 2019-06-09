@@ -63,45 +63,48 @@ function searchMap() {
     closeControlDiv.index = 1;
     map.controls[google.maps.ControlPosition.TOP_RIGHT].push(closeControlDiv);
     var markers = [providers.length];
+    var services = document.getElementById('services').value;
     for (var i = 0; i < providers.length; i++) {
-        markers[i] = new google.maps.Marker({
-            position: new google.maps.LatLng(providers[i].latitude, providers[i].longitude),
-            map: map,
-            draggable: false,
-            title: providers[i].title,
-            id: providers[i].id,
-            firstname: providers[i].firstname,
-            lastname: providers[i].lastname,
-            description: providers[i].description
-        });
-        markers[i].addListener('click', function() {
-            var contentString = '<div id = "container" class = "p-1 m-0">'+
-                                    '<form id = "form" action = /searchservice/requestquotation/'+ this.id +' method = "post" class = "" onsubmit = "return validateQuotation()">'+
-                                        '<h4 class = "display-5 text-center p-0 m-1">'+this.title+'</h3>'+
-                                        '<p class = "text-center p-0 m-1">'+this.firstname+' '+this.lastname+'</p>'+
-                                        '<p class = "text-center p-0 m-1">'+this.description+'</p>'+                        
-                                        '<input type = "text" id = "provider" name = "provider" placeholder = "provider" value = '+ this.id +' style = "display:none;" required>'+
-                                        '<input type = "text" id = "service" name = "service" placeholder = "service" value = '+ this.title +' style = "display:none;" required>'+
-                                        '<div class = "form-group p-0 m-1" style = "display:block;">'+
-                                            '<input type = "date" id = "date" name = "date" placeholder = "fecha" class = "form-control form-control-sm" autofocus required>'+
-                                            '<small class = "form-text text-muted">* campo obligatorio</small>'+
-                                        '</div>'+
-                                        '<div class = "form-group p-0 m-1" style = "display:block;">'+
-                                            '<textarea id = "description" name = "description" placeholder = "descripción" class = "form-control form-control-sm" required></textarea>'+
-                                            '<small class = "form-text text-muted">* campo obligatorio</small>'+
-                                        '</div>'+
-                                        '<div class = "form-group p-0 m-1" style = "display:block;">'+
-                                            '<input type = "url" id = "image" name = "image" placeholder = "link imagen" class = "form-control form-control-sm">'+
-                                        '</div>'+
-                                        '<div class = "form-group p-0 m-1" style = "display:block;">'+
-                                            '<input type = "submit" value = "cotizar servicio" class = "btn btn-primary btn-sm btn-block">'+
-                                        '</div>'+
-                                    '</form>'+
-                                '</div>';
-            infowindow.close();
-            infowindow.setContent(contentString);
-            infowindow.open(map, this);
-        });
+        if(providers[i].title == services) {
+            markers[i] = new google.maps.Marker({
+                position: new google.maps.LatLng(providers[i].latitude, providers[i].longitude),
+                map: map,
+                draggable: false,
+                title: providers[i].title,
+                id: providers[i].id,
+                firstname: providers[i].firstname,
+                lastname: providers[i].lastname,
+                description: providers[i].description
+            });
+            markers[i].addListener('click', function() {
+                var contentString = '<div id = "container" class = "p-1 m-0">'+
+                                        '<form id = "form" action = /searchservice/requestquotation/'+ this.id +' method = "post" class = "" onsubmit = "return validateQuotation()">'+
+                                            '<h4 class = "display-5 text-center p-0 m-1">'+this.title+'</h3>'+
+                                            '<p class = "text-center p-0 m-1">'+this.firstname+' '+this.lastname+'</p>'+
+                                            '<p class = "text-center p-0 m-1">'+this.description+'</p>'+                        
+                                            '<input type = "text" id = "provider" name = "provider" placeholder = "provider" value = '+ this.id +' style = "display:none;" required>'+
+                                            '<input type = "text" id = "service" name = "service" placeholder = "service" value = '+ this.title +' style = "display:none;" required>'+
+                                            '<div class = "form-group p-0 m-1" style = "display:block;">'+
+                                                '<input type = "date" id = "date" name = "date" placeholder = "fecha" class = "form-control form-control-sm" autofocus required>'+
+                                                '<small class = "form-text text-muted">* campo obligatorio</small>'+
+                                            '</div>'+
+                                            '<div class = "form-group p-0 m-1" style = "display:block;">'+
+                                                '<textarea id = "description" name = "description" placeholder = "descripción" class = "form-control form-control-sm" required></textarea>'+
+                                                '<small class = "form-text text-muted">* campo obligatorio</small>'+
+                                            '</div>'+
+                                            '<div class = "form-group p-0 m-1" style = "display:block;">'+
+                                                '<input type = "url" id = "image" name = "image" placeholder = "link imagen" class = "form-control form-control-sm">'+
+                                            '</div>'+
+                                            '<div class = "form-group p-0 m-1" style = "display:block;">'+
+                                                '<input type = "submit" value = "cotizar servicio" class = "btn btn-primary btn-sm btn-block">'+
+                                            '</div>'+
+                                        '</form>'+
+                                    '</div>';
+                infowindow.close();
+                infowindow.setContent(contentString);
+                infowindow.open(map, this);
+            });
+        }
     }
     var image = 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png';
     var marker = new google.maps.Marker({

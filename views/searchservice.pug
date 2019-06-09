@@ -43,7 +43,7 @@ block content
                                 option(id = 'movilidad' name = 'movilidad' value = 'movilidad') movilidad
                                 option(id = 'panadería' name = 'panadería' value = 'panadería') panadería
                             input(type = 'submit' value = 'buscar servicio' class = 'btn btn-primary m-2')
-                            button(type = 'button' onclick = 'return show()' class = 'btn btn-primary m-2') ubicación
+                            button(type = 'button' onclick = 'return validateSearchMap()' class = 'btn btn-primary m-2') ubicación
                             div(id = 'map' style = 'height: 350px; width: 1046px; display: none;' disabled)
                             if users
                                 div(class = 'table-responsive')

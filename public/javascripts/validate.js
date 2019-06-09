@@ -145,6 +145,18 @@ function validateSearchService() {
     }
 }
 
+function validateSearchMap() {
+    var services = document.getElementById('services').value;
+    if (services === '') {
+        createErrors('debes completar los campos.');
+        return false;
+    }
+    else {
+        searchMap();
+        show();
+    }
+}
+
 function testDate(date) {
     var status = false;
     var today =  new Date();

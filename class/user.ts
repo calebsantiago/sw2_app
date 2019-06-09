@@ -163,7 +163,7 @@ export abstract class User {
         from: 'contacta.no.reply@gmail.com',
         to: this.getEmail(),
         subject: 'Contacta',
-        text: 'Hola ' + this.getEmail() + ' te damos la bienvenida a Contacta.'
+        text: 'Hola ' + this.getFirstname() + ' ' + this.getLastname() + ' te damos la bienvenida a Contacta.'
     };
     transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
