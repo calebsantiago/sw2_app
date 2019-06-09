@@ -16,13 +16,43 @@ block content
                             li(class = 'nav-item')
                                 a(class = 'nav-link' href = '/checkquotations') cotizaciones
                             li(class = 'nav-item')
-                                a(class = 'nav-link' href = '/checkhistory') servicios
+                                a(class = 'nav-link' href = '/checkhistory') historial
                             li(class = 'nav-item')
                                 a(class = 'nav-link' href = '/updateaccount') editar perfil
                             li(class = 'nav-item')
                                 a(class = 'nav-link' href = '/deleteaccount') eliminar cuenta
                             li(class = 'nav-item')
                                 a(class = 'nav-link' href = '/logout') cerrar sesión
+            div(class = 'container jumbotron')
+                include messages
+                form(action = '' method = '')
+                    if quotations
+                        div(class = 'table-responsive')
+                            table(class = 'table table-hover')
+                                thead
+                                    tr(class = 'table-light')
+                                        th(class = 'text-center align-middle' scope = 'col') prestador
+                                        th(class = 'text-center align-middle' scope = 'col') servicio
+                                        th(class = 'text-center align-middle' scope = 'col') fecha
+                                        th(class = 'text-center align-middle' scope = 'col') descripción
+                                        th(class = 'text-center align-middle' scope = 'col') costo
+                                        th(class = 'text-center align-middle' scope = 'col') estado
+                                        th(class = 'text-center align-middle' scope = 'col') calificar servicio
+                                        th(class = 'text-center align-middle' scope = 'col') reportar servicio
+                                tbody
+                                    each quotation in quotations
+                                        tr(class = 'table-primary')
+                                            td(class = 'text-center align-middle') #{quotation.name.firstname + ' ' + quotation.name.lastname}
+                                            td(class = 'text-center align-middle') #{quotation.service}
+                                            td(class = 'text-center align-middle') #{quotation.date}
+                                            td(class = 'text-center align-middle') #{quotation.description}
+                                            td(class = 'text-center align-middle') S/.#{quotation.cost}
+                                            td(class = 'text-center align-middle') #{quotation.status}
+                                            td(class = 'text-center align-middle')
+                                                input(type = 'submit' value = 'calificar' class = 'btn btn-primary' disabled)
+                                            td(class = 'text-center align-middle')
+                                                input(type = 'submit' value = 'reportar' class = 'btn btn-success' disabled)
+
         else
             div(class = 'navbar navbar-expand-lg fixed-top navbar-dark bg-primary')
                 div(class = 'container')
@@ -34,10 +64,33 @@ block content
                             li(class = 'nav-item')
                                 a(class = 'nav-link' href = '/checkquotations') cotizaciones
                             li(class = 'nav-item')
-                                a(class = 'nav-link' href = '/checkhistory') servicios
+                                a(class = 'nav-link' href = '/checkhistory') historial
                             li(class = 'nav-item')
                                 a(class = 'nav-link' href = '/updateaccount') editar perfil
                             li(class = 'nav-item')
                                 a(class = 'nav-link' href = '/deleteaccount') eliminar cuenta
                             li(class = 'nav-item')
                                 a(class = 'nav-link' href = '/logout') cerrar sesión
+            div(class = 'container jumbotron')
+                include messages
+                form(action = '' method = '')
+                    if quotations
+                        div(class = 'table-responsive')
+                            table(class = 'table table-hover')
+                                thead
+                                    tr(class = 'table-light')
+                                        th(class = 'text-center align-middle' scope = 'col') cliente
+                                        th(class = 'text-center align-middle' scope = 'col') servicio
+                                        th(class = 'text-center align-middle' scope = 'col') fecha
+                                        th(class = 'text-center align-middle' scope = 'col') descripción
+                                        th(class = 'text-center align-middle' scope = 'col') costo
+                                        th(class = 'text-center align-middle' scope = 'col') estado
+                                tbody
+                                    each quotation in quotations
+                                        tr(class = 'table-primary')
+                                            td(class = 'text-center align-middle') #{quotation.name.firstname + ' ' + quotation.name.lastname}
+                                            td(class = 'text-center align-middle') #{quotation.service}
+                                            td(class = 'text-center align-middle') #{quotation.date}
+                                            td(class = 'text-center align-middle') #{quotation.description}
+                                            td(class = 'text-center align-middle') S/.#{quotation.cost}
+                                            td(class = 'text-center align-middle') #{quotation.status}

@@ -259,8 +259,7 @@ let main = () => {
     });
     app.get('/logout', (request, response) => {
         request.logout();
-        request.flash('info', 'hasta luego.');
-        response.render('index', {success_message: request.flash('info')});
+        response.redirect('/');
         if(request.session != undefined) {
             request.session.destroy((error) => {
                 if(error) {
@@ -389,7 +388,7 @@ let main = () => {
                     }
                     },
                     { 
-                        $match : { _id_client : id } 
+                        $match : { _id_client : id, $or:[ { status : "pendiente" }, { status : "aceptado" } ] } 
                     },
                     {
                         $replaceRoot : { newRoot : { $mergeObjects : [ { $arrayElemAt : [ "$fromProviders", 0 ] }, "$$ROOT" ] } }
@@ -401,7 +400,7 @@ let main = () => {
                         console.log(error);
                     }
                     if(!document.length) {
-                        request.flash('info', 'no tienes cotizaciones.');
+                        request.flash('info', 'no tienes cotizaciones pendientes.');
                         response.render('checkquotations', {error_message : request.flash('info'), account : account});
                     }
                     else {
@@ -419,7 +418,7 @@ let main = () => {
                     }
                     },
                     { 
-                        $match : { _id_provider : id } 
+                        $match : { _id_provider : id, $or:[ { status : "pendiente" }, { status : "aceptado" } ] } 
                     },
                     {
                         $replaceRoot : { newRoot : { $mergeObjects : [ { $arrayElemAt : [ "$fromClients", 0 ] }, "$$ROOT" ] } }
@@ -431,7 +430,7 @@ let main = () => {
                         console.log(error);
                     }
                     if(!document.length) {
-                        request.flash('info', 'no tienes cotizaciones.');
+                        request.flash('info', 'no tienes cotizaciones pendientes.');
                         response.render('checkquotations', {error_message : request.flash('info'), account : account});
                     }
                     else {
@@ -441,9 +440,102 @@ let main = () => {
             }
         }
     });
+    app.get('/quoteService/:id', (request, response) => {
+        let id = mongoose.Types.ObjectId(request.params.id);
+        connectDB();
+        quotation_model.findOne({_id : id}, (error, document) => {
+            if(error) {
+                console.log(error);
+            }
+            response.render('quoteservice', {quotation : document});
+        });
+    });
+    app.put('/quoteService/:id', (request, response) => {
+        let id = mongoose.Types.ObjectId(request.params.id);
+        let {cost} = request.body;
+        connectDB();
+        quotation_model.updateOne({_id : id}, {cost : cost}, (error) => {
+            if(error) {
+                console.log(error);
+            }
+            response.redirect('/checkquotations');
+        });
+    });
+    app.put('/changeStatus', (request, response) => {
+        let {id, status} = request.body;
+        connectDB();
+        quotation_model.updateOne({_id : id}, {status : status}, (error) => {
+            if(error) {
+                console.log(error);
+            }
+            response.redirect('/checkquotations');
+        });
+    });
     app.get('/checkhistory', (request, response) => {
         if(request.session != undefined) {
-            response.render('checkhistory', {account: request.session.account});
+            let id = mongoose.Types.ObjectId(request.session.user_id);
+            let account = request.session.account;
+            connectDB();
+            if(account == "client") {
+                quotation_model.aggregate([{
+                    $lookup : {
+                       from : "providers",
+                       localField : "_id_provider",
+                       foreignField : "_id",
+                       as : "fromProviders"
+                    }
+                    },
+                    { 
+                        $match : { _id_client : id, $or:[ { status : "cancelado" }, { status : "rechazado" }, { status : "finalizado" } ] } 
+                    },
+                    {
+                        $replaceRoot : { newRoot : { $mergeObjects : [ { $arrayElemAt : [ "$fromProviders", 0 ] }, "$$ROOT" ] } }
+                    },
+                    { 
+                        $project : { account : 0, gender : 0, birthdate : 0, idcard : 0, phonenumber : 0, address : 0, coordinate : 0, video : 0, certificate : 0, __v : 0, fromProviders : 0 } 
+                    }], (error : any, document : any) => {
+                    if(error) {
+                        console.log(error);
+                    }
+                    if(!document.length) {
+                        request.flash('info', 'no tienes historial.');
+                        response.render('checkhistory', {error_message : request.flash('info'), account : account});
+                    }
+                    else {
+                        response.render('checkhistory', {account : account, quotations : document});
+                    }
+                });
+            }
+            else {
+                quotation_model.aggregate([{
+                    $lookup : {
+                       from : "clients",
+                       localField : "_id_client",
+                       foreignField : "_id",
+                       as : "fromClients"
+                    }
+                    },
+                    { 
+                        $match : { _id_provider : id, $or:[ { status : "cancelado" }, { status : "rechazado" }, { status : "finalizado" } ] } 
+                    },
+                    {
+                        $replaceRoot : { newRoot : { $mergeObjects : [ { $arrayElemAt : [ "$fromClients", 0 ] }, "$$ROOT" ] } }
+                    },
+                    { 
+                        $project : { account : 0, gender : 0, birthdate : 0, phonenumber : 0, address : 0, coordinate : 0, __v : 0, fromClients : 0 } 
+                    }], (error : any, document : any) => {
+                    if(error) {
+                        console.log(error);
+                    }
+                    if(!document.length) {
+                        request.flash('info', 'no tienes historial.');
+                        response.render('checkhistory', {error_message : request.flash('info'), account : account});
+                    }
+                    else {
+                        response.render('checkhistory', {account : account, quotations : document});
+                    }
+                });
+            }
         }
     });
     app.get('/updateaccount', (request, response) => {

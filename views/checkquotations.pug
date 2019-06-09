@@ -16,7 +16,7 @@ block content
                             li(class = 'nav-item')
                                 a(class = 'nav-link' href = '/checkquotations') cotizaciones
                             li(class = 'nav-item')
-                                a(class = 'nav-link' href = '/checkhistory') servicios
+                                a(class = 'nav-link' href = '/checkhistory') historial
                             li(class = 'nav-item')
                                 a(class = 'nav-link' href = '/updateaccount') editar perfil
                             li(class = 'nav-item')
@@ -25,8 +25,7 @@ block content
                                 a(class = 'nav-link' href = '/logout') cerrar sesión
             div(class = 'container jumbotron')
                 include messages
-                form(action = '' method = '')
-                    include messages
+                form(action = 'changeStatus?_method=put' method = 'post')
                     if quotations
                         div(class = 'table-responsive')
                             table(class = 'table table-hover')
@@ -38,7 +37,7 @@ block content
                                         th(class = 'text-center align-middle' scope = 'col') descripción
                                         th(class = 'text-center align-middle' scope = 'col') costo
                                         th(class = 'text-center align-middle' scope = 'col') estado
-                                        th(class = 'text-center align-middle' scope = 'col') cancelar cotizacion
+                                        th(class = 'text-center align-middle' scope = 'col') cambiar estado
                                 tbody
                                     each quotation in quotations
                                         tr(class = 'table-primary')
@@ -49,11 +48,16 @@ block content
                                             td(class = 'text-center align-middle') S/.#{quotation.cost}
                                             td(class = 'text-center align-middle') #{quotation.status}
                                             td(class = 'text-center align-middle')
-                                                a(href = 'searchservice/requestquotation/' + quotation._id)
-                                                if quotation.status == 'pendiente' || quotation.status == 'rechazado'
-                                                    button(type = 'button' class = 'btn btn-primary' disabled) cancelar
-                                                else 
-                                                    button(type = 'button' class = 'btn btn-primary' disabled) cancelar
+                                                if quotation.status == 'aceptado'
+                                                    input(type = 'text' id = 'id' name = 'id' value = quotation._id style = 'display: none;')
+                                                    input(type = 'text' id = 'status' name = 'status' value = 'cancelado' style = 'display: none;')
+                                                    input(type = 'submit' value = 'cancelar' class = 'btn btn-danger')
+                                                else if quotation.status == 'pendiente' && quotation.cost > 0
+                                                    input(type = 'text' id = 'id' name = 'id' value = quotation._id style = 'display: none;')
+                                                    input(type = 'text' id = 'status' name = 'status' value = 'aceptado' style = 'display: none;')
+                                                    input(type = 'submit' value = 'aceptar' class = 'btn btn-primary')
+                                                else if quotation.status == 'cancelado' || quotation.status == 'rechazado' || quotation.status == 'finalizado' || quotation.cost == 0
+                                                    input(type = 'submit' value = 'aceptar' class = 'btn btn-primary' disabled)
         else
             div(class = 'navbar navbar-expand-lg fixed-top navbar-dark bg-primary')
                 div(class = 'container')
@@ -65,7 +69,7 @@ block content
                             li(class = 'nav-item')
                                 a(class = 'nav-link' href = '/checkquotations') cotizaciones
                             li(class = 'nav-item')
-                                a(class = 'nav-link' href = '/checkhistory') servicios
+                                a(class = 'nav-link' href = '/checkhistory') historial
                             li(class = 'nav-item')
                                 a(class = 'nav-link' href = '/updateaccount') editar perfil
                             li(class = 'nav-item')
@@ -74,7 +78,7 @@ block content
                                 a(class = 'nav-link' href = '/logout') cerrar sesión
             div(class = 'container jumbotron')
                 include messages
-                form(action = '' method = '')
+                form(action = 'changeStatus?_method=put' method = 'post')
                     if quotations
                         div(class = 'table-responsive')
                             table(class = 'table table-hover')
@@ -87,7 +91,7 @@ block content
                                         th(class = 'text-center align-middle' scope = 'col') costo
                                         th(class = 'text-center align-middle' scope = 'col') estado
                                         th(class = 'text-center align-middle' scope = 'col') cotizar servicio
-                                        th(class = 'text-center align-middle' scope = 'col') cancelar servicio
+                                        th(class = 'text-center align-middle' scope = 'col') cambiar estado
                                 tbody
                                     each quotation in quotations
                                         tr(class = 'table-primary')
@@ -98,14 +102,21 @@ block content
                                             td(class = 'text-center align-middle') S/.#{quotation.cost}
                                             td(class = 'text-center align-middle') #{quotation.status}
                                             td(class = 'text-center align-middle')
-                                                a(href = 'searchservice/requestquotation/' + quotation._id)
-                                                if quotation.status == 'aceptado' || quotation.status == 'rechazado'
-                                                    button(type = 'button' class = 'btn btn-primary' disabled) cotizar
-                                                else 
-                                                    button(type = 'button' class = 'btn btn-primary' disabled) cotizar
+                                                a(href = 'quoteservice/' + quotation._id)
+                                                    if quotation.status == 'pendiente' && quotation.cost == 0
+                                                        button(type = 'button' class = 'btn btn-primary') cotizar
+                                                    else 
+                                                        button(type = 'button' class = 'btn btn-primary' disabled) cotizar
                                             td(class = 'text-center align-middle')
-                                                a(href = 'searchservice/requestquotation/' + quotation._id)
-                                                if quotation.status == 'pendiente' || quotation.status == 'rechazado'
-                                                    button(type = 'button' class = 'btn btn-primary' disabled) cancelar
-                                                else 
-                                                    button(type = 'button' class = 'btn btn-primary' disabled) cancelar
+                                                if quotation.status == 'aceptado'
+                                                    input(type = 'text' id = 'id' name = 'id' value = quotation._id style = 'display: none;')
+                                                    select(id = 'status' name = 'status' class = 'btn btn-success' onchange = 'this.form.submit()')
+                                                        option(value = '' select hidden) estado
+                                                        option(value = 'rechazado') rechazar
+                                                        option(value = 'finalizado') finalizar
+                                                else if quotation.status == 'pendiente'
+                                                    input(type = 'text' id = 'id' name = 'id' value = quotation._id style = 'display: none;')
+                                                    input(type = 'text' id = 'status' name = 'status' value = 'rechazado' style = 'display: none;')
+                                                    input(type = 'submit' value = 'rechazar' class = 'btn btn-danger')
+                                                else
+                                                    input(type = 'submit' value = 'finalizar' class = 'btn btn-success' disabled)

@@ -346,8 +346,7 @@ var main = function () {
     }); });
     app.get('/logout', function (request, response) {
         request.logout();
-        request.flash('info', 'hasta luego.');
-        response.render('index', { success_message: request.flash('info') });
+        response.redirect('/');
         if (request.session != undefined) {
             request.session.destroy(function (error) {
                 if (error) {
@@ -500,7 +499,7 @@ var main = function () {
                         }
                     },
                     {
-                        $match: { _id_client: id }
+                        $match: { _id_client: id, $or: [{ status: "pendiente" }, { status: "aceptado" }] }
                     },
                     {
                         $replaceRoot: { newRoot: { $mergeObjects: [{ $arrayElemAt: ["$fromProviders", 0] }, "$$ROOT"] } }
@@ -512,7 +511,7 @@ var main = function () {
                         console.log(error);
                     }
                     if (!document.length) {
-                        request.flash('info', 'no tienes cotizaciones.');
+                        request.flash('info', 'no tienes cotizaciones pendientes.');
                         response.render('checkquotations', { error_message: request.flash('info'), account: account_2 });
                     }
                     else {
@@ -530,7 +529,7 @@ var main = function () {
                         }
                     },
                     {
-                        $match: { _id_provider: id }
+                        $match: { _id_provider: id, $or: [{ status: "pendiente" }, { status: "aceptado" }] }
                     },
                     {
                         $replaceRoot: { newRoot: { $mergeObjects: [{ $arrayElemAt: ["$fromClients", 0] }, "$$ROOT"] } }
@@ -542,7 +541,7 @@ var main = function () {
                         console.log(error);
                     }
                     if (!document.length) {
-                        request.flash('info', 'no tienes cotizaciones.');
+                        request.flash('info', 'no tienes cotizaciones pendientes.');
                         response.render('checkquotations', { error_message: request.flash('info'), account: account_2 });
                     }
                     else {
@@ -552,9 +551,102 @@ var main = function () {
             }
         }
     });
+    app.get('/quoteService/:id', function (request, response) {
+        var id = mongoose_1.default.Types.ObjectId(request.params.id);
+        connection_1.connectDB();
+        quotation_1.quotation_model.findOne({ _id: id }, function (error, document) {
+            if (error) {
+                console.log(error);
+            }
+            response.render('quoteservice', { quotation: document });
+        });
+    });
+    app.put('/quoteService/:id', function (request, response) {
+        var id = mongoose_1.default.Types.ObjectId(request.params.id);
+        var cost = request.body.cost;
+        connection_1.connectDB();
+        quotation_1.quotation_model.updateOne({ _id: id }, { cost: cost }, function (error) {
+            if (error) {
+                console.log(error);
+            }
+            response.redirect('/checkquotations');
+        });
+    });
+    app.put('/changeStatus', function (request, response) {
+        var _a = request.body, id = _a.id, status = _a.status;
+        connection_1.connectDB();
+        quotation_1.quotation_model.updateOne({ _id: id }, { status: status }, function (error) {
+            if (error) {
+                console.log(error);
+            }
+            response.redirect('/checkquotations');
+        });
+    });
     app.get('/checkhistory', function (request, response) {
         if (request.session != undefined) {
-            response.render('checkhistory', { account: request.session.account });
+            var id = mongoose_1.default.Types.ObjectId(request.session.user_id);
+            var account_3 = request.session.account;
+            connection_1.connectDB();
+            if (account_3 == "client") {
+                quotation_1.quotation_model.aggregate([{
+                        $lookup: {
+                            from: "providers",
+                            localField: "_id_provider",
+                            foreignField: "_id",
+                            as: "fromProviders"
+                        }
+                    },
+                    {
+                        $match: { _id_client: id, $or: [{ status: "cancelado" }, { status: "rechazado" }, { status: "finalizado" }] }
+                    },
+                    {
+                        $replaceRoot: { newRoot: { $mergeObjects: [{ $arrayElemAt: ["$fromProviders", 0] }, "$$ROOT"] } }
+                    },
+                    {
+                        $project: { account: 0, gender: 0, birthdate: 0, idcard: 0, phonenumber: 0, address: 0, coordinate: 0, video: 0, certificate: 0, __v: 0, fromProviders: 0 }
+                    }], function (error, document) {
+                    if (error) {
+                        console.log(error);
+                    }
+                    if (!document.length) {
+                        request.flash('info', 'no tienes historial.');
+                        response.render('checkhistory', { error_message: request.flash('info'), account: account_3 });
+                    }
+                    else {
+                        response.render('checkhistory', { account: account_3, quotations: document });
+                    }
+                });
+            }
+            else {
+                quotation_1.quotation_model.aggregate([{
+                        $lookup: {
+                            from: "clients",
+                            localField: "_id_client",
+                            foreignField: "_id",
+                            as: "fromClients"
+                        }
+                    },
+                    {
+                        $match: { _id_provider: id, $or: [{ status: "cancelado" }, { status: "rechazado" }, { status: "finalizado" }] }
+                    },
+                    {
+                        $replaceRoot: { newRoot: { $mergeObjects: [{ $arrayElemAt: ["$fromClients", 0] }, "$$ROOT"] } }
+                    },
+                    {
+                        $project: { account: 0, gender: 0, birthdate: 0, phonenumber: 0, address: 0, coordinate: 0, __v: 0, fromClients: 0 }
+                    }], function (error, document) {
+                    if (error) {
+                        console.log(error);
+                    }
+                    if (!document.length) {
+                        request.flash('info', 'no tienes historial.');
+                        response.render('checkhistory', { error_message: request.flash('info'), account: account_3 });
+                    }
+                    else {
+                        response.render('checkhistory', { account: account_3, quotations: document });
+                    }
+                });
+            }
         }
     });
     app.get('/updateaccount', function (request, response) {

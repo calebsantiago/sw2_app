@@ -186,3 +186,23 @@ function validateQuotation() {
         }
     }
 }
+
+function validateQuoteService() {
+    var cost = document.getElementById('cost').value;
+    if (cost === '') {
+        createErrors('debes completar los campos.');
+        return false;
+    }
+    else {
+        if (isNaN(cost)) {
+            createErrors('costo no válido.');
+            return false;
+        }
+        else {
+            if(cost <= 0) {
+                createErrors('costo menor o igual a cero.');
+                return false;
+            }
+        }
+    }
+}
