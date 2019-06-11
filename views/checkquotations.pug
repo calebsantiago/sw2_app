@@ -25,7 +25,6 @@ block content
                                 a(class = 'nav-link' href = '/logout') cerrar sesión
             div(class = 'container jumbotron')
                 include messages
-                form(action = 'changeStatus?_method=put' method = 'post')
                     if quotations
                         div(class = 'table-responsive')
                             table(class = 'table table-hover')
@@ -49,13 +48,15 @@ block content
                                             td(class = 'text-center align-middle') #{quotation.status}
                                             td(class = 'text-center align-middle')
                                                 if quotation.status == 'aceptado'
-                                                    input(type = 'text' id = 'id' name = 'id' value = quotation._id style = 'display: none;')
-                                                    input(type = 'text' id = 'status' name = 'status' value = 'cancelado' style = 'display: none;')
-                                                    input(type = 'submit' value = 'cancelar' class = 'btn btn-danger')
+                                                    form(action = 'changeStatus?_method=put' method = 'post')
+                                                        input(type = 'text' id = 'id' name = 'id' value = quotation._id style = 'display: none;')
+                                                        input(type = 'text' id = 'status' name = 'status' value = 'cancelado' style = 'display: none;')
+                                                        input(type = 'submit' value = 'cancelar' class = 'btn btn-danger')
                                                 else if quotation.status == 'pendiente' && quotation.cost > 0
-                                                    input(type = 'text' id = 'id' name = 'id' value = quotation._id style = 'display: none;')
-                                                    input(type = 'text' id = 'status' name = 'status' value = 'aceptado' style = 'display: none;')
-                                                    input(type = 'submit' value = 'aceptar' class = 'btn btn-primary')
+                                                    form(action = 'changeStatus?_method=put' method = 'post')
+                                                        input(type = 'text' id = 'id' name = 'id' value = quotation._id style = 'display: none;')
+                                                        input(type = 'text' id = 'status' name = 'status' value = 'aceptado' style = 'display: none;')
+                                                        input(type = 'submit' value = 'aceptar' class = 'btn btn-primary')
                                                 else if quotation.status == 'cancelado' || quotation.status == 'rechazado' || quotation.status == 'finalizado' || quotation.cost == 0
                                                     input(type = 'submit' value = 'aceptar' class = 'btn btn-primary' disabled)
         else
@@ -78,7 +79,6 @@ block content
                                 a(class = 'nav-link' href = '/logout') cerrar sesión
             div(class = 'container jumbotron')
                 include messages
-                form(action = 'changeStatus?_method=put' method = 'post')
                     if quotations
                         div(class = 'table-responsive')
                             table(class = 'table table-hover')
@@ -90,7 +90,7 @@ block content
                                         th(class = 'text-center align-middle' scope = 'col') descripción
                                         th(class = 'text-center align-middle' scope = 'col') costo
                                         th(class = 'text-center align-middle' scope = 'col') estado
-                                        th(class = 'text-center align-middle' scope = 'col') cotizar servicio
+                                        th(class = 'text-center align-middle' scope = 'col') cotizar/localizar
                                         th(class = 'text-center align-middle' scope = 'col') cambiar estado
                                 tbody
                                     each quotation in quotations
@@ -102,21 +102,27 @@ block content
                                             td(class = 'text-center align-middle') S/.#{quotation.cost}
                                             td(class = 'text-center align-middle') #{quotation.status}
                                             td(class = 'text-center align-middle')
-                                                a(href = 'quoteservice/' + quotation._id)
-                                                    if quotation.status == 'pendiente' && quotation.cost == 0
+                                                if quotation.status == 'pendiente' && quotation.cost == 0
+                                                    a(href = 'quoteservice/' + quotation._id)
                                                         button(type = 'button' class = 'btn btn-primary') cotizar
-                                                    else 
+                                                else if quotation.status == 'aceptado'
+                                                    a(href = 'locateclient/' + quotation._id)
+                                                        button(type = 'button' class = 'btn btn-info') localizar
+                                                else
+                                                    a(href = 'quoteservice/' + quotation._id) 
                                                         button(type = 'button' class = 'btn btn-primary' disabled) cotizar
                                             td(class = 'text-center align-middle')
                                                 if quotation.status == 'aceptado'
-                                                    input(type = 'text' id = 'id' name = 'id' value = quotation._id style = 'display: none;')
-                                                    select(id = 'status' name = 'status' class = 'btn btn-success' onchange = 'this.form.submit()')
-                                                        option(value = '' select hidden) estado
-                                                        option(value = 'rechazado') rechazar
-                                                        option(value = 'finalizado') finalizar
+                                                    form(action = 'changeStatus?_method=put' method = 'post')
+                                                        input(type = 'text' id = 'id' name = 'id' value = quotation._id style = 'display: none;')
+                                                        select(id = 'status' name = 'status' class = 'btn btn-success' onchange = 'this.form.submit()')
+                                                            option(value = '' select hidden) estado
+                                                            option(value = 'rechazado') rechazar
+                                                            option(value = 'finalizado') finalizar
                                                 else if quotation.status == 'pendiente'
-                                                    input(type = 'text' id = 'id' name = 'id' value = quotation._id style = 'display: none;')
-                                                    input(type = 'text' id = 'status' name = 'status' value = 'rechazado' style = 'display: none;')
-                                                    input(type = 'submit' value = 'rechazar' class = 'btn btn-danger')
+                                                    form(action = 'changeStatus?_method=put' method = 'post')
+                                                        input(type = 'text' id = 'id' name = 'id' value = quotation._id style = 'display: none;')
+                                                        input(type = 'text' id = 'status' name = 'status' value = 'rechazado' style = 'display: none;')
+                                                        input(type = 'submit' value = 'rechazar' class = 'btn btn-danger')
                                                 else
                                                     input(type = 'submit' value = 'finalizar' class = 'btn btn-success' disabled)

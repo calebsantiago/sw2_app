@@ -582,6 +582,39 @@ var main = function () {
             response.redirect('/checkquotations');
         });
     });
+    app.get('/locateclient/:id', function (request, response) {
+        var id_quotation = mongoose_1.default.Types.ObjectId(request.params.id);
+        connection_1.connectDB();
+        quotation_1.quotation_model.findOne({ _id: id_quotation }, function (error, document) { return __awaiter(_this, void 0, void 0, function () {
+            var id_client, id_provider, doc_client, doc_provider;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        if (error) {
+                            console.log(error);
+                        }
+                        id_client = document._id_client;
+                        id_provider = document._id_provider;
+                        return [4 /*yield*/, client_2.client_model.findOne({ _id: id_client }, function (error) {
+                                if (error) {
+                                    console.log(error);
+                                }
+                            })];
+                    case 1:
+                        doc_client = _a.sent();
+                        return [4 /*yield*/, provider_2.provider_model.findOne({ _id: id_provider }, function (error) {
+                                if (error) {
+                                    console.log(error);
+                                }
+                            })];
+                    case 2:
+                        doc_provider = _a.sent();
+                        response.render('locateclient', { client: doc_client, provider: doc_provider, quotation: document });
+                        return [2 /*return*/];
+                }
+            });
+        }); });
+    });
     app.get('/checkhistory', function (request, response) {
         if (request.session != undefined) {
             var id = mongoose_1.default.Types.ObjectId(request.session.user_id);

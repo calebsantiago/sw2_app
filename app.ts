@@ -471,6 +471,28 @@ let main = () => {
             response.redirect('/checkquotations');
         });
     });
+    app.get('/locateclient/:id', (request, response) => {
+        let id_quotation = mongoose.Types.ObjectId(request.params.id);
+        connectDB();
+        quotation_model.findOne({_id : id_quotation}, async (error, document) => {
+            if(error) {
+                console.log(error);
+            }
+            let id_client = document._id_client;
+            let id_provider = document._id_provider;
+            let doc_client = await client_model.findOne({_id : id_client}, (error) => {
+                if(error) {
+                    console.log(error);
+                }
+            });
+            let doc_provider = await provider_model.findOne({_id : id_provider}, (error) => {
+                if(error) {
+                    console.log(error);
+                }
+            });
+            response.render('locateclient', {client : doc_client, provider : doc_provider, quotation : document});
+        });
+    });
     app.get('/checkhistory', (request, response) => {
         if(request.session != undefined) {
             let id = mongoose.Types.ObjectId(request.session.user_id);

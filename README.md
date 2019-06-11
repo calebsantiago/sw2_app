@@ -1,4 +1,4 @@
-# Start
+# start
 ````
 install on computer:
 - node.js
