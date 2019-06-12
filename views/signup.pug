@@ -13,13 +13,13 @@ block content
             p Empieza a disfrutar de los mejores servicios
         div(class = 'container')
             div(class = 'row')
-                div(class = 'col')
-                    div(class = 'text-right' style = 'padding-bottom: 400px')
-                        img(src = 'https://www.gruponebralejo.com/wp-content/uploads/2016/06/Logo-jardineria.png' width = '50%' height = '50%')
-                    div(class = 'b-5' style = 'padding-bottom: 400px')
-                        img(src = 'https://png.pngtree.com/templates/md/20180619/md_5b28f32e50a62.jpg' width = '50%' height = '50%')
-                    div(class = 'text-right')
-                        img(src = 'https://comparadorluz.com/sites/comparadorluz.com/themes/images/Bombilla_sin_fondo.png' width = '50%' height = '50%')
+                div(class = 'col d-none')
+                        div(class = 'text-right' style = 'padding-bottom: 400px')
+                            img(src = 'https://www.gruponebralejo.com/wp-content/uploads/2016/06/Logo-jardineria.png' width = '50%' height = '50%')
+                        div(class = 'b-5' style = 'padding-bottom: 400px')
+                            img(src = 'https://png.pngtree.com/templates/md/20180619/md_5b28f32e50a62.jpg' width = '50%' height = '50%')
+                        div(class = 'text-right')
+                            img(src = 'https://comparadorluz.com/sites/comparadorluz.com/themes/images/Bombilla_sin_fondo.png' width = '50%' height = '50%')
                 div(class = 'col')
                     div(id = 'container' class = 'signup-form')
                         include messages
@@ -30,14 +30,14 @@ block content
                                 input(type = 'text' id = 'lastname' name = 'lastname' placeholder = 'apellido' value = lastname class = 'signup-form-input' required)
                                 if gender == 'female'
                                     input(type = 'radio' id = 'gender' name = 'gender' value = 'male' class = 'signup-form-input' required)
-                                    | masculino
+                                    label masculino
                                     input(type = 'radio' id = 'gender' name = 'gender' value = 'female' class = 'signup-form-input' checked)
-                                    | femenino
+                                    label femenino
                                 else
                                     input(type = 'radio' id = 'gender' name = 'gender' value = 'male' class = 'signup-form-input' checked)
-                                    | masculino
+                                    label masculino
                                     input(type = 'radio' id = 'gender' name = 'gender' value = 'female' class = 'signup-form-input' required)
-                                    | femenino
+                                    label femenino
 
                                 input(type = 'date' id = 'birthdate' name = 'birthdate' placeholder = 'fecha de nacimiento' value = birthdate class = 'signup-form-input' required)
                                 if account == 'provider'
@@ -93,7 +93,7 @@ block content
                         div(class = 'signup-form-button')
                             a(href = '/')
                                 button(type = 'button' class = 'btn btn-secondary btn-lg btn-block') volver
-                div(class = 'col')
+                div(class = 'col d-none')
                     div(class = 'text-left' style = 'padding-bottom: 400px')
                         img(src = 'https://st4.depositphotos.com/1019239/25179/v/450/depositphotos_251790418-stock-illustration-repairs-icon-hand-wrench-concept.jpg' width = '50%' height = '50%')
                     div(class = 'text-right' style = 'padding-bottom: 400px')
