@@ -1,43 +1,44 @@
 extends layout
 block content
     head
-        link(rel = 'stylesheet' type = 'text/css' href = 'stylesheets/index.css')
         include head
-    body
+    body(style = 'padding-top: 50px;')
         header 
             div(class = 'navbar navbar-expand-lg fixed-top navbar-dark bg-primary box-shadow')
                 div(class = 'container')
-                    a(href = '/main' class = 'navbar-brand') Contacta
+                    a(href = '/' class = 'navbar-brand') Contacta
                     button(type = 'button' class = 'navbar-toggler' data-toggle = 'collapse' data-target = '#navbarResponsive' aria-controls = 'navbarResponsive' aria-expanded = 'false' aria-label = 'Toggle navigation')
                         span(class = 'navbar-toggler-icon')
                     div(id = 'navbarResponsive' class = 'navbar-collapse collapse')
                         ul(class = 'navbar-nav')
                             li(class = 'nav-item')
-                                a(class = 'nav-link' href = '/signup') Crear cuenta
+                                a(class = 'nav-link' href = '/signup') crear cuenta
                             li(class = 'nav-item')
-                                a(class = 'nav-link' href = '/login') Iniciar sesion
-        img(src = 'images/image001.png' class = 'image-fluid rounded mx-auto d-block ' style='max-width: 100%; padding-top:100px')
-        div(class = 'container' style='padding: 20px;') 
+                                a(class = 'nav-link' href = '/login') iniciar sesión
+        img(src = 'images/image001.png' class = 'image-fluid rounded mx-auto d-block ' style = 'max-width: 100%;')
+        div(class = 'container') 
             div(class = 'row')
-                h1(class = 'mt-5' ) Contacta tu servicio
+                div(class = 'col-lg-12 m-3')
+                    h1(class = 'display-5 text-center') Contacta tu servicio
             div(class = 'row')
                 div(class = 'col-lg-4')
                     div(class = 'row rounded')
                         img(src = 'https://image.flaticon.com/icons/svg/1651/1651373.svg' class = 'rounded mx-auto d-block' width = '80px' height = '80px')
-                    div(class = 'row text-left')
-                        p Rentabiliza y ofrece servicios al mejor precio y gana dinero
+                    div(class = 'row justify-content-center m-3')
+                        strong Rentabiliza tus servicios
+                        div(class = 'text-center')
+                            span Ofrece servicios al mejor precio y gana dinero.
                 div(class = 'col-lg-4')
                     div(class = 'row')
                         img(src = 'https://www.flaticon.es/premium-icon/icons/svg/1700/1700553.svg' class = 'rounded mx-auto d-block' width = '80px' height = '80px')
-                    div(class = 'row text-left')    
-                        span Expande tus oportunidades
-                        span Descubre servicios que satisfagan tus necesidades de manera inmediata
+                    div(class = 'row justify-content-center m-3')    
+                        strong Expande tus oportunidades
+                        div(class = 'text-center')
+                            span Descubre servicios que satisfagan tus necesidades de manera inmediata.
                 div(class = 'col-lg-4')
                     div(class = 'row')
                         img(src = 'https://image.flaticon.com/icons/svg/1739/1739432.svg' class = 'rounded mx-auto d-block' width = '80px' height = '80px')
-                    div(class = 'row text-left')    
-                        span Registrarse es fácil
-                        span Registrate en menos de 4 minutos y empieza a obtener el servicio que deseas
-
-
-                    
+                    div(class = 'row justify-content-center m-3') 
+                        strong Registrarse es fácil 
+                        div(class = 'text-center')
+                            span Registrate en menos de 4 minutos y empieza a obtener el servicio que deseas.                                       

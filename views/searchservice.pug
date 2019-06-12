@@ -11,25 +11,26 @@ block content
         script(type = 'text/javascript' src = 'javascripts/show.js')
         script(type = 'text/javascript' src = 'javascripts/selectOption.js')
     body(style = 'padding-top: 50px;')
-        div(class = 'navbar navbar-expand-lg fixed-top navbar-dark bg-primary')
-            div(class = 'container')
-                a(href = '/main' class = 'navbar-brand') Contacta
-                button(type = 'button' class = 'navbar-toggler' data-toggle = 'collapse' data-target = '#navbarResponsive' aria-controls = 'navbarResponsive' aria-expanded = 'false' aria-label = 'Toggle navigation')
-                    span(class = 'navbar-toggler-icon')
-                div(id = 'navbarResponsive' class = 'navbar-collapse collapse')
-                    ul(class = 'navbar-nav')
-                        li(class = 'nav-item')
-                            a(class = 'nav-link' href = '/searchservice') buscar servicio
-                        li(class = 'nav-item')
-                            a(class = 'nav-link' href = '/checkquotations') cotizaciones
-                        li(class = 'nav-item')
-                            a(class = 'nav-link' href = '/checkhistory') historial
-                        li(class = 'nav-item')
-                            a(class = 'nav-link' href = '/updateaccount') editar perfil
-                        li(class = 'nav-item')
-                            a(class = 'nav-link' href = '/deleteaccount') eliminar cuenta
-                        li(class = 'nav-item')
-                            a(class = 'nav-link' href = '/logout') cerrar sesión
+        header
+            div(class = 'navbar navbar-expand-lg fixed-top navbar-dark bg-primary')
+                div(class = 'container')
+                    a(href = '/main' class = 'navbar-brand') Contacta
+                    button(type = 'button' class = 'navbar-toggler' data-toggle = 'collapse' data-target = '#navbarResponsive' aria-controls = 'navbarResponsive' aria-expanded = 'false' aria-label = 'Toggle navigation')
+                        span(class = 'navbar-toggler-icon')
+                    div(id = 'navbarResponsive' class = 'navbar-collapse collapse')
+                        ul(class = 'navbar-nav')
+                            li(class = 'nav-item')
+                                a(class = 'nav-link' href = '/searchservice') buscar servicio
+                            li(class = 'nav-item')
+                                a(class = 'nav-link' href = '/checkquotations') cotizaciones
+                            li(class = 'nav-item')
+                                a(class = 'nav-link' href = '/checkhistory') historial
+                            li(class = 'nav-item')
+                                a(class = 'nav-link' href = '/updateaccount') editar perfil
+                            li(class = 'nav-item')
+                                a(class = 'nav-link' href = '/deleteaccount') eliminar cuenta
+                            li(class = 'nav-item')
+                                a(class = 'nav-link' href = '/logout') cerrar sesión
         div(class = 'container')
             div(class = 'bs-docs-section')
                 div(class = 'row jumbotron')

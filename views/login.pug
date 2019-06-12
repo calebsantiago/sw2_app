@@ -4,6 +4,18 @@ block content
         include head
         script(type = 'text/javascript' src = '/javascripts/validate.js')
     body(style = 'height: 100%;')
+        header 
+            div(class = 'navbar navbar-expand-lg fixed-top navbar-dark bg-primary box-shadow')
+                div(class = 'container')
+                    a(href = '/' class = 'navbar-brand') Contacta
+                    button(type = 'button' class = 'navbar-toggler' data-toggle = 'collapse' data-target = '#navbarResponsive' aria-controls = 'navbarResponsive' aria-expanded = 'false' aria-label = 'Toggle navigation')
+                        span(class = 'navbar-toggler-icon')
+                    div(id = 'navbarResponsive' class = 'navbar-collapse collapse')
+                        ul(class = 'navbar-nav')
+                            li(class = 'nav-item')
+                                a(class = 'nav-link' href = '/signup') crear cuenta
+                            li(class = 'nav-item')
+                                a(class = 'nav-link' href = '/login') iniciar sesión
         div(class = 'container h-100')
             div(class = 'row align-items-center h-100')
                 div(class = 'col-xs-12 col-sm-10 col-lg-7 mx-auto')
@@ -18,6 +30,6 @@ block content
                                     input(type = 'text' id = 'email' name = 'email' placeholder = 'correo electrónico o número de teléfono' value = email class = 'form-control' autofocus required) 
                                 div(class = 'form-group')
                                     input(type = 'password' id = 'password' name = 'password' placeholder = 'contraseña' value = password class = 'form-control' required)
-                                button(type = 'submit' class='btn btn-primary btn-lg btn-block') iniciar sesión
+                                button(type = 'submit' class = 'btn btn-primary btn-lg btn-block') iniciar sesión
                                 p ¿No tienes cuenta? 
                                     a(href = '/signup') Crear cuenta
