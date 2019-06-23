@@ -14,6 +14,8 @@ var quotation_schema = new schema({
     description: { type: String, required: true },
     cost: { type: Number, required: true },
     status: { type: String, required: true },
+    rate: { type: Number, required: true },
+    comment: { type: String, required: true },
     image: String
 });
 exports.quotation_model = mongoose_1.default.model('quotations', quotation_schema);

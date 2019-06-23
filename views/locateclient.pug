@@ -22,7 +22,20 @@ block content
                             li(class = 'nav-item')
                                 a(class = 'nav-link' href = '/deleteaccount') eliminar cuenta
                             li(class = 'nav-item')
+                                a(class = 'nav-link' href = '' data-toggle = "modal" data-target = "#ayuda") ayuda
+                            li(class = 'nav-item')
                                 a(class = 'nav-link' href = '/logout') cerrar sesión
+        div(class = "modal fade" id = "ayuda" tabindex = "-1" role = "dialog" aria-labelledby = "exampleModalLongTitle" aria-hidden = "true")
+            div(class = "modal-dialog" role = "document")
+                div(class = "modal-content")
+                    div(class = "modal-header")
+                        h5(class = "modal-title" id = "exampleModalLongTitle") Ayuda
+                        button(type = "button" class = "close" data-dismiss = "modal" aria-label = "Close")
+                            span(aria-hidden = "true") &times;
+                    div(class = "modal-body")
+                        span Aquí va la ayuda.
+                    div(class = "modal-footer")
+                        button(type = "button" class = "btn btn-primary" data-dismiss = "modal") cerrar
         div(class = 'container')
             div(class = 'bs-docs-section')
                 div(class = 'row jumbotron')

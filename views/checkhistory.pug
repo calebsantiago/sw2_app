@@ -2,6 +2,13 @@ extends layout
 block content
     head
         include head
+        link(rel='stylesheet' type='text/css' href='/stylesheets/stars.css')
+        link(rel='stylesheet' type='text/css' href='https://fonts.googleapis.com/css?family=Lobster')
+        link(rel='stylesheet' type='text/css' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css')
+        script(type = 'text/javascript' src = '/javascripts/ratings.js')
+        if quotations
+            each quotation in quotations
+                script(type = 'text/javascript') addRatings(#{quotation.rate})
     body(style = 'padding-top: 50px;')
         if account == 'client'
             header
@@ -23,10 +30,22 @@ block content
                                 li(class = 'nav-item')
                                     a(class = 'nav-link' href = '/deleteaccount') eliminar cuenta
                                 li(class = 'nav-item')
+                                    a(class = 'nav-link' href = '' data-toggle = "modal" data-target = "#ayuda") ayuda
+                                li(class = 'nav-item')
                                     a(class = 'nav-link' href = '/logout') cerrar sesión
+            div(class = "modal fade" id = "ayuda" tabindex = "-1" role = "dialog" aria-labelledby = "exampleModalLongTitle" aria-hidden = "true")
+                div(class = "modal-dialog" role = "document")
+                    div(class = "modal-content")
+                        div(class = "modal-header")
+                            h5(class = "modal-title" id = "exampleModalLongTitle") Ayuda
+                            button(type = "button" class = "close" data-dismiss = "modal" aria-label = "Close")
+                                span(aria-hidden = "true") &times;
+                        div(class = "modal-body")
+                            span Aquí va la ayuda.
+                        div(class = "modal-footer")
+                            button(type = "button" class = "btn btn-primary" data-dismiss = "modal") cerrar
             div(class = 'container jumbotron')
                 include messages
-                form(action = '' method = '')
                     if quotations
                         div(class = 'table-responsive')
                             table(class = 'table table-hover')
@@ -50,9 +69,20 @@ block content
                                             td(class = 'text-center align-middle') S/.#{quotation.cost}
                                             td(class = 'text-center align-middle') #{quotation.status}
                                             td(class = 'text-center align-middle')
-                                                input(type = 'submit' value = 'calificar' class = 'btn btn-primary' disabled)
+                                                if quotation.rate == 0    
+                                                    a(href = 'rateservice/' + quotation._id)
+                                                        button(type = 'button' class = 'btn btn-primary') calificar
+                                                else
+                                                    a(href = 'rateservice/' + quotation._id)
+                                                        button(type = 'button' class = 'btn btn-primary' disabled) calificar
                                             td(class = 'text-center align-middle')
-                                                input(type = 'submit' value = 'reportar' class = 'btn btn-success' disabled)
+                                                if quotation.status == 'finalizado'
+                                                    form(action = 'changestatus?_method=put' method = 'post')
+                                                        input(type = 'text' id = 'id' name = 'id' value = quotation._id style = 'display: none;')
+                                                        input(type = 'text' id = 'status' name = 'status' value = 'reportado' style = 'display: none;')
+                                                        input(type = 'submit' value = 'reportar' class = 'btn btn-success')
+                                                else  
+                                                    input(type = 'submit' value = 'reportar' class = 'btn btn-success' disabled)
 
         else
             header
@@ -72,7 +102,20 @@ block content
                                 li(class = 'nav-item')
                                     a(class = 'nav-link' href = '/deleteaccount') eliminar cuenta
                                 li(class = 'nav-item')
+                                    a(class = 'nav-link' href = '' data-toggle = "modal" data-target = "#ayuda") ayuda
+                                li(class = 'nav-item')
                                     a(class = 'nav-link' href = '/logout') cerrar sesión
+            div(class = "modal fade" id = "ayuda" tabindex = "-1" role = "dialog" aria-labelledby = "exampleModalLongTitle" aria-hidden = "true")
+                div(class = "modal-dialog" role = "document")
+                    div(class = "modal-content")
+                        div(class = "modal-header")
+                            h5(class = "modal-title" id = "exampleModalLongTitle") Ayuda
+                            button(type = "button" class = "close" data-dismiss = "modal" aria-label = "Close")
+                                span(aria-hidden = "true") &times;
+                        div(class = "modal-body")
+                            span Aquí va la ayuda.
+                        div(class = "modal-footer")
+                            button(type = "button" class = "btn btn-primary" data-dismiss = "modal") cerrar
             div(class = 'container jumbotron')
                 include messages
                 form(action = '' method = '')
@@ -87,6 +130,8 @@ block content
                                         th(class = 'text-center align-middle' scope = 'col') descripción
                                         th(class = 'text-center align-middle' scope = 'col') costo
                                         th(class = 'text-center align-middle' scope = 'col') estado
+                                        th(class = 'text-center align-middle' scope = 'col') calificación
+                                        th(class = 'text-center align-middle' scope = 'col') comentario
                                 tbody
                                     each quotation in quotations
                                         tr(class = 'table-primary')
@@ -96,3 +141,7 @@ block content
                                             td(class = 'text-center align-middle') #{quotation.description}
                                             td(class = 'text-center align-middle') S/.#{quotation.cost}
                                             td(class = 'text-center align-middle') #{quotation.status}
+                                            td(class = 'text-center align-middle')
+                                                div(class = "stars-outer")
+                                                    div(class = "stars-inner")
+                                            td(class = 'text-center align-middle') #{quotation.comment}

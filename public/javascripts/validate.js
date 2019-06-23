@@ -218,3 +218,28 @@ function validateQuoteService() {
         }
     }
 }
+
+function validateRateService() {
+    var rate = document.getElementsByName("rate");
+    var comment = document.getElementById('comment').value;
+    var status = false;
+    var i = 0;
+    while (!status && i < rate.length) {
+        if (rate[i].checked) {
+            status = true;
+        } 
+        i++;        
+    }
+    if (!status || comment === '') {
+        createErrors('debes completar los campos.');
+        return false;
+    }
+}
+
+function validateDeleteAccount() {
+    var password = document.getElementById('password').value;
+    if (password === '') {
+        createErrors('debes completar los campos.');
+        return false;
+    }
+}

@@ -363,6 +363,8 @@ let main = () => {
                     description : description,
                     cost : 0,
                     status : "pendiente",
+                    rate : 0, 
+                    comment : "sin comentario",
                     image : image
                 });
                 model.save((error : any) => {
@@ -440,7 +442,7 @@ let main = () => {
             }
         }
     });
-    app.get('/quoteService/:id', (request, response) => {
+    app.get('/quoteservice/:id', (request, response) => {
         let id = mongoose.Types.ObjectId(request.params.id);
         connectDB();
         quotation_model.findOne({_id : id}, (error, document) => {
@@ -450,7 +452,7 @@ let main = () => {
             response.render('quoteservice', {quotation : document});
         });
     });
-    app.put('/quoteService/:id', (request, response) => {
+    app.put('/quoteservice/:id', (request, response) => {
         let id = mongoose.Types.ObjectId(request.params.id);
         let {cost} = request.body;
         connectDB();
@@ -461,14 +463,19 @@ let main = () => {
             response.redirect('/checkquotations');
         });
     });
-    app.put('/changeStatus', (request, response) => {
+    app.put('/changestatus', (request, response) => {
         let {id, status} = request.body;
         connectDB();
         quotation_model.updateOne({_id : id}, {status : status}, (error) => {
             if(error) {
                 console.log(error);
             }
-            response.redirect('/checkquotations');
+            if(status == 'reportado') {
+                response.redirect('/checkhistory');
+            }
+            else {
+                response.redirect('/checkquotations');
+            }
         });
     });
     app.get('/locateclient/:id', (request, response) => {
@@ -508,7 +515,7 @@ let main = () => {
                     }
                     },
                     { 
-                        $match : { _id_client : id, $or:[ { status : "cancelado" }, { status : "rechazado" }, { status : "finalizado" } ] } 
+                        $match : { _id_client : id, $or:[ { status : "cancelado" }, { status : "rechazado" }, { status : "finalizado" }, { status : "reportado" } ] } 
                     },
                     {
                         $replaceRoot : { newRoot : { $mergeObjects : [ { $arrayElemAt : [ "$fromProviders", 0 ] }, "$$ROOT" ] } }
@@ -538,7 +545,7 @@ let main = () => {
                     }
                     },
                     { 
-                        $match : { _id_provider : id, $or:[ { status : "cancelado" }, { status : "rechazado" }, { status : "finalizado" } ] } 
+                        $match : { _id_provider : id, $or:[ { status : "cancelado" }, { status : "rechazado" }, { status : "finalizado" }, { status : "reportado" } ] } 
                     },
                     {
                         $replaceRoot : { newRoot : { $mergeObjects : [ { $arrayElemAt : [ "$fromClients", 0 ] }, "$$ROOT" ] } }
@@ -560,6 +567,33 @@ let main = () => {
             }
         }
     });
+    app.get('/rateservice/:id', (request, response) => {
+        let id_quotation = mongoose.Types.ObjectId(request.params.id);
+        connectDB();
+        quotation_model.findOne({_id : id_quotation}, async (error, document) => {
+            if(error) {
+                console.log(error);
+            }
+            let id_provider = document._id_provider;
+            let doc_provider = await provider_model.findOne({_id : id_provider}, (error) => {
+                if(error) {
+                    console.log(error);
+                }
+            });
+            response.render('rateservice', {user : doc_provider, quotation : document});
+        });
+    });
+    app.put('/rateservice/:id', (request, response) => {
+        let id = mongoose.Types.ObjectId(request.params.id);
+        let {rate, comment} = request.body;
+        connectDB();
+        quotation_model.updateOne({_id : id}, {rate : rate, comment : comment}, (error) => {
+            if(error) {
+                console.log(error);
+            }
+            response.redirect('/checkhistory');
+        });
+    });
     app.get('/updateaccount', (request, response) => {
         if(request.session != undefined) {
             response.render('updateaccount', {account: request.session.account});
@@ -568,6 +602,55 @@ let main = () => {
     app.get('/deleteaccount', (request, response) => {
         if(request.session != undefined) {
             response.render('deleteaccount', {account: request.session.account});
+        }
+    });
+    app.delete('/deleteaccount', async (request, response) => {
+        if(request.session != undefined) {
+            let id = mongoose.Types.ObjectId(request.session.user_id);
+            let account = request.session.account;
+            let {password} = request.body;
+            let doc;
+            connectDB();
+            if(account == 'client') {
+                doc = await client_model.findOne({_id : id}, async (error) => {
+                    if(error) {
+                        console.log(error);
+                    }
+                });
+                let match = await doc.matchPassword(password);
+                if (match) {
+                    client_model.deleteOne({_id : id}, (error) => {
+                        if(error) {
+                            console.log(error);
+                        }
+                        response.redirect("/");
+                    });
+                } 
+                else {
+                    request.flash('info', 'contraseña incorrecta.');
+                    response.render('deleteaccount', {error_message: request.flash('info'), password});
+                }
+            }
+            else {
+                doc = await provider_model.findOne({_id : id}, async (error) => {
+                    if(error) {
+                        console.log(error);
+                    }
+                });
+                let match = await doc.matchPassword(password);
+                if (match) {
+                    provider_model.deleteOne({_id : id}, (error) => {
+                        if(error) {
+                            console.log(error);
+                        }
+                        response.redirect("/");
+                    });
+                } 
+                else {
+                    request.flash('info', 'contraseña incorrecta.');
+                    response.render('deleteaccount', {error_message: request.flash('info'), password});
+                }
+            }
         }
     });
     module.exports = app;

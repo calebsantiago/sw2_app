@@ -474,6 +474,8 @@ var main = function () {
                 description: description,
                 cost: 0,
                 status: "pendiente",
+                rate: 0,
+                comment: "sin comentario",
                 image: image
             });
             model.save(function (error) {
@@ -551,7 +553,7 @@ var main = function () {
             }
         }
     });
-    app.get('/quoteService/:id', function (request, response) {
+    app.get('/quoteservice/:id', function (request, response) {
         var id = mongoose_1.default.Types.ObjectId(request.params.id);
         connection_1.connectDB();
         quotation_1.quotation_model.findOne({ _id: id }, function (error, document) {
@@ -561,7 +563,7 @@ var main = function () {
             response.render('quoteservice', { quotation: document });
         });
     });
-    app.put('/quoteService/:id', function (request, response) {
+    app.put('/quoteservice/:id', function (request, response) {
         var id = mongoose_1.default.Types.ObjectId(request.params.id);
         var cost = request.body.cost;
         connection_1.connectDB();
@@ -572,14 +574,19 @@ var main = function () {
             response.redirect('/checkquotations');
         });
     });
-    app.put('/changeStatus', function (request, response) {
+    app.put('/changestatus', function (request, response) {
         var _a = request.body, id = _a.id, status = _a.status;
         connection_1.connectDB();
         quotation_1.quotation_model.updateOne({ _id: id }, { status: status }, function (error) {
             if (error) {
                 console.log(error);
             }
-            response.redirect('/checkquotations');
+            if (status == 'reportado') {
+                response.redirect('/checkhistory');
+            }
+            else {
+                response.redirect('/checkquotations');
+            }
         });
     });
     app.get('/locateclient/:id', function (request, response) {
@@ -630,7 +637,7 @@ var main = function () {
                         }
                     },
                     {
-                        $match: { _id_client: id, $or: [{ status: "cancelado" }, { status: "rechazado" }, { status: "finalizado" }] }
+                        $match: { _id_client: id, $or: [{ status: "cancelado" }, { status: "rechazado" }, { status: "finalizado" }, { status: "reportado" }] }
                     },
                     {
                         $replaceRoot: { newRoot: { $mergeObjects: [{ $arrayElemAt: ["$fromProviders", 0] }, "$$ROOT"] } }
@@ -660,7 +667,7 @@ var main = function () {
                         }
                     },
                     {
-                        $match: { _id_provider: id, $or: [{ status: "cancelado" }, { status: "rechazado" }, { status: "finalizado" }] }
+                        $match: { _id_provider: id, $or: [{ status: "cancelado" }, { status: "rechazado" }, { status: "finalizado" }, { status: "reportado" }] }
                     },
                     {
                         $replaceRoot: { newRoot: { $mergeObjects: [{ $arrayElemAt: ["$fromClients", 0] }, "$$ROOT"] } }
@@ -682,6 +689,42 @@ var main = function () {
             }
         }
     });
+    app.get('/rateservice/:id', function (request, response) {
+        var id_quotation = mongoose_1.default.Types.ObjectId(request.params.id);
+        connection_1.connectDB();
+        quotation_1.quotation_model.findOne({ _id: id_quotation }, function (error, document) { return __awaiter(_this, void 0, void 0, function () {
+            var id_provider, doc_provider;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        if (error) {
+                            console.log(error);
+                        }
+                        id_provider = document._id_provider;
+                        return [4 /*yield*/, provider_2.provider_model.findOne({ _id: id_provider }, function (error) {
+                                if (error) {
+                                    console.log(error);
+                                }
+                            })];
+                    case 1:
+                        doc_provider = _a.sent();
+                        response.render('rateservice', { user: doc_provider, quotation: document });
+                        return [2 /*return*/];
+                }
+            });
+        }); });
+    });
+    app.put('/rateservice/:id', function (request, response) {
+        var id = mongoose_1.default.Types.ObjectId(request.params.id);
+        var _a = request.body, rate = _a.rate, comment = _a.comment;
+        connection_1.connectDB();
+        quotation_1.quotation_model.updateOne({ _id: id }, { rate: rate, comment: comment }, function (error) {
+            if (error) {
+                console.log(error);
+            }
+            response.redirect('/checkhistory');
+        });
+    });
     app.get('/updateaccount', function (request, response) {
         if (request.session != undefined) {
             response.render('updateaccount', { account: request.session.account });
@@ -692,6 +735,75 @@ var main = function () {
             response.render('deleteaccount', { account: request.session.account });
         }
     });
+    app.delete('/deleteaccount', function (request, response) { return __awaiter(_this, void 0, void 0, function () {
+        var id, account, password, doc, match, match;
+        var _this = this;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    if (!(request.session != undefined)) return [3 /*break*/, 6];
+                    id = mongoose_1.default.Types.ObjectId(request.session.user_id);
+                    account = request.session.account;
+                    password = request.body.password;
+                    doc = void 0;
+                    connection_1.connectDB();
+                    if (!(account == 'client')) return [3 /*break*/, 3];
+                    return [4 /*yield*/, client_2.client_model.findOne({ _id: id }, function (error) { return __awaiter(_this, void 0, void 0, function () {
+                            return __generator(this, function (_a) {
+                                if (error) {
+                                    console.log(error);
+                                }
+                                return [2 /*return*/];
+                            });
+                        }); })];
+                case 1:
+                    doc = _a.sent();
+                    return [4 /*yield*/, doc.matchPassword(password)];
+                case 2:
+                    match = _a.sent();
+                    if (match) {
+                        client_2.client_model.deleteOne({ _id: id }, function (error) {
+                            if (error) {
+                                console.log(error);
+                            }
+                            response.redirect("/");
+                        });
+                    }
+                    else {
+                        request.flash('info', 'contraseña incorrecta.');
+                        response.render('deleteaccount', { error_message: request.flash('info'), password: password });
+                    }
+                    return [3 /*break*/, 6];
+                case 3: return [4 /*yield*/, provider_2.provider_model.findOne({ _id: id }, function (error) { return __awaiter(_this, void 0, void 0, function () {
+                        return __generator(this, function (_a) {
+                            if (error) {
+                                console.log(error);
+                            }
+                            return [2 /*return*/];
+                        });
+                    }); })];
+                case 4:
+                    doc = _a.sent();
+                    return [4 /*yield*/, doc.matchPassword(password)];
+                case 5:
+                    match = _a.sent();
+                    if (match) {
+                        provider_2.provider_model.deleteOne({ _id: id }, function (error) {
+                            if (error) {
+                                console.log(error);
+                            }
+                            response.redirect("/");
+                        });
+                    }
+                    else {
+                        request.flash('info', 'contraseña incorrecta.');
+                        response.render('deleteaccount', { error_message: request.flash('info'), password: password });
+                    }
+                    _a.label = 6;
+                case 6: return [2 /*return*/];
+            }
+        });
+    }); });
     module.exports = app;
 };
 main();

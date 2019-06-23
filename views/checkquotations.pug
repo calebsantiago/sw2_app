@@ -23,7 +23,20 @@ block content
                                 li(class = 'nav-item')
                                     a(class = 'nav-link' href = '/deleteaccount') eliminar cuenta
                                 li(class = 'nav-item')
+                                    a(class = 'nav-link' href = '' data-toggle = "modal" data-target = "#ayuda") ayuda
+                                li(class = 'nav-item')
                                     a(class = 'nav-link' href = '/logout') cerrar sesión
+            div(class = "modal fade" id = "ayuda" tabindex = "-1" role = "dialog" aria-labelledby = "exampleModalLongTitle" aria-hidden = "true")
+                div(class = "modal-dialog" role = "document")
+                    div(class = "modal-content")
+                        div(class = "modal-header")
+                            h5(class = "modal-title" id = "exampleModalLongTitle") Ayuda
+                            button(type = "button" class = "close" data-dismiss = "modal" aria-label = "Close")
+                                span(aria-hidden = "true") &times;
+                        div(class = "modal-body")
+                            span Aquí va la ayuda.
+                        div(class = "modal-footer")
+                            button(type = "button" class = "btn btn-primary" data-dismiss = "modal") cerrar
             div(class = 'container jumbotron')
                 include messages
                     if quotations
@@ -49,12 +62,12 @@ block content
                                             td(class = 'text-center align-middle') #{quotation.status}
                                             td(class = 'text-center align-middle')
                                                 if quotation.status == 'aceptado'
-                                                    form(action = 'changeStatus?_method=put' method = 'post')
+                                                    form(action = 'changestatus?_method=put' method = 'post')
                                                         input(type = 'text' id = 'id' name = 'id' value = quotation._id style = 'display: none;')
                                                         input(type = 'text' id = 'status' name = 'status' value = 'cancelado' style = 'display: none;')
                                                         input(type = 'submit' value = 'cancelar' class = 'btn btn-danger')
                                                 else if quotation.status == 'pendiente' && quotation.cost > 0
-                                                    form(action = 'changeStatus?_method=put' method = 'post')
+                                                    form(action = 'changestatus?_method=put' method = 'post')
                                                         input(type = 'text' id = 'id' name = 'id' value = quotation._id style = 'display: none;')
                                                         input(type = 'text' id = 'status' name = 'status' value = 'aceptado' style = 'display: none;')
                                                         input(type = 'submit' value = 'aceptar' class = 'btn btn-primary')
@@ -78,7 +91,20 @@ block content
                                 li(class = 'nav-item')
                                     a(class = 'nav-link' href = '/deleteaccount') eliminar cuenta
                                 li(class = 'nav-item')
+                                    a(class = 'nav-link' href = '' data-toggle = "modal" data-target = "#ayuda") ayuda
+                                li(class = 'nav-item')
                                     a(class = 'nav-link' href = '/logout') cerrar sesión
+            div(class = "modal fade" id = "ayuda" tabindex = "-1" role = "dialog" aria-labelledby = "exampleModalLongTitle" aria-hidden = "true")
+                div(class = "modal-dialog" role = "document")
+                    div(class = "modal-content")
+                        div(class = "modal-header")
+                            h5(class = "modal-title" id = "exampleModalLongTitle") Ayuda
+                            button(type = "button" class = "close" data-dismiss = "modal" aria-label = "Close")
+                                span(aria-hidden = "true") &times;
+                        div(class = "modal-body")
+                            span Aquí va la ayuda.
+                        div(class = "modal-footer")
+                            button(type = "button" class = "btn btn-primary" data-dismiss = "modal") cerrar
             div(class = 'container jumbotron')
                 include messages
                     if quotations
@@ -115,14 +141,14 @@ block content
                                                         button(type = 'button' class = 'btn btn-primary' disabled) cotizar
                                             td(class = 'text-center align-middle')
                                                 if quotation.status == 'aceptado'
-                                                    form(action = 'changeStatus?_method=put' method = 'post')
+                                                    form(action = 'changestatus?_method=put' method = 'post')
                                                         input(type = 'text' id = 'id' name = 'id' value = quotation._id style = 'display: none;')
                                                         select(id = 'status' name = 'status' class = 'btn btn-success' onchange = 'this.form.submit()')
                                                             option(value = '' select hidden) estado
                                                             option(value = 'rechazado') rechazar
                                                             option(value = 'finalizado') finalizar
                                                 else if quotation.status == 'pendiente'
-                                                    form(action = 'changeStatus?_method=put' method = 'post')
+                                                    form(action = 'changestatus?_method=put' method = 'post')
                                                         input(type = 'text' id = 'id' name = 'id' value = quotation._id style = 'display: none;')
                                                         input(type = 'text' id = 'status' name = 'status' value = 'rechazado' style = 'display: none;')
                                                         input(type = 'submit' value = 'rechazar' class = 'btn btn-danger')
