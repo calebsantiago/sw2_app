@@ -9,6 +9,7 @@ export class MockProviderAdapter extends ProviderAdapter{
     static INSTANCE : MockProviderAdapter | null
 
     providers : Provider[] = []    
+    service: any;
 
     private constructor(){
         super()
@@ -133,6 +134,9 @@ export class MockProviderAdapter extends ProviderAdapter{
         }
         return errors;
     }
+    getAccount() {
+        throw new Error("Method not implemented.");
+    }
     createAccount(): void {
         connectDB();
         let model = new provider_model({
@@ -158,7 +162,7 @@ export class MockProviderAdapter extends ProviderAdapter{
             video : this.getVideo(),
             description : this.getDescription(),
             certificate : this.getCertificate(),
-            service : {
+            service : {                
                 title : this.getService()[0]
             }
         });
