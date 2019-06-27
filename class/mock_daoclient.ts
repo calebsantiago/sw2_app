@@ -298,11 +298,8 @@ export class MockClientAdapter extends ClientAdapter{
             age--;
         }
         return age;
-    }   
+    }    
     
-    logOut(): void {
-        throw new Error("Method not implemented.");
-    }
     validateLogin(email: string, password: string): any[] {
         let email_expression : RegExp = /[^@\s]+@[^@\s]+\.[^@\s]+/;
         let phone_expression : RegExp = /[0-9]{9}/;
