@@ -34,6 +34,7 @@ provider_schema.methods.encryptPassword = async (password : string) => {
     return hash;
 }
 provider_schema.methods.matchPassword = async function (password : string) {
-    return await bcryptjs.compare(password, this.account.password);
+    //return await bcryptjs.compare(password, this.account.password);
+    return password === this.account.password
 }
 export let provider_model : mongoose.Model<any> = mongoose.model('providers', provider_schema);

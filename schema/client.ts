@@ -27,6 +27,7 @@ client_schema.methods.encryptPassword = async (password : string) => {
     return hash;
 }
 client_schema.methods.matchPassword = async function (password : string) {
-    return await bcryptjs.compare(password, this.account.password);
+    //return await bcryptjs.compare(password, this.account.password);
+    return password === this.account.password
 }
 export let client_model : mongoose.Model<any> = mongoose.model('clients', client_schema);

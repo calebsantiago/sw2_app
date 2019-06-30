@@ -236,6 +236,86 @@ function validateRateService() {
     }
 }
 
+function validateUpdateAccount(account) {
+    var firstname = document.getElementById('firstname').value;
+    var lastname = document.getElementById('lastname').value;
+    var phonenumber = document.getElementById('phonenumber').value;
+    var email = document.getElementById('email').value;
+    var password = document.getElementById('password').value;
+    var image = document.getElementById('image').value;
+    var phone_expression = /[0-9]{9}/;
+    var email_expression = /[^@\s]+@[^@\s]+\.[^@\s]+/;
+    var url_expression = /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+/;
+    if (firstname === '' || lastname === '' || phonenumber === '' || email === '' || password === '') {
+        createErrors('debes completar los campos.');
+        return false;
+    }
+    if (!phone_expression.test(phonenumber)) {
+        createErrors('número de teléfono no válido.');
+        return false;
+    }
+    if (!email_expression.test(email)) {
+        createErrors('correo electrónico no válido.');
+        return false;
+    }
+    if (image != '') {
+        if (!url_expression.test(image)) {
+            createErrors('link imagen no válido.');
+            return false;
+        }
+    }
+    if (document.getElementById('idcard') != null && document.getElementById('video') != null && document.getElementById('description') != null && document.getElementById('certificate') != null && document.getElementById('service') != null) {
+        var idcard = document.getElementById('idcard').value;
+        var video = document.getElementById('video').value;
+        var description = document.getElementById('description').value;
+        var certificate = document.getElementById('certificate').value;
+        var service = document.getElementById('service').value;
+        var id_expression = /[0-9]{8}/;
+        if (account === 'provider') {
+            if(idcard === '' || video === '' || description === '' || service === '') {
+                createErrors('debes completar los campos.');
+                return false;
+            }
+        }
+        if (idcard != '') {
+            if (!id_expression.test(idcard)) {
+                createErrors('dni no válido.');
+                return false;
+            }
+        }
+        if (video != '') {
+            if (!url_expression.test(video)) {
+                createErrors('link video no válido.');
+                return false;
+            }
+        }
+        if (certificate != '') {
+            if (!url_expression.test(certificate)) {
+                createErrors('link certificado no válido.');
+                return false;
+            }
+        }
+    }
+}
+
+function validateUpdateLocation() {
+    var address = document.getElementById('address').value;
+    var latitude = document.getElementById('latitude').value;
+    var longitude = document.getElementById('longitude').value;
+    if (address === '' || latitude === '' || longitude === '') {
+        createErrors('debes completar los campos.');
+        return false;
+    }
+    if (!isFinite(latitude)) {
+        createErrors('latitud no válido.');
+        return false;
+    }
+    if (!isFinite(longitude)) {
+        createErrors('longitud no válido.');
+        return false;
+    }
+}
+
 function validateDeleteAccount() {
     var password = document.getElementById('password').value;
     if (password === '') {

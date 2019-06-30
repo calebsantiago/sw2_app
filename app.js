@@ -52,6 +52,14 @@ var provider_1 = require("./class/provider");
 var provider_2 = require("./schema/provider");
 var quotation_1 = require("./schema/quotation");
 var mongoose_1 = __importDefault(require("mongoose"));
+function jsonlength(object) {
+    if (object) {
+        return Object.keys(object).length;
+    }
+    else {
+        return 0;
+    }
+}
 var main = function () {
     var app = express_1.default();
     app.set('view engine', 'pug');
@@ -86,12 +94,12 @@ var main = function () {
         response.render('signup');
     });
     app.post('/signup', function (request, response) { return __awaiter(_this, void 0, void 0, function () {
-        var _a, firstname, lastname, gender, birthdate, idcard, phonenumber, email, password, confirm_password, image, account, address, latitude, longitude, video, description, certificate, service, user, doc1, doc2, doc3, doc4, docs, model, _b, user, doc1, doc2, doc3, doc4, docs, model, _c;
-        return __generator(this, function (_d) {
-            switch (_d.label) {
+        var _a, firstname, lastname, gender, birthdate, idcard, phonenumber, email, password, confirm_password, image, account, address, latitude, longitude, video, description, certificate, service, user, doc1, doc2, doc3, doc4, docs, model, user, doc1, doc2, doc3, doc4, docs, model;
+        return __generator(this, function (_b) {
+            switch (_b.label) {
                 case 0:
                     _a = request.body, firstname = _a.firstname, lastname = _a.lastname, gender = _a.gender, birthdate = _a.birthdate, idcard = _a.idcard, phonenumber = _a.phonenumber, email = _a.email, password = _a.password, confirm_password = _a.confirm_password, image = _a.image, account = _a.account, address = _a.address, latitude = _a.latitude, longitude = _a.longitude, video = _a.video, description = _a.description, certificate = _a.certificate, service = _a.service;
-                    if (!(account === 'client')) return [3 /*break*/, 10];
+                    if (!(account === 'client')) return [3 /*break*/, 9];
                     user = new client_1.Client(firstname, lastname, gender, birthdate, Number(phonenumber), email, password, confirm_password, image, account, address, Number(latitude), Number(longitude));
                     /*let errors : any[] = user.validateSignUp();
                     if (errors.length > 0) {
@@ -105,38 +113,38 @@ var main = function () {
                             }
                         })];
                 case 1:
-                    doc1 = _d.sent();
+                    doc1 = _b.sent();
                     return [4 /*yield*/, client_2.client_model.findOne({ 'account.email': user.getEmail() }, function (error) {
                             if (error) {
                                 console.log(error);
                             }
                         })];
                 case 2:
-                    doc2 = _d.sent();
+                    doc2 = _b.sent();
                     return [4 /*yield*/, provider_2.provider_model.findOne({ 'phonenumber': user.getPhonenumber() }, function (error) {
                             if (error) {
                                 console.log(error);
                             }
                         })];
                 case 3:
-                    doc3 = _d.sent();
+                    doc3 = _b.sent();
                     return [4 /*yield*/, provider_2.provider_model.findOne({ 'account.email': user.getEmail() }, function (error) {
                             if (error) {
                                 console.log(error);
                             }
                         })];
                 case 4:
-                    doc4 = _d.sent();
+                    doc4 = _b.sent();
                     docs = [doc1, doc2, doc3, doc4];
                     if (!(docs[0] || docs[2])) return [3 /*break*/, 5];
                     request.flash('info', 'número de teléfono ya existe.');
                     response.render('signup', { error_message: request.flash('info'), firstname: firstname, lastname: lastname, gender: gender, birthdate: birthdate, phonenumber: phonenumber, email: email, password: password, confirm_password: confirm_password, image: image, account: account });
-                    return [3 /*break*/, 9];
+                    return [3 /*break*/, 8];
                 case 5:
                     if (!(docs[1] || docs[3])) return [3 /*break*/, 6];
                     request.flash('info', 'correo electrónico ya existe.');
                     response.render('signup', { error_message: request.flash('info'), firstname: firstname, lastname: lastname, gender: gender, birthdate: birthdate, phonenumber: phonenumber, email: email, password: password, confirm_password: confirm_password, image: image, account: account });
-                    return [3 /*break*/, 9];
+                    return [3 /*break*/, 8];
                 case 6:
                     connection_1.connectDB();
                     model = new client_2.client_model({
@@ -159,23 +167,21 @@ var main = function () {
                             longitude: user.getCoordinate()[1]
                         }
                     });
-                    _b = model.account;
-                    return [4 /*yield*/, model.encryptPassword(password)];
-                case 7:
-                    _b.password = _d.sent();
+                    //model.account.password = await model.encryptPassword(password);
                     return [4 /*yield*/, model.save(function (error) {
                             if (error) {
                                 console.log(error);
                             }
                         })];
-                case 8:
-                    _d.sent();
+                case 7:
+                    //model.account.password = await model.encryptPassword(password);
+                    _b.sent();
                     request.flash('info', 'estas registrado.');
                     response.render('login', { success_message: request.flash('info') });
                     user.sendMail();
-                    _d.label = 9;
-                case 9: return [3 /*break*/, 19];
-                case 10:
+                    _b.label = 8;
+                case 8: return [3 /*break*/, 17];
+                case 9:
                     user = new provider_1.Provider(firstname, lastname, gender, birthdate, Number(phonenumber), email, password, confirm_password, image, account, address, Number(latitude), Number(longitude), Number(idcard), video, description, certificate, service);
                     /*let errors : DocumentQuery<any, any, {}>[] = user.validateSignUp();
                     if (errors.length > 0) {
@@ -188,40 +194,40 @@ var main = function () {
                                 console.log(error);
                             }
                         })];
-                case 11:
-                    doc1 = _d.sent();
+                case 10:
+                    doc1 = _b.sent();
                     return [4 /*yield*/, client_2.client_model.findOne({ 'account.email': user.getEmail() }, function (error) {
                             if (error) {
                                 console.log(error);
                             }
                         })];
-                case 12:
-                    doc2 = _d.sent();
+                case 11:
+                    doc2 = _b.sent();
                     return [4 /*yield*/, provider_2.provider_model.findOne({ 'phonenumber': user.getPhonenumber() }, function (error) {
                             if (error) {
                                 console.log(error);
                             }
                         })];
-                case 13:
-                    doc3 = _d.sent();
+                case 12:
+                    doc3 = _b.sent();
                     return [4 /*yield*/, provider_2.provider_model.findOne({ 'account.email': user.getEmail() }, function (error) {
                             if (error) {
                                 console.log(error);
                             }
                         })];
-                case 14:
-                    doc4 = _d.sent();
+                case 13:
+                    doc4 = _b.sent();
                     docs = [doc1, doc2, doc3, doc4];
-                    if (!(docs[0] || docs[2])) return [3 /*break*/, 15];
+                    if (!(docs[0] || docs[2])) return [3 /*break*/, 14];
                     request.flash('info', 'número de teléfono ya existe.');
                     response.render('signup', { error_message: request.flash('info'), firstname: firstname, lastname: lastname, gender: gender, birthdate: birthdate, idcard: idcard, phonenumber: phonenumber, email: email, password: password, confirm_password: confirm_password, image: image, account: account, video: video, description: description, certificate: certificate, service: service });
-                    return [3 /*break*/, 19];
-                case 15:
-                    if (!(docs[1] || docs[3])) return [3 /*break*/, 16];
+                    return [3 /*break*/, 17];
+                case 14:
+                    if (!(docs[1] || docs[3])) return [3 /*break*/, 15];
                     request.flash('info', 'correo electrónico ya existe.');
                     response.render('signup', { error_message: request.flash('info'), firstname: firstname, lastname: lastname, gender: gender, birthdate: birthdate, idcard: idcard, phonenumber: phonenumber, email: email, password: password, confirm_password: confirm_password, image: image, account: account, video: video, description: description, certificate: certificate, service: service });
-                    return [3 /*break*/, 19];
-                case 16:
+                    return [3 /*break*/, 17];
+                case 15:
                     connection_1.connectDB();
                     model = new provider_2.provider_model({
                         _id: new mongoose_1.default.Types.ObjectId(),
@@ -250,22 +256,20 @@ var main = function () {
                             title: user.getService()[0]
                         }
                     });
-                    _c = model.account;
-                    return [4 /*yield*/, model.encryptPassword(password)];
-                case 17:
-                    _c.password = _d.sent();
+                    //model.account.password = await model.encryptPassword(password);
                     return [4 /*yield*/, model.save(function (error) {
                             if (error) {
                                 console.log(error);
                             }
                         })];
-                case 18:
-                    _d.sent();
+                case 16:
+                    //model.account.password = await model.encryptPassword(password);
+                    _b.sent();
                     request.flash('info', 'estas registrado.');
                     response.render('login', { success_message: request.flash('info') });
                     user.sendMail();
-                    _d.label = 19;
-                case 19: return [2 /*return*/];
+                    _b.label = 17;
+                case 17: return [2 /*return*/];
             }
         });
     }); });
@@ -727,7 +731,231 @@ var main = function () {
     });
     app.get('/updateaccount', function (request, response) {
         if (request.session != undefined) {
-            response.render('updateaccount', { account: request.session.account });
+            var id = mongoose_1.default.Types.ObjectId(request.session.user_id);
+            var account_4 = request.session.account;
+            connection_1.connectDB();
+            if (account_4 == 'client') {
+                client_2.client_model.findOne({ _id: id }, function (error, document) {
+                    if (error) {
+                        console.log(error);
+                    }
+                    response.render('updateaccount', { account: account_4, user: document });
+                });
+            }
+            else {
+                provider_2.provider_model.findOne({ _id: id }, function (error, document) {
+                    if (error) {
+                        console.log(error);
+                    }
+                    response.render('updateaccount', { account: account_4, user: document });
+                });
+            }
+        }
+    });
+    app.put('/updateaccount', function (request, response) { return __awaiter(_this, void 0, void 0, function () {
+        var id_1, account_5, _a, firstname, lastname, phonenumber, email, password, image, doc, doc1, doc2, doc3, doc4, document_1, docs, _b, idcard, video, description, certificate, service, docs;
+        var _this = this;
+        return __generator(this, function (_c) {
+            switch (_c.label) {
+                case 0:
+                    if (!(request.session != undefined)) return [3 /*break*/, 12];
+                    id_1 = mongoose_1.default.Types.ObjectId(request.session.user_id);
+                    account_5 = request.session.account;
+                    _a = request.body, firstname = _a.firstname, lastname = _a.lastname, phonenumber = _a.phonenumber, email = _a.email, password = _a.password, image = _a.image;
+                    doc = void 0;
+                    doc1 = void 0;
+                    doc2 = void 0;
+                    doc3 = void 0;
+                    doc4 = void 0;
+                    connection_1.connectDB();
+                    if (!(account_5 == 'client')) return [3 /*break*/, 6];
+                    return [4 /*yield*/, client_2.client_model.findOne({ _id: id_1 }, function (error) {
+                            if (error) {
+                                console.log(error);
+                            }
+                        })];
+                case 1:
+                    doc = _c.sent();
+                    return [4 /*yield*/, client_2.client_model.findOne({ 'phonenumber': phonenumber }, function (error) {
+                            if (error) {
+                                console.log(error);
+                            }
+                        })];
+                case 2:
+                    doc1 = _c.sent();
+                    return [4 /*yield*/, client_2.client_model.findOne({ 'account.email': email }, function (error) {
+                            if (error) {
+                                console.log(error);
+                            }
+                        })];
+                case 3:
+                    doc2 = _c.sent();
+                    return [4 /*yield*/, provider_2.provider_model.findOne({ 'phonenumber': phonenumber }, function (error) {
+                            if (error) {
+                                console.log(error);
+                            }
+                        })];
+                case 4:
+                    doc3 = _c.sent();
+                    return [4 /*yield*/, provider_2.provider_model.findOne({ 'account.email': email }, function (error) {
+                            if (error) {
+                                console.log(error);
+                            }
+                        })];
+                case 5:
+                    doc4 = _c.sent();
+                    docs = [doc1, doc2, doc3, doc4];
+                    if (doc.name.firstname == firstname && doc.name.lastname == lastname && doc.account.email == email && doc.account.password == password && doc.account.image == image && doc.phonenumber == phonenumber) {
+                        request.flash('info', 'sin cambios.');
+                        response.render('updateaccount', { success_message: request.flash('info'), user: doc, account: account_5 });
+                    }
+                    else if (jsonlength(docs[0]) - 6 > 0 || jsonlength(docs[1]) - 6 > 0 || jsonlength(docs[2]) > 0 || jsonlength(docs[3]) > 0) {
+                        request.flash('info', 'número de teléfono o correo electrónico ya existen.');
+                        response.render('updateaccount', { error_message: request.flash('info'), user: doc, account: account_5 });
+                    }
+                    else {
+                        client_2.client_model.updateOne({ _id: id_1 }, { name: { firstname: firstname, lastname: lastname }, account: { email: email, password: password, image: image }, phonenumber: phonenumber }, function (error) { return __awaiter(_this, void 0, void 0, function () {
+                            return __generator(this, function (_a) {
+                                switch (_a.label) {
+                                    case 0:
+                                        if (error) {
+                                            console.log(error);
+                                        }
+                                        return [4 /*yield*/, client_2.client_model.findOne({ _id: id_1 }, function (error) {
+                                                if (error) {
+                                                    console.log(error);
+                                                }
+                                            })];
+                                    case 1:
+                                        document_1 = _a.sent();
+                                        response.render('main', { user: document_1, account: account_5 });
+                                        return [2 /*return*/];
+                                }
+                            });
+                        }); });
+                    }
+                    return [3 /*break*/, 12];
+                case 6:
+                    _b = request.body, idcard = _b.idcard, video = _b.video, description = _b.description, certificate = _b.certificate, service = _b.service;
+                    return [4 /*yield*/, provider_2.provider_model.findOne({ _id: id_1 }, function (error) {
+                            if (error) {
+                                console.log(error);
+                            }
+                        })];
+                case 7:
+                    doc = _c.sent();
+                    return [4 /*yield*/, client_2.client_model.findOne({ 'phonenumber': phonenumber }, function (error) {
+                            if (error) {
+                                console.log(error);
+                            }
+                        })];
+                case 8:
+                    doc1 = _c.sent();
+                    return [4 /*yield*/, client_2.client_model.findOne({ 'account.email': email }, function (error) {
+                            if (error) {
+                                console.log(error);
+                            }
+                        })];
+                case 9:
+                    doc2 = _c.sent();
+                    return [4 /*yield*/, provider_2.provider_model.findOne({ 'phonenumber': phonenumber }, function (error) {
+                            if (error) {
+                                console.log(error);
+                            }
+                        })];
+                case 10:
+                    doc3 = _c.sent();
+                    return [4 /*yield*/, provider_2.provider_model.findOne({ 'account.email': email }, function (error) {
+                            if (error) {
+                                console.log(error);
+                            }
+                        })];
+                case 11:
+                    doc4 = _c.sent();
+                    docs = [doc1, doc2, doc3, doc4];
+                    if (doc.name.firstname == firstname && doc.name.lastname == lastname && doc.account.email == email && doc.account.password == password && doc.account.image == image && doc.phonenumber == phonenumber && doc.idcard == idcard && doc.video == video && doc.description == description && doc.certificate == certificate && doc.service.title == service) {
+                        request.flash('info', 'sin cambios.');
+                        response.render('updateaccount', { success_message: request.flash('info'), user: doc, account: account_5 });
+                    }
+                    else if (jsonlength(docs[0]) > 0 || jsonlength(docs[1]) > 0 || jsonlength(docs[2]) - 6 > 0 || jsonlength(docs[3]) - 6 > 0) {
+                        request.flash('info', 'número de teléfono o correo electrónico ya existen.');
+                        response.render('updateaccount', { error_message: request.flash('info'), user: doc, account: account_5 });
+                    }
+                    else {
+                        provider_2.provider_model.updateOne({ _id: id_1 }, { name: { firstname: firstname, lastname: lastname }, account: { email: email, password: password, image: image }, phonenumber: phonenumber, idcard: idcard, video: video, description: description, certificate: certificate, service: { title: service } }, function (error) { return __awaiter(_this, void 0, void 0, function () {
+                            return __generator(this, function (_a) {
+                                switch (_a.label) {
+                                    case 0:
+                                        if (error) {
+                                            console.log(error);
+                                        }
+                                        return [4 /*yield*/, provider_2.provider_model.findOne({ _id: id_1 }, function (error) {
+                                                if (error) {
+                                                    console.log(error);
+                                                }
+                                            })];
+                                    case 1:
+                                        document_1 = _a.sent();
+                                        response.render('main', { user: document_1, account: account_5 });
+                                        return [2 /*return*/];
+                                }
+                            });
+                        }); });
+                    }
+                    _c.label = 12;
+                case 12: return [2 /*return*/];
+            }
+        });
+    }); });
+    app.put('/updateaccountlocation', function (request, response) {
+        if (request.session != undefined) {
+            var id_2 = mongoose_1.default.Types.ObjectId(request.session.user_id);
+            var account_6 = request.session.account;
+            var _a = request.body, address = _a.address, latitude = _a.latitude, longitude = _a.longitude;
+            var document_2;
+            connection_1.connectDB();
+            if (account_6 == 'client') {
+                client_2.client_model.updateOne({ _id: id_2 }, { address: address, coordinate: { latitude: latitude, longitude: longitude } }, function (error) { return __awaiter(_this, void 0, void 0, function () {
+                    return __generator(this, function (_a) {
+                        switch (_a.label) {
+                            case 0:
+                                if (error) {
+                                    console.log(error);
+                                }
+                                return [4 /*yield*/, client_2.client_model.findOne({ _id: id_2 }, function (error) {
+                                        if (error) {
+                                            console.log(error);
+                                        }
+                                    })];
+                            case 1:
+                                document_2 = _a.sent();
+                                response.render('main', { user: document_2, account: account_6 });
+                                return [2 /*return*/];
+                        }
+                    });
+                }); });
+            }
+            else {
+                provider_2.provider_model.updateOne({ _id: id_2 }, { address: address, coordinate: { latitude: latitude, longitude: longitude } }, function (error) { return __awaiter(_this, void 0, void 0, function () {
+                    return __generator(this, function (_a) {
+                        switch (_a.label) {
+                            case 0:
+                                if (error) {
+                                    console.log(error);
+                                }
+                                return [4 /*yield*/, provider_2.provider_model.findOne({ _id: id_2 }, function (error) {
+                                        if (error) {
+                                            console.log(error);
+                                        }
+                                    })];
+                            case 1:
+                                document_2 = _a.sent();
+                                response.render('main', { user: document_2, account: account_6 });
+                                return [2 /*return*/];
+                        }
+                    });
+                }); });
+            }
         }
     });
     app.get('/deleteaccount', function (request, response) {

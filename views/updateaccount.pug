@@ -2,6 +2,9 @@ extends layout
 block content
     head
         include head
+        script(type = 'text/javascript' src = 'javascripts/selectOption.js')
+        script(type = 'text/javascript' src = '/javascripts/initMap.js')
+        script(type = 'text/javascript' src = '/javascripts/validate.js')
     body(style = 'padding-top: 50px;')
         if account == 'client'
             header
@@ -33,10 +36,60 @@ block content
                             h5(class = "modal-title" id = "exampleModalLongTitle") Ayuda
                             button(type = "button" class = "close" data-dismiss = "modal" aria-label = "Close")
                                 span(aria-hidden = "true") &times;
-                        div(class = "modal-body")
-                            span Aquí va la ayuda.
+                        div(class = "modal-body text-center")
+                            h3 Contáctanos
+                            div
+                                a(class = "btn btn-social-icon btn-lg btn-twitter mx-1" href = 'https://twitter.com/')
+                                    span(class = "fa fa-twitter" style = "color:white;")
+                                a(class = "btn btn-social-icon btn-lg btn-facebook mx-1" href = 'https://facebook.com/')
+                                    span(class = "fa fa-facebook" style = "color:white;")
+                                a(class = "btn btn-social-icon btn-lg btn-instagram mx-1" href = 'https://instagram.com/')
+                                    span(class = "fa fa-instagram" style = "color:white;")
+                                a(class = "btn btn-social-icon btn-lg btn-google mx-1" href = 'https://google.com/')
+                                    span(class = "fa fa-google" style = "color:white;")
+                            ul(class="list-unstyled")
+                                li(class = 'lead') Av. Javier Prado Este N.° 4600, Urb. Fundo Monterrico Chico, Santiago de Surco, Lima.
+                                li(class = 'lead') (511) 7654321
+                                li(class = 'lead') findhelp@contacta.com
+                                li(class = 'lead') © Contacta, 2019 - Todos los derechos reservados
                         div(class = "modal-footer")
                             button(type = "button" class = "btn btn-primary" data-dismiss = "modal") cerrar
+            div(class = 'container')
+                div(class = 'bs-docs-section')
+                    div(id = 'container' class = 'jumbotron')
+                        include messages
+                        div(id = 'form' class = 'row')
+                            div(class = 'col-lg-6')
+                                form(action = 'updateaccount?_method=put' method = 'post' onsubmit = 'return validateUpdateAccount("'+account+'")')
+                                    div(class = 'form-group')
+                                        input(type = 'text' id = 'firstname' name = 'firstname' placeholder = 'nombre' value = user.name.firstname class = 'form-control' required)
+                                        small(class = 'form-text text-muted') * campo obligatorio
+                                    div(class = 'form-group')
+                                        input(type = 'text' id = 'lastname' name = 'lastname' placeholder = 'apellido' value = user.name.lastname class = 'form-control' required)
+                                        small(class = 'form-text text-muted') * campo obligatorio
+                                    div(class = 'form-group')
+                                        input(type = 'tel' id = 'phonenumber' name = 'phonenumber' placeholder = 'número de teléfono' value = user.phonenumber class = 'form-control' required)
+                                        small(class = 'form-text text-muted') * campo obligatorio
+                                    div(class = 'form-group')
+                                        input(type = 'email' id = 'email' name = 'email' placeholder = 'correo electrónico' value = user.account.email class = 'form-control' required)
+                                        small(class = 'form-text text-muted') * campo obligatorio
+                                    div(class = 'form-group')
+                                        input(type = 'password' id = 'password' name = 'password' placeholder = 'contraseña' value = user.account.password class = 'form-control' required)
+                                        small(class = 'form-text text-muted') * campo obligatorio
+                                    div(class = 'form-group')
+                                        input(type = 'url' id = 'image' name = 'image' placeholder = 'link imagen' value = user.account.image class = 'form-control')
+                                    button(type = 'submit' class = 'btn btn-primary btn-lg btn-block') editar perfil
+                            div(class = 'col-lg-6')
+                                form(action = 'updateaccountlocation?_method=put' method = 'post' onsubmit = 'return validateUpdateLocation()')
+                                    div(class = 'form-group form-inline justify-content-center')
+                                        div(id = 'map' style = 'height: 260px; width: 626px;')
+                                    div(class = 'form-group')
+                                        input(type = 'text' id = 'address' name = 'address' placeholder = 'dirección' value = user.address class = 'form-control' readonly required)
+                                    div(class = 'form-group')
+                                        input(type = 'text' id = 'latitude' name = 'latitude' placeholder = 'latitud' value = user.coordinate.latitude class = 'form-control' readonly required)
+                                    div(class = 'form-group')
+                                        input(type = 'text' id = 'longitude' name = 'longitude' placeholder = 'longitud' value = user.coordinate.longitude class = 'form-control' readonly required)
+                                    button(type = 'submit' class = 'btn btn-primary btn-lg btn-block') editar localización
         else
             header
                 div(class = 'navbar navbar-expand-lg fixed-top navbar-dark bg-primary')
@@ -65,7 +118,78 @@ block content
                             h5(class = "modal-title" id = "exampleModalLongTitle") Ayuda
                             button(type = "button" class = "close" data-dismiss = "modal" aria-label = "Close")
                                 span(aria-hidden = "true") &times;
-                        div(class = "modal-body")
-                            span Aquí va la ayuda.
+                        div(class = "modal-body text-center")
+                            h3 Contáctanos
+                            div
+                                a(class = "btn btn-social-icon btn-lg btn-twitter mx-1" href = 'https://twitter.com/')
+                                    span(class = "fa fa-twitter" style = "color:white;")
+                                a(class = "btn btn-social-icon btn-lg btn-facebook mx-1" href = 'https://facebook.com/')
+                                    span(class = "fa fa-facebook" style = "color:white;")
+                                a(class = "btn btn-social-icon btn-lg btn-instagram mx-1" href = 'https://instagram.com/')
+                                    span(class = "fa fa-instagram" style = "color:white;")
+                                a(class = "btn btn-social-icon btn-lg btn-google mx-1" href = 'https://google.com/')
+                                    span(class = "fa fa-google" style = "color:white;")
+                            ul(class="list-unstyled")
+                                li(class = 'lead') Av. Javier Prado Este N.° 4600, Urb. Fundo Monterrico Chico, Santiago de Surco, Lima.
+                                li(class = 'lead') (511) 7654321
+                                li(class = 'lead') findhelp@contacta.com
+                                li(class = 'lead') © Contacta, 2019 - Todos los derechos reservados
                         div(class = "modal-footer")
                             button(type = "button" class = "btn btn-primary" data-dismiss = "modal") cerrar
+            div(class = 'container')
+                div(class = 'bs-docs-section')
+                    div(id = 'container' class = 'jumbotron')
+                        include messages
+                        div(id = 'form' class = 'row')
+                            div(class = 'col-lg-6')
+                                form(action = 'updateaccount?_method=put' method = 'post' onsubmit = 'return validateUpdateAccount("'+account+'")')
+                                    div(class = 'form-group')
+                                        input(type = 'text' id = 'firstname' name = 'firstname' placeholder = 'nombre' value = user.name.firstname class = 'form-control' required)
+                                        small(class = 'form-text text-muted') * campo obligatorio
+                                    div(class = 'form-group')
+                                        input(type = 'text' id = 'lastname' name = 'lastname' placeholder = 'apellido' value = user.name.lastname class = 'form-control' required)
+                                        small(class = 'form-text text-muted') * campo obligatorio
+                                    div(class = 'form-group')
+                                        input(type = 'number' id = 'idcard' name = 'idcard' placeholder = 'dni' value = user.idcard class = 'form-control' required)
+                                        small(class = 'form-text text-muted') * campo obligatorio
+                                    div(class = 'form-group')
+                                        input(type = 'tel' id = 'phonenumber' name = 'phonenumber' placeholder = 'número de teléfono' value = user.phonenumber class = 'form-control' required)
+                                        small(class = 'form-text text-muted') * campo obligatorio
+                                    div(class = 'form-group')
+                                        input(type = 'email' id = 'email' name = 'email' placeholder = 'correo electrónico' value = user.account.email class = 'form-control' required)
+                                        small(class = 'form-text text-muted') * campo obligatorio
+                                    div(class = 'form-group')
+                                        input(type = 'password' id = 'password' name = 'password' placeholder = 'contraseña' value = user.account.password class = 'form-control' required)
+                                        small(class = 'form-text text-muted') * campo obligatorio
+                                    div(class = 'form-group')
+                                        input(type = 'url' id = 'image' name = 'image' placeholder = 'link imagen' value = user.account.image class = 'form-control')
+                                    div(class = 'form-group')
+                                        input(type = 'url' id = 'video' name = 'video' placeholder = 'link video' value = user.video class = 'form-control' required)
+                                        small(class = 'form-text text-muted') * campo obligatorio
+                                    div(class = 'form-group')
+                                        textarea(id = 'description' name = 'description' placeholder = 'descripción' class = 'form-control' required) #{user.description}
+                                        small(class = 'form-text text-muted') * campo obligatorio
+                                    div(class = 'form-group')
+                                        input(type = 'url' id = 'certificate' name = 'certificate' placeholder = 'link certificado' value = user.certificate class = 'form-control')
+                                    div(class = 'form-group')
+                                        select(id = 'service' name = 'service' class = 'form-control' required)
+                                            option(value = '' select hidden) servicio
+                                            option(id = 'gasfitería' name = 'gasfitería' value = 'gasfitería') gasfitería
+                                            option(id = 'guardería' name = 'guardería' value = 'guardería') guardería
+                                            option(id = 'movilidad' name = 'movilidad' value = 'movilidad') movilidad
+                                            option(id = 'panadería' name = 'panadería' value = 'panadería') panadería
+                                        small(id = 'small_service' class = 'form-text text-muted') * campo obligatorio
+                                    button(type = 'submit' class = 'btn btn-primary btn-lg btn-block') editar perfil
+                            div(class = 'col-lg-6')
+                                form(action = 'updateaccountlocation?_method=put' method = 'post' onsubmit = 'return validateUpdateLocation()')
+                                    div(class = 'form-group form-inline justify-content-center')
+                                        div(id = 'map' style = 'height: 260px; width: 626px;')
+                                    div(class = 'form-group')
+                                        input(type = 'text' id = 'address' name = 'address' placeholder = 'dirección' value = user.address class = 'form-control' readonly required)
+                                    div(class = 'form-group')
+                                        input(type = 'text' id = 'latitude' name = 'latitude' placeholder = 'latitud' value = user.coordinate.latitude class = 'form-control' readonly required)
+                                    div(class = 'form-group')
+                                        input(type = 'text' id = 'longitude' name = 'longitude' placeholder = 'longitud' value = user.coordinate.longitude class = 'form-control' readonly required)
+                                    button(type = 'submit' class = 'btn btn-primary btn-lg btn-block') editar localización
+            script(type = 'text/javascript') selectOption('#{user.service.title}')
+        script(type = 'text/javascript' src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyCSRS9SAWe9v2szpbAYACT9F8c1hJThJ7c&callback=initMap' async defer)

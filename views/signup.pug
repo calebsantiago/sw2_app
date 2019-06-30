@@ -28,19 +28,26 @@ block content
                         h5(class = "modal-title" id = "exampleModalLongTitle") Ayuda
                         button(type = "button" class = "close" data-dismiss = "modal" aria-label = "Close")
                             span(aria-hidden = "true") &times;
-                    div(class = "modal-body")
-                        span Aquí va la ayuda.
+                    div(class = "modal-body text-center")
+                        h3 Contáctanos
+                        div
+                            a(class = "btn btn-social-icon btn-lg btn-twitter mx-1" href = 'https://twitter.com/')
+                                span(class = "fa fa-twitter" style = "color:white;")
+                            a(class = "btn btn-social-icon btn-lg btn-facebook mx-1" href = 'https://facebook.com/')
+                                span(class = "fa fa-facebook" style = "color:white;")
+                            a(class = "btn btn-social-icon btn-lg btn-instagram mx-1" href = 'https://instagram.com/')
+                                span(class = "fa fa-instagram" style = "color:white;")
+                            a(class = "btn btn-social-icon btn-lg btn-google mx-1" href = 'https://google.com/')
+                                span(class = "fa fa-google" style = "color:white;")
+                        ul(class="list-unstyled")
+                            li(class = 'lead') Av. Javier Prado Este N.° 4600, Urb. Fundo Monterrico Chico, Santiago de Surco, Lima.
+                            li(class = 'lead') (511) 7654321
+                            li(class = 'lead') findhelp@contacta.com
+                            li(class = 'lead') © Contacta, 2019 - Todos los derechos reservados
                     div(class = "modal-footer")
                         button(type = "button" class = "btn btn-primary" data-dismiss = "modal") cerrar
         div(class = 'container h-100')
             div(class = 'row align-items-center h-100')
-                //div(class = 'col d-none')
-                        div(class = 'text-right' style = 'padding-bottom: 400px')
-                            img(src = 'https://www.gruponebralejo.com/wp-content/uploads/2016/06/Logo-jardineria.png' width = '50%' height = '50%')
-                        div(class = 'b-5' style = 'padding-bottom: 400px')
-                            img(src = 'https://png.pngtree.com/templates/md/20180619/md_5b28f32e50a62.jpg' width = '50%' height = '50%')
-                        div(class = 'text-right')
-                            img(src = 'https://comparadorluz.com/sites/comparadorluz.com/themes/images/Bombilla_sin_fondo.png' width = '50%' height = '50%')
                 div(class = 'col-xs-12 col-sm-10 col-lg-7 mx-auto')
                     div(id = 'container' class = 'jumbotron')
                         div(class = 'page-header')
@@ -162,12 +169,5 @@ block content
                                             option(id = 'panadería' name = 'panadería' value = 'panadería') panadería
                                         small(id = 'small_service' class = 'form-text text-muted' style = 'display: none;') * campo obligatorio
                                 button(type = 'submit' class = 'btn btn-primary btn-lg btn-block') crear cuenta
-                //div(class = 'col d-none')
-                    div(class = 'text-left' style = 'padding-bottom: 400px')
-                        img(src = 'https://st4.depositphotos.com/1019239/25179/v/450/depositphotos_251790418-stock-illustration-repairs-icon-hand-wrench-concept.jpg' width = '50%' height = '50%')
-                    div(class = 'text-right' style = 'padding-bottom: 400px')
-                        img(src = 'https://st2.depositphotos.com/4197925/11806/v/950/depositphotos_118064842-stock-illustration-vector-logo-water-gas-engineering.jpg' width = '50%' height = '50%')
-                    div(class = 'text-left')
-                        img(src = 'https://www.cerrajeriavega.com/wp-content/uploads/2017/10/servicios-de-cerrajeria-las-24-horas.png' width = '60%' height = '60%')
         script(type = 'text/javascript') selectOption('#{service}')
         script(type = 'text/javascript' src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyCSRS9SAWe9v2szpbAYACT9F8c1hJThJ7c&callback=initMap' async defer)                         

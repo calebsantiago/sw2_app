@@ -77,10 +77,8 @@ client_schema.methods.encryptPassword = function (password) { return __awaiter(_
 client_schema.methods.matchPassword = function (password) {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, bcryptjs_1.default.compare(password, this.account.password)];
-                case 1: return [2 /*return*/, _a.sent()];
-            }
+            //return await bcryptjs.compare(password, this.account.password);
+            return [2 /*return*/, password === this.account.password];
         });
     });
 };

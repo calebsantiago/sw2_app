@@ -11,6 +11,14 @@ import {Provider} from './class/provider';
 import {provider_model} from './schema/provider';
 import {quotation_model} from './schema/quotation';
 import mongoose, {DocumentQuery} from 'mongoose';
+function jsonlength(object : any) : number {
+    if (object) {
+        return Object.keys(object).length
+    }
+    else {
+        return 0
+    }
+}
 let main = () => {
     let app : express.Application = express();
     app.set('view engine', 'pug');
@@ -105,7 +113,7 @@ let main = () => {
                             longitude : user.getCoordinate()[1]
                         }
                     });
-                    model.account.password = await model.encryptPassword(password);
+                    //model.account.password = await model.encryptPassword(password);
                     await model.save((error : any) => {
                         if (error) {
                             console.log(error);
@@ -183,7 +191,7 @@ let main = () => {
                             title : user.getService()[0]
                         }
                     });
-                    model.account.password = await model.encryptPassword(password);
+                    //model.account.password = await model.encryptPassword(password);
                     await model.save((error : any) => {
                         if (error) {
                             console.log(error);
@@ -596,7 +604,173 @@ let main = () => {
     });
     app.get('/updateaccount', (request, response) => {
         if(request.session != undefined) {
-            response.render('updateaccount', {account: request.session.account});
+            let id = mongoose.Types.ObjectId(request.session.user_id);
+            let account = request.session.account;
+            connectDB();
+            if(account == 'client') {
+                client_model.findOne({_id : id}, (error, document) => {
+                    if(error) {
+                        console.log(error);
+                    }
+                    response.render('updateaccount', {account: account, user :document});
+                });
+            }
+            else {
+                provider_model.findOne({_id : id}, (error, document) => {
+                    if(error) {
+                        console.log(error);
+                    }
+                    response.render('updateaccount', {account: account, user :document});
+                });
+            }
+        }
+    });
+    app.put('/updateaccount', async (request, response) => {
+        if(request.session != undefined) {
+            let id = mongoose.Types.ObjectId(request.session.user_id);
+            let account = request.session.account;
+            let {firstname, lastname, phonenumber, email, password, image} = request.body;
+            let doc;
+            let doc1;
+            let doc2;
+            let doc3;
+            let doc4;
+            let document;
+            connectDB();
+            if(account == 'client') {
+                doc = await client_model.findOne({_id : id}, (error) => {
+                    if(error) {
+                        console.log(error);
+                    }
+                });
+                doc1 = await client_model.findOne({'phonenumber' : phonenumber}, (error) => {
+                    if (error){
+                        console.log(error);
+                    }
+                });
+                doc2 = await client_model.findOne({'account.email' : email}, (error) => {
+                    if (error){
+                        console.log(error);
+                    }
+                });
+                doc3 = await provider_model.findOne({'phonenumber' : phonenumber}, (error) => {
+                    if (error){
+                        console.log(error);
+                    }
+                });
+                doc4 = await provider_model.findOne({'account.email' : email}, (error) => {
+                    if (error){
+                        console.log(error);
+                    }
+                });
+                let docs : DocumentQuery<any, any, {}>[] = [doc1, doc2, doc3, doc4];
+                if (doc.name.firstname == firstname && doc.name.lastname == lastname && doc.account.email == email && doc.account.password == password && doc.account.image == image && doc.phonenumber == phonenumber) {
+                    request.flash('info', 'sin cambios.');
+                    response.render('updateaccount', {success_message: request.flash('info'), user : doc, account});
+                }
+                else if (jsonlength(docs[0]) - 6 > 0 || jsonlength(docs[1]) - 6 > 0  || jsonlength(docs[2]) > 0 || jsonlength(docs[3]) > 0) {
+                    request.flash('info', 'número de teléfono o correo electrónico ya existen.');
+                    response.render('updateaccount', {error_message: request.flash('info'), user : doc, account});
+                }
+                else {
+                    client_model.updateOne({_id : id}, {name : {firstname : firstname, lastname : lastname}, account : {email : email, password : password, image : image}, phonenumber : phonenumber}, async (error) => {
+                        if(error) {
+                            console.log(error);
+                        }
+                        document = await client_model.findOne({_id : id}, (error) => {
+                            if(error) {
+                                console.log(error);
+                            }
+                        });
+                        response.render('main', {user : document, account});
+                    });
+                }
+            }
+            else {
+                let {idcard, video, description, certificate, service} = request.body;
+                doc = await provider_model.findOne({_id : id}, (error) => {
+                    if(error) {
+                        console.log(error);
+                    }
+                });
+                doc1 = await client_model.findOne({'phonenumber' : phonenumber}, (error) => {
+                    if (error){
+                        console.log(error);
+                    }
+                });
+                doc2 = await client_model.findOne({'account.email' : email}, (error) => {
+                    if (error){
+                        console.log(error);
+                    }
+                });
+                doc3 = await provider_model.findOne({'phonenumber' : phonenumber}, (error) => {
+                    if (error){
+                        console.log(error);
+                    }
+                });
+                doc4 = await provider_model.findOne({'account.email' : email}, (error) => {
+                    if (error){
+                        console.log(error);
+                    }
+                });
+                let docs : DocumentQuery<any, any, {}>[] = [doc1, doc2, doc3, doc4];
+                if (doc.name.firstname == firstname && doc.name.lastname == lastname && doc.account.email == email && doc.account.password == password && doc.account.image == image && doc.phonenumber == phonenumber && doc.idcard == idcard && doc.video == video && doc.description == description && doc.certificate == certificate && doc.service.title == service) {
+                    request.flash('info', 'sin cambios.');
+                    response.render('updateaccount', {success_message: request.flash('info'), user : doc, account});
+                }
+                else if (jsonlength(docs[0]) > 0 || jsonlength(docs[1]) > 0  || jsonlength(docs[2]) - 6 > 0 || jsonlength(docs[3]) - 6 > 0) {
+                    request.flash('info', 'número de teléfono o correo electrónico ya existen.');
+                    response.render('updateaccount', {error_message: request.flash('info'), user : doc, account});
+                }
+                else {
+                    provider_model.updateOne({_id : id}, {name : {firstname : firstname, lastname : lastname}, account : {email : email, password : password, image : image}, phonenumber : phonenumber, idcard : idcard, video : video, description : description, certificate : certificate, service : {title : service}}, async (error) => {
+                        if(error) {
+                            console.log(error);
+                        }
+                        document = await provider_model.findOne({_id : id}, (error) => {
+                            if(error) {
+                                console.log(error);
+                            }
+                        });
+                        response.render('main', {user : document, account});
+                    });
+                }
+            }
+        }
+    });
+    app.put('/updateaccountlocation', (request, response) => {
+        if(request.session != undefined) {
+            let id = mongoose.Types.ObjectId(request.session.user_id);
+            let account = request.session.account;
+            let {address, latitude, longitude} = request.body;
+            let document;
+            connectDB();
+            if (account == 'client') {
+                client_model.updateOne({_id : id}, {address : address, coordinate : {latitude : latitude, longitude : longitude}}, async (error) => {
+                    if(error) {
+                        console.log(error);
+                    }
+                    document = await client_model.findOne({_id : id}, (error) => {
+                        if(error) {
+                            console.log(error);
+                        }
+                    });
+                    response.render('main', {user : document, account});
+                });
+            }
+            else {
+                provider_model.updateOne({_id : id}, {address : address, coordinate : {latitude : latitude, longitude : longitude}}, async (error) => {
+                    if(error) {
+                        console.log(error);
+                    }
+                    document = await provider_model.findOne({_id : id}, (error) => {
+                        if(error) {
+                            console.log(error);
+                        }
+                    });
+                    response.render('main', {user : document, account});
+                });
+            }
         }
     });
     app.get('/deleteaccount', (request, response) => {
