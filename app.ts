@@ -4,7 +4,8 @@ import method_override from 'method-override';
 import session from 'express-session';
 import passport from 'passport';
 import flash from 'connect-flash';
-import {connectDB} from './connection';
+//import {connectDB} from './connection';
+import connect from './connection'
 import {Client} from './class/client';
 import {client_model} from './schema/client';
 import {Provider} from './class/provider';
@@ -19,6 +20,8 @@ function jsonlength(object : any) : number {
         return 0
     }
 }
+const db : string = 'mongodb+srv://caleb:Misael15@cluster0-aqv0w.mongodb.net/test?retryWrites=true'
+connect({db})
 let main = () => {
     let app : express.Application = express();
     app.set('view engine', 'pug');
@@ -61,7 +64,7 @@ let main = () => {
                 response.render('signup', {errors, firstname, lastname, gender, birthdate, phonenumber, email, password, confirm_password, image, account});
             }
             else {*/
-                connectDB();
+                //connectDB();
                 let doc1 = await client_model.findOne({'phonenumber' : user.getPhonenumber()}, (error) => {
                     if (error){
                         console.log(error);
@@ -92,7 +95,7 @@ let main = () => {
                     response.render('signup', {error_message: request.flash('info'), firstname, lastname, gender, birthdate, phonenumber, email, password, confirm_password, image, account});
                 }
                 else {
-                    connectDB();
+                    //connectDB();
                     let model = new client_model({
                         _id: new mongoose.Types.ObjectId(),
                         account : {
@@ -132,7 +135,7 @@ let main = () => {
                 response.render('signup', {errors, firstname, lastname, gender, birthdate, idcard, phonenumber, email, password, confirm_password, image, account, video, description, certificate, service});
             }
             else {*/
-                connectDB();
+                //connectDB();
                 let doc1 = await client_model.findOne({'phonenumber' : user.getPhonenumber()}, (error) => {
                     if (error){
                         console.log(error);
@@ -163,7 +166,7 @@ let main = () => {
                     response.render('signup', {error_message: request.flash('info'), firstname, lastname, gender, birthdate, idcard, phonenumber, email, password, confirm_password, image, account, video, description, certificate, service});
                 }
                 else {
-                    connectDB();
+                    //connectDB();
                     let model = new provider_model({
                         _id: new mongoose.Types.ObjectId(),
                         account : {
@@ -210,7 +213,7 @@ let main = () => {
     app.post('/login', async (request, response) => {
         let {email, password} = request.body;
         let account : string = ""     
-        connectDB();
+        //connectDB();
         let email_expression : RegExp = /[^@\s]+@[^@\s]+\.[^@\s]+/;
         let doc;
         if (email_expression.test(email)) {
@@ -267,7 +270,6 @@ let main = () => {
     });
     app.get('/logout', (request, response) => {
         request.logout();
-        response.redirect('/');
         if(request.session != undefined) {
             request.session.destroy((error) => {
                 if(error) {
@@ -275,12 +277,13 @@ let main = () => {
                 }
             });
         }
+        response.redirect('/');
     });
     app.get('/main', (request, response) => {
         if(request.session != undefined) {
             let id = mongoose.Types.ObjectId(request.session.user_id);
             let account = request.session.account;
-            connectDB();
+            //connectDB();
             if(account == 'client') {
                 client_model.findOne({_id : id}, (error, document) => {
                     if(error) {
@@ -300,14 +303,14 @@ let main = () => {
         }
     });
     app.get('/searchservice', (request, response) => {
-        connectDB();
+        //connectDB();
         provider_model.find(async (error, document) => {
             if(error) {
                 console.log(error);
             }
             if(request.session != undefined) {
                 let id = mongoose.Types.ObjectId(request.session.user_id);
-                connectDB();
+                //connectDB();
                 let doc = await client_model.findOne({_id : id}, (error) => {
                     if(error) {
                         console.log(error);
@@ -319,20 +322,20 @@ let main = () => {
     });
     app.post('/searchservice', (request, response) => {
         let {services} = request.body;
-            connectDB();
+            //connectDB();
             provider_model.find({'service.title' : services}, async (error, document) => {
                 if(error) {
                     console.log(error);
                 }
                 if(request.session != undefined) {
                     let id = mongoose.Types.ObjectId(request.session.user_id);
-                    connectDB();
+                    //connectDB();
                     let doc = await client_model.findOne({_id : id}, (error) => {
                         if(error) {
                             console.log(error);
                         }
                     });
-                    connectDB();
+                    //connectDB();
                     let pro = await provider_model.find(async (error) => {
                         if(error) {
                             console.log(error);
@@ -350,7 +353,7 @@ let main = () => {
     });
     app.get('/searchservice/requestquotation/:id', (request, response) => {
         let id = mongoose.Types.ObjectId(request.params.id);
-        connectDB();
+        //connectDB();
         provider_model.findOne({_id : id}, (error, document) => {
             if(error) {
                 console.log(error);
@@ -361,7 +364,7 @@ let main = () => {
     app.post('/searchservice/requestquotation/:id', (request, response) => {
         let {provider, service, date, description, image} = request.body;
         if (request.session != undefined) {
-                connectDB();
+                //connectDB();
                 let model = new quotation_model({
                     _id: new mongoose.Types.ObjectId(),
                     _id_client : request.session.user_id,
@@ -387,7 +390,7 @@ let main = () => {
         if(request.session != undefined) {
             let id = mongoose.Types.ObjectId(request.session.user_id);
             let account = request.session.account;
-            connectDB();
+            //connectDB();
             if(account == "client") {
                 quotation_model.aggregate([{
                     $lookup : {
@@ -452,7 +455,7 @@ let main = () => {
     });
     app.get('/quoteservice/:id', (request, response) => {
         let id = mongoose.Types.ObjectId(request.params.id);
-        connectDB();
+        //connectDB();
         quotation_model.findOne({_id : id}, (error, document) => {
             if(error) {
                 console.log(error);
@@ -463,7 +466,7 @@ let main = () => {
     app.put('/quoteservice/:id', (request, response) => {
         let id = mongoose.Types.ObjectId(request.params.id);
         let {cost} = request.body;
-        connectDB();
+        //connectDB();
         quotation_model.updateOne({_id : id}, {cost : cost}, (error) => {
             if(error) {
                 console.log(error);
@@ -473,7 +476,7 @@ let main = () => {
     });
     app.put('/changestatus', (request, response) => {
         let {id, status} = request.body;
-        connectDB();
+        //connectDB();
         quotation_model.updateOne({_id : id}, {status : status}, (error) => {
             if(error) {
                 console.log(error);
@@ -488,7 +491,7 @@ let main = () => {
     });
     app.get('/locateclient/:id', (request, response) => {
         let id_quotation = mongoose.Types.ObjectId(request.params.id);
-        connectDB();
+        //connectDB();
         quotation_model.findOne({_id : id_quotation}, async (error, document) => {
             if(error) {
                 console.log(error);
@@ -512,7 +515,7 @@ let main = () => {
         if(request.session != undefined) {
             let id = mongoose.Types.ObjectId(request.session.user_id);
             let account = request.session.account;
-            connectDB();
+            //connectDB();
             if(account == "client") {
                 quotation_model.aggregate([{
                     $lookup : {
@@ -531,10 +534,10 @@ let main = () => {
                     { 
                         $project : { account : 0, gender : 0, birthdate : 0, idcard : 0, phonenumber : 0, address : 0, coordinate : 0, video : 0, certificate : 0, __v : 0, fromProviders : 0 } 
                     }], (error : any, document : any) => {
-                    if(error) {
+                    if (error) {
                         console.log(error);
                     }
-                    if(!document.length) {
+                    if (!document.length) {
                         request.flash('info', 'no tienes historial.');
                         response.render('checkhistory', {error_message : request.flash('info'), account : account});
                     }
@@ -577,7 +580,7 @@ let main = () => {
     });
     app.get('/rateservice/:id', (request, response) => {
         let id_quotation = mongoose.Types.ObjectId(request.params.id);
-        connectDB();
+        //connectDB();
         quotation_model.findOne({_id : id_quotation}, async (error, document) => {
             if(error) {
                 console.log(error);
@@ -594,7 +597,7 @@ let main = () => {
     app.put('/rateservice/:id', (request, response) => {
         let id = mongoose.Types.ObjectId(request.params.id);
         let {rate, comment} = request.body;
-        connectDB();
+        //connectDB();
         quotation_model.updateOne({_id : id}, {rate : rate, comment : comment}, (error) => {
             if(error) {
                 console.log(error);
@@ -606,7 +609,7 @@ let main = () => {
         if(request.session != undefined) {
             let id = mongoose.Types.ObjectId(request.session.user_id);
             let account = request.session.account;
-            connectDB();
+            //connectDB();
             if(account == 'client') {
                 client_model.findOne({_id : id}, (error, document) => {
                     if(error) {
@@ -636,7 +639,7 @@ let main = () => {
             let doc3;
             let doc4;
             let document;
-            connectDB();
+            //connectDB();
             if(account == 'client') {
                 doc = await client_model.findOne({_id : id}, (error) => {
                     if(error) {
@@ -682,7 +685,8 @@ let main = () => {
                                 console.log(error);
                             }
                         });
-                        response.render('main', {user : document, account});
+                        request.flash('info', 'los datos se actualizaron correctamente.');
+                        response.render('main', {success_message: request.flash('info'), user : document, account});
                     });
                 }
             }
@@ -732,7 +736,8 @@ let main = () => {
                                 console.log(error);
                             }
                         });
-                        response.render('main', {user : document, account});
+                        request.flash('info', 'los datos se actualizaron correctamente.');
+                        response.render('main', {success_message: request.flash('info'), user : document, account});
                     });
                 }
             }
@@ -744,7 +749,7 @@ let main = () => {
             let account = request.session.account;
             let {address, latitude, longitude} = request.body;
             let document;
-            connectDB();
+            //connectDB();
             if (account == 'client') {
                 client_model.updateOne({_id : id}, {address : address, coordinate : {latitude : latitude, longitude : longitude}}, async (error) => {
                     if(error) {
@@ -755,7 +760,8 @@ let main = () => {
                             console.log(error);
                         }
                     });
-                    response.render('main', {user : document, account});
+                    request.flash('info', 'los datos se actualizaron correctamente.');
+                    response.render('main', {success_message: request.flash('info'), user : document, account});
                 });
             }
             else {
@@ -768,7 +774,8 @@ let main = () => {
                             console.log(error);
                         }
                     });
-                    response.render('main', {user : document, account});
+                    request.flash('info', 'los datos se actualizaron correctamente.');
+                    response.render('main', {success_message: request.flash('info'), user : document, account});
                 });
             }
         }
@@ -784,7 +791,7 @@ let main = () => {
             let account = request.session.account;
             let {password} = request.body;
             let doc;
-            connectDB();
+            //connectDB();
             if(account == 'client') {
                 doc = await client_model.findOne({_id : id}, async (error) => {
                     if(error) {
@@ -793,13 +800,18 @@ let main = () => {
                 });
                 let match = await doc.matchPassword(password);
                 if (match) {
-                    client_model.deleteOne({_id : id}, (error) => {
+                    quotation_model.updateMany({_id_client : id, status : {$in:['pendiente', 'aceptado']}}, {status : 'cancelado'}, (error) => {
                         if(error) {
                             console.log(error);
                         }
-                        response.redirect("/");
+                        client_model.deleteOne({_id : id}, (error) => {
+                            if(error) {
+                                console.log(error);
+                            }
+                            response.redirect("/");
+                        });
                     });
-                } 
+                }
                 else {
                     request.flash('info', 'contraseña incorrecta.');
                     response.render('deleteaccount', {error_message: request.flash('info'), password});
@@ -813,11 +825,16 @@ let main = () => {
                 });
                 let match = await doc.matchPassword(password);
                 if (match) {
-                    provider_model.deleteOne({_id : id}, (error) => {
+                    quotation_model.updateMany({_id_provider : id, status : {$in:['pendiente', 'aceptado']}}, {status : 'rechazado'}, (error) => {
                         if(error) {
                             console.log(error);
                         }
-                        response.redirect("/");
+                        provider_model.deleteOne({_id : id}, (error) => {
+                            if(error) {
+                                console.log(error);
+                            }
+                            response.redirect("/");
+                        });
                     });
                 } 
                 else {

@@ -1,4 +1,4 @@
-import {connectDB} from './../connection';
+//import {connectDB} from './../connection';
 import {client_model} from './../schema/client';
 import {provider_model} from './../schema/provider';
 import {DocumentQuery} from 'mongoose';
@@ -126,7 +126,7 @@ export abstract class User {
     }
     return errors;
   }
-  public anotherAccount() : DocumentQuery<any, any, {}>[] {
+  /*public anotherAccount() : DocumentQuery<any, any, {}>[] {
     connectDB();
     let doc1 = client_model.findOne({'phonenumber' : this.getPhonenumber()}, (error) => {
       if (error){
@@ -149,7 +149,7 @@ export abstract class User {
         }
     });
     return [doc1, doc2, doc3, doc4]
-  }
+  }*/
   public abstract createAccount() : void
   public sendMail() : void {
     let transporter = nodemailer.createTransport({

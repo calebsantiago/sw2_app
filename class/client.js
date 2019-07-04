@@ -17,7 +17,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var user_1 = require("./user");
-var connection_1 = require("../connection");
+//import {connectDB} from '../connection';
 var client_1 = require("../schema/client");
 var mongoose_1 = __importDefault(require("mongoose"));
 var Client = /** @class */ (function (_super) {
@@ -65,7 +65,7 @@ var Client = /** @class */ (function (_super) {
         return errors;
     };
     Client.prototype.createAccount = function () {
-        connection_1.connectDB();
+        //connectDB();
         var model = new client_1.client_model({
             _id: new mongoose_1.default.Types.ObjectId(),
             account: {
@@ -95,7 +95,7 @@ var Client = /** @class */ (function (_super) {
         });
     };
     Client.prototype.logIn = function (email) {
-        connection_1.connectDB();
+        //connectDB();
         var email_expression = /[^@\s]+@[^@\s]+\.[^@\s]+/;
         var doc;
         if (email_expression.test(email)) {
@@ -115,7 +115,7 @@ var Client = /** @class */ (function (_super) {
         return doc;
     };
     Client.prototype.updateAccount = function (id) {
-        connection_1.connectDB();
+        //connectDB();
         client_1.client_model.updateOne({ _id: id }, {
             account: {
                 email: this.getEmail(),
@@ -141,7 +141,7 @@ var Client = /** @class */ (function (_super) {
         });
     };
     Client.prototype.deleteAccount = function (id) {
-        connection_1.connectDB();
+        //connectDB();
         client_1.client_model.deleteOne({ _id: id }, function (error) {
             if (error) {
                 console.log(error);

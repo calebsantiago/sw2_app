@@ -8,7 +8,7 @@ block content
         script(type = 'text/javascript' src = '/javascripts/ratings.js')
         if quotations
             each quotation in quotations
-                script(type = 'text/javascript') addRatings(#{quotation.rate})
+                script(type = 'text/javascript') addRatings('#{quotation._id}', #{quotation.rate})
     body(style = 'padding-top: 50px;')
         if account == 'client'
             header
@@ -76,7 +76,10 @@ block content
                                 tbody
                                     each quotation in quotations
                                         tr(class = 'table-primary')
-                                            td(class = 'text-center align-middle') #{quotation.name.firstname + ' ' + quotation.name.lastname}
+                                            if quotation.name != null
+                                                td(class = 'text-center align-middle') #{quotation.name.firstname + ' ' + quotation.name.lastname}
+                                            else
+                                                td(class = 'text-center align-middle') desconocido
                                             td(class = 'text-center align-middle') #{quotation.service}
                                             td(class = 'text-center align-middle') #{quotation.date}
                                             td(class = 'text-center align-middle') #{quotation.description}
@@ -163,7 +166,10 @@ block content
                                 tbody
                                     each quotation in quotations
                                         tr(class = 'table-primary')
-                                            td(class = 'text-center align-middle') #{quotation.name.firstname + ' ' + quotation.name.lastname}
+                                            if quotation.name != null
+                                                td(class = 'text-center align-middle') #{quotation.name.firstname + ' ' + quotation.name.lastname}
+                                            else
+                                                td(class = 'text-center align-middle') desconocido
                                             td(class = 'text-center align-middle') #{quotation.service}
                                             td(class = 'text-center align-middle') #{quotation.date}
                                             td(class = 'text-center align-middle') #{quotation.description}
@@ -171,5 +177,5 @@ block content
                                             td(class = 'text-center align-middle') #{quotation.status}
                                             td(class = 'text-center align-middle')
                                                 div(class = "stars-outer")
-                                                    div(class = "stars-inner")
+                                                    div(id = quotation._id class = "stars-inner")
                                             td(class = 'text-center align-middle') #{quotation.comment}

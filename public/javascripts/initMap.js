@@ -13,8 +13,8 @@ function initMap() {
             var marker = new google.maps.Marker({
                 map: map,
                 position: myLatlng,
-                draggable: true 
-            }); 
+                draggable: true
+            });
             geocoder.geocode({'latLng': myLatlng }, function(results, status) {
                 if (status == google.maps.GeocoderStatus.OK) {
                     if (results[0]) {

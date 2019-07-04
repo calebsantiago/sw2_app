@@ -3,9 +3,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var connection_1 = require("./../connection");
-var client_1 = require("./../schema/client");
-var provider_1 = require("./../schema/provider");
 var nodemailer_1 = __importDefault(require("nodemailer"));
 var User = /** @class */ (function () {
     function User(firstname, lastname, gender, birthdate, phonenumber, email, password, confirm_password, image, account, address, latitude, longitude) {
@@ -116,30 +113,6 @@ var User = /** @class */ (function () {
             }
         }
         return errors;
-    };
-    User.prototype.anotherAccount = function () {
-        connection_1.connectDB();
-        var doc1 = client_1.client_model.findOne({ 'phonenumber': this.getPhonenumber() }, function (error) {
-            if (error) {
-                console.log(error);
-            }
-        });
-        var doc2 = client_1.client_model.findOne({ 'account.email': this.getEmail() }, function (error) {
-            if (error) {
-                console.log(error);
-            }
-        });
-        var doc3 = provider_1.provider_model.findOne({ 'phonenumber': this.getPhonenumber() }, function (error) {
-            if (error) {
-                console.log(error);
-            }
-        });
-        var doc4 = provider_1.provider_model.findOne({ 'account.email': this.getEmail() }, function (error) {
-            if (error) {
-                console.log(error);
-            }
-        });
-        return [doc1, doc2, doc3, doc4];
     };
     User.prototype.sendMail = function () {
         var transporter = nodemailer_1.default.createTransport({

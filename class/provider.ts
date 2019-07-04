@@ -1,5 +1,5 @@
 import {User} from './user';
-import {connectDB} from '../connection';
+//import {connectDB} from '../connection';
 import {provider_model} from '../schema/provider';
 import mongoose from 'mongoose';
 export class Provider extends User {
@@ -110,7 +110,7 @@ export class Provider extends User {
         return errors;
     }
     public createAccount() : void {
-        connectDB();
+        //connectDB();
         let model = new provider_model({
             _id: new mongoose.Types.ObjectId(),
             account : {
@@ -147,7 +147,7 @@ export class Provider extends User {
         });
     }
     public logIn(email : string) : any {
-        connectDB();
+        //connectDB();
         let email_expression : RegExp = /[^@\s]+@[^@\s]+\.[^@\s]+/;
         let doc;
         if (email_expression.test(email)) {
@@ -167,7 +167,7 @@ export class Provider extends User {
         return doc
     }
     public updateAccount(id : string) : void {
-        connectDB();
+        //connectDB();
         provider_model.updateOne({_id : id}, {
             account : {
                 email : this.getEmail(),
@@ -200,7 +200,7 @@ export class Provider extends User {
         });
     }
     public deleteAccount(id : string) : void {
-        connectDB();
+        //connectDB();
         provider_model.deleteOne({_id : id}, (error) => {
             if(error) {
                 console.log(error);

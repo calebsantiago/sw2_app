@@ -45,7 +45,8 @@ var method_override_1 = __importDefault(require("method-override"));
 var express_session_1 = __importDefault(require("express-session"));
 var passport_1 = __importDefault(require("passport"));
 var connect_flash_1 = __importDefault(require("connect-flash"));
-var connection_1 = require("./connection");
+//import {connectDB} from './connection';
+var connection_1 = __importDefault(require("./connection"));
 var client_1 = require("./class/client");
 var client_2 = require("./schema/client");
 var provider_1 = require("./class/provider");
@@ -60,6 +61,8 @@ function jsonlength(object) {
         return 0;
     }
 }
+var db = 'mongodb+srv://caleb:Misael15@cluster0-aqv0w.mongodb.net/test?retryWrites=true';
+connection_1.default({ db: db });
 var main = function () {
     var app = express_1.default();
     app.set('view engine', 'pug');
@@ -101,12 +104,6 @@ var main = function () {
                     _a = request.body, firstname = _a.firstname, lastname = _a.lastname, gender = _a.gender, birthdate = _a.birthdate, idcard = _a.idcard, phonenumber = _a.phonenumber, email = _a.email, password = _a.password, confirm_password = _a.confirm_password, image = _a.image, account = _a.account, address = _a.address, latitude = _a.latitude, longitude = _a.longitude, video = _a.video, description = _a.description, certificate = _a.certificate, service = _a.service;
                     if (!(account === 'client')) return [3 /*break*/, 9];
                     user = new client_1.Client(firstname, lastname, gender, birthdate, Number(phonenumber), email, password, confirm_password, image, account, address, Number(latitude), Number(longitude));
-                    /*let errors : any[] = user.validateSignUp();
-                    if (errors.length > 0) {
-                        response.render('signup', {errors, firstname, lastname, gender, birthdate, phonenumber, email, password, confirm_password, image, account});
-                    }
-                    else {*/
-                    connection_1.connectDB();
                     return [4 /*yield*/, client_2.client_model.findOne({ 'phonenumber': user.getPhonenumber() }, function (error) {
                             if (error) {
                                 console.log(error);
@@ -146,7 +143,6 @@ var main = function () {
                     response.render('signup', { error_message: request.flash('info'), firstname: firstname, lastname: lastname, gender: gender, birthdate: birthdate, phonenumber: phonenumber, email: email, password: password, confirm_password: confirm_password, image: image, account: account });
                     return [3 /*break*/, 8];
                 case 6:
-                    connection_1.connectDB();
                     model = new client_2.client_model({
                         _id: new mongoose_1.default.Types.ObjectId(),
                         account: {
@@ -183,12 +179,6 @@ var main = function () {
                 case 8: return [3 /*break*/, 17];
                 case 9:
                     user = new provider_1.Provider(firstname, lastname, gender, birthdate, Number(phonenumber), email, password, confirm_password, image, account, address, Number(latitude), Number(longitude), Number(idcard), video, description, certificate, service);
-                    /*let errors : DocumentQuery<any, any, {}>[] = user.validateSignUp();
-                    if (errors.length > 0) {
-                        response.render('signup', {errors, firstname, lastname, gender, birthdate, idcard, phonenumber, email, password, confirm_password, image, account, video, description, certificate, service});
-                    }
-                    else {*/
-                    connection_1.connectDB();
                     return [4 /*yield*/, client_2.client_model.findOne({ 'phonenumber': user.getPhonenumber() }, function (error) {
                             if (error) {
                                 console.log(error);
@@ -228,7 +218,6 @@ var main = function () {
                     response.render('signup', { error_message: request.flash('info'), firstname: firstname, lastname: lastname, gender: gender, birthdate: birthdate, idcard: idcard, phonenumber: phonenumber, email: email, password: password, confirm_password: confirm_password, image: image, account: account, video: video, description: description, certificate: certificate, service: service });
                     return [3 /*break*/, 17];
                 case 15:
-                    connection_1.connectDB();
                     model = new provider_2.provider_model({
                         _id: new mongoose_1.default.Types.ObjectId(),
                         account: {
@@ -283,7 +272,6 @@ var main = function () {
                 case 0:
                     _a = request.body, email = _a.email, password = _a.password;
                     account = "";
-                    connection_1.connectDB();
                     email_expression = /[^@\s]+@[^@\s]+\.[^@\s]+/;
                     if (!email_expression.test(email)) return [3 /*break*/, 4];
                     return [4 /*yield*/, client_2.client_model.findOne({ 'account.email': email }, function (error) {
@@ -350,7 +338,6 @@ var main = function () {
     }); });
     app.get('/logout', function (request, response) {
         request.logout();
-        response.redirect('/');
         if (request.session != undefined) {
             request.session.destroy(function (error) {
                 if (error) {
@@ -358,12 +345,13 @@ var main = function () {
                 }
             });
         }
+        response.redirect('/');
     });
     app.get('/main', function (request, response) {
         if (request.session != undefined) {
             var id = mongoose_1.default.Types.ObjectId(request.session.user_id);
             var account_1 = request.session.account;
-            connection_1.connectDB();
+            //connectDB();
             if (account_1 == 'client') {
                 client_2.client_model.findOne({ _id: id }, function (error, document) {
                     if (error) {
@@ -383,7 +371,7 @@ var main = function () {
         }
     });
     app.get('/searchservice', function (request, response) {
-        connection_1.connectDB();
+        //connectDB();
         provider_2.provider_model.find(function (error, document) { return __awaiter(_this, void 0, void 0, function () {
             var id, doc;
             return __generator(this, function (_a) {
@@ -394,7 +382,6 @@ var main = function () {
                         }
                         if (!(request.session != undefined)) return [3 /*break*/, 2];
                         id = mongoose_1.default.Types.ObjectId(request.session.user_id);
-                        connection_1.connectDB();
                         return [4 /*yield*/, client_2.client_model.findOne({ _id: id }, function (error) {
                                 if (error) {
                                     console.log(error);
@@ -411,7 +398,7 @@ var main = function () {
     });
     app.post('/searchservice', function (request, response) {
         var services = request.body.services;
-        connection_1.connectDB();
+        //connectDB();
         provider_2.provider_model.find({ 'service.title': services }, function (error, document) { return __awaiter(_this, void 0, void 0, function () {
             var id, doc, pro;
             var _this = this;
@@ -423,7 +410,6 @@ var main = function () {
                         }
                         if (!(request.session != undefined)) return [3 /*break*/, 3];
                         id = mongoose_1.default.Types.ObjectId(request.session.user_id);
-                        connection_1.connectDB();
                         return [4 /*yield*/, client_2.client_model.findOne({ _id: id }, function (error) {
                                 if (error) {
                                     console.log(error);
@@ -431,7 +417,6 @@ var main = function () {
                             })];
                     case 1:
                         doc = _a.sent();
-                        connection_1.connectDB();
                         return [4 /*yield*/, provider_2.provider_model.find(function (error) { return __awaiter(_this, void 0, void 0, function () {
                                 return __generator(this, function (_a) {
                                     if (error) {
@@ -457,7 +442,7 @@ var main = function () {
     });
     app.get('/searchservice/requestquotation/:id', function (request, response) {
         var id = mongoose_1.default.Types.ObjectId(request.params.id);
-        connection_1.connectDB();
+        //connectDB();
         provider_2.provider_model.findOne({ _id: id }, function (error, document) {
             if (error) {
                 console.log(error);
@@ -468,7 +453,7 @@ var main = function () {
     app.post('/searchservice/requestquotation/:id', function (request, response) {
         var _a = request.body, provider = _a.provider, service = _a.service, date = _a.date, description = _a.description, image = _a.image;
         if (request.session != undefined) {
-            connection_1.connectDB();
+            //connectDB();
             var model = new quotation_1.quotation_model({
                 _id: new mongoose_1.default.Types.ObjectId(),
                 _id_client: request.session.user_id,
@@ -494,7 +479,7 @@ var main = function () {
         if (request.session != undefined) {
             var id = mongoose_1.default.Types.ObjectId(request.session.user_id);
             var account_2 = request.session.account;
-            connection_1.connectDB();
+            //connectDB();
             if (account_2 == "client") {
                 quotation_1.quotation_model.aggregate([{
                         $lookup: {
@@ -559,7 +544,7 @@ var main = function () {
     });
     app.get('/quoteservice/:id', function (request, response) {
         var id = mongoose_1.default.Types.ObjectId(request.params.id);
-        connection_1.connectDB();
+        //connectDB();
         quotation_1.quotation_model.findOne({ _id: id }, function (error, document) {
             if (error) {
                 console.log(error);
@@ -570,7 +555,7 @@ var main = function () {
     app.put('/quoteservice/:id', function (request, response) {
         var id = mongoose_1.default.Types.ObjectId(request.params.id);
         var cost = request.body.cost;
-        connection_1.connectDB();
+        //connectDB();
         quotation_1.quotation_model.updateOne({ _id: id }, { cost: cost }, function (error) {
             if (error) {
                 console.log(error);
@@ -580,7 +565,7 @@ var main = function () {
     });
     app.put('/changestatus', function (request, response) {
         var _a = request.body, id = _a.id, status = _a.status;
-        connection_1.connectDB();
+        //connectDB();
         quotation_1.quotation_model.updateOne({ _id: id }, { status: status }, function (error) {
             if (error) {
                 console.log(error);
@@ -595,7 +580,7 @@ var main = function () {
     });
     app.get('/locateclient/:id', function (request, response) {
         var id_quotation = mongoose_1.default.Types.ObjectId(request.params.id);
-        connection_1.connectDB();
+        //connectDB();
         quotation_1.quotation_model.findOne({ _id: id_quotation }, function (error, document) { return __awaiter(_this, void 0, void 0, function () {
             var id_client, id_provider, doc_client, doc_provider;
             return __generator(this, function (_a) {
@@ -630,7 +615,7 @@ var main = function () {
         if (request.session != undefined) {
             var id = mongoose_1.default.Types.ObjectId(request.session.user_id);
             var account_3 = request.session.account;
-            connection_1.connectDB();
+            //connectDB();
             if (account_3 == "client") {
                 quotation_1.quotation_model.aggregate([{
                         $lookup: {
@@ -695,7 +680,7 @@ var main = function () {
     });
     app.get('/rateservice/:id', function (request, response) {
         var id_quotation = mongoose_1.default.Types.ObjectId(request.params.id);
-        connection_1.connectDB();
+        //connectDB();
         quotation_1.quotation_model.findOne({ _id: id_quotation }, function (error, document) { return __awaiter(_this, void 0, void 0, function () {
             var id_provider, doc_provider;
             return __generator(this, function (_a) {
@@ -721,7 +706,7 @@ var main = function () {
     app.put('/rateservice/:id', function (request, response) {
         var id = mongoose_1.default.Types.ObjectId(request.params.id);
         var _a = request.body, rate = _a.rate, comment = _a.comment;
-        connection_1.connectDB();
+        //connectDB();
         quotation_1.quotation_model.updateOne({ _id: id }, { rate: rate, comment: comment }, function (error) {
             if (error) {
                 console.log(error);
@@ -733,7 +718,7 @@ var main = function () {
         if (request.session != undefined) {
             var id = mongoose_1.default.Types.ObjectId(request.session.user_id);
             var account_4 = request.session.account;
-            connection_1.connectDB();
+            //connectDB();
             if (account_4 == 'client') {
                 client_2.client_model.findOne({ _id: id }, function (error, document) {
                     if (error) {
@@ -767,7 +752,6 @@ var main = function () {
                     doc2 = void 0;
                     doc3 = void 0;
                     doc4 = void 0;
-                    connection_1.connectDB();
                     if (!(account_5 == 'client')) return [3 /*break*/, 6];
                     return [4 /*yield*/, client_2.client_model.findOne({ _id: id_1 }, function (error) {
                             if (error) {
@@ -828,7 +812,8 @@ var main = function () {
                                             })];
                                     case 1:
                                         document_1 = _a.sent();
-                                        response.render('main', { user: document_1, account: account_5 });
+                                        request.flash('info', 'los datos se actualizaron correctamente.');
+                                        response.render('main', { success_message: request.flash('info'), user: document_1, account: account_5 });
                                         return [2 /*return*/];
                                 }
                             });
@@ -896,7 +881,8 @@ var main = function () {
                                             })];
                                     case 1:
                                         document_1 = _a.sent();
-                                        response.render('main', { user: document_1, account: account_5 });
+                                        request.flash('info', 'los datos se actualizaron correctamente.');
+                                        response.render('main', { success_message: request.flash('info'), user: document_1, account: account_5 });
                                         return [2 /*return*/];
                                 }
                             });
@@ -913,7 +899,7 @@ var main = function () {
             var account_6 = request.session.account;
             var _a = request.body, address = _a.address, latitude = _a.latitude, longitude = _a.longitude;
             var document_2;
-            connection_1.connectDB();
+            //connectDB();
             if (account_6 == 'client') {
                 client_2.client_model.updateOne({ _id: id_2 }, { address: address, coordinate: { latitude: latitude, longitude: longitude } }, function (error) { return __awaiter(_this, void 0, void 0, function () {
                     return __generator(this, function (_a) {
@@ -929,7 +915,8 @@ var main = function () {
                                     })];
                             case 1:
                                 document_2 = _a.sent();
-                                response.render('main', { user: document_2, account: account_6 });
+                                request.flash('info', 'los datos se actualizaron correctamente.');
+                                response.render('main', { success_message: request.flash('info'), user: document_2, account: account_6 });
                                 return [2 /*return*/];
                         }
                     });
@@ -950,7 +937,8 @@ var main = function () {
                                     })];
                             case 1:
                                 document_2 = _a.sent();
-                                response.render('main', { user: document_2, account: account_6 });
+                                request.flash('info', 'los datos se actualizaron correctamente.');
+                                response.render('main', { success_message: request.flash('info'), user: document_2, account: account_6 });
                                 return [2 /*return*/];
                         }
                     });
@@ -964,19 +952,18 @@ var main = function () {
         }
     });
     app.delete('/deleteaccount', function (request, response) { return __awaiter(_this, void 0, void 0, function () {
-        var id, account, password, doc, match, match;
+        var id_3, account, password, doc, match, match;
         var _this = this;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     if (!(request.session != undefined)) return [3 /*break*/, 6];
-                    id = mongoose_1.default.Types.ObjectId(request.session.user_id);
+                    id_3 = mongoose_1.default.Types.ObjectId(request.session.user_id);
                     account = request.session.account;
                     password = request.body.password;
                     doc = void 0;
-                    connection_1.connectDB();
                     if (!(account == 'client')) return [3 /*break*/, 3];
-                    return [4 /*yield*/, client_2.client_model.findOne({ _id: id }, function (error) { return __awaiter(_this, void 0, void 0, function () {
+                    return [4 /*yield*/, client_2.client_model.findOne({ _id: id_3 }, function (error) { return __awaiter(_this, void 0, void 0, function () {
                             return __generator(this, function (_a) {
                                 if (error) {
                                     console.log(error);
@@ -990,11 +977,16 @@ var main = function () {
                 case 2:
                     match = _a.sent();
                     if (match) {
-                        client_2.client_model.deleteOne({ _id: id }, function (error) {
+                        quotation_1.quotation_model.updateMany({ _id_client: id_3, status: { $in: ['pendiente', 'aceptado'] } }, { status: 'cancelado' }, function (error) {
                             if (error) {
                                 console.log(error);
                             }
-                            response.redirect("/");
+                            client_2.client_model.deleteOne({ _id: id_3 }, function (error) {
+                                if (error) {
+                                    console.log(error);
+                                }
+                                response.redirect("/");
+                            });
                         });
                     }
                     else {
@@ -1002,7 +994,7 @@ var main = function () {
                         response.render('deleteaccount', { error_message: request.flash('info'), password: password });
                     }
                     return [3 /*break*/, 6];
-                case 3: return [4 /*yield*/, provider_2.provider_model.findOne({ _id: id }, function (error) { return __awaiter(_this, void 0, void 0, function () {
+                case 3: return [4 /*yield*/, provider_2.provider_model.findOne({ _id: id_3 }, function (error) { return __awaiter(_this, void 0, void 0, function () {
                         return __generator(this, function (_a) {
                             if (error) {
                                 console.log(error);
@@ -1016,11 +1008,16 @@ var main = function () {
                 case 5:
                     match = _a.sent();
                     if (match) {
-                        provider_2.provider_model.deleteOne({ _id: id }, function (error) {
+                        quotation_1.quotation_model.updateMany({ _id_provider: id_3, status: { $in: ['pendiente', 'aceptado'] } }, { status: 'rechazado' }, function (error) {
                             if (error) {
                                 console.log(error);
                             }
-                            response.redirect("/");
+                            provider_2.provider_model.deleteOne({ _id: id_3 }, function (error) {
+                                if (error) {
+                                    console.log(error);
+                                }
+                                response.redirect("/");
+                            });
                         });
                     }
                     else {
