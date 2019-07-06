@@ -1,10 +1,10 @@
 # Start
 ````
-install on computer:
+Install on computer:
 - node.js
 - visual studio code
 
-write in command prompt:
+Write in command prompt:
 - npm install typescript -g
 - npm install express --save
 - npm install @types/express --save
@@ -26,15 +26,15 @@ write in command prompt:
 ````
 # Install
 ````
-write in command prompt:
+Write in command prompt:
 - npm install
 ````
 # Run
 ````
-write in command prompt:
+Write in command prompt:
 - npm run build
 - node ./app.js
 
-write in web browser url:
+Write in web browser url:
 - http://localhost:3000/
 ````
