@@ -24,7 +24,7 @@ write in command prompt:
 - npm init
 - tsc --init
 ````
-# install
+# Install
 ````
 write in command prompt:
 - npm install
