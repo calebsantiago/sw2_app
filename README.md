@@ -29,7 +29,7 @@ write in command prompt:
 write in command prompt:
 - npm install
 ````
-# run
+# Run
 ````
 write in command prompt:
 - npm run build
