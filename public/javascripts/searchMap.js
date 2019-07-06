@@ -81,7 +81,7 @@ function searchMap() {
                                         '<form id = "form" action = /searchservice/requestquotation/'+ this.id +' method = "post" class = "" onsubmit = "return validateQuotation()">'+
                                             '<h4 class = "display-5 text-center p-0 m-1">'+this.title+'</h3>'+
                                             '<p class = "text-center p-0 m-1">'+this.firstname+' '+this.lastname+'</p>'+
-                                            '<p class = "text-center p-0 m-1">'+this.description+'</p>'+                        
+                                            '<p class = "text-center p-0 m-1">'+this.description+'</p>'+          
                                             '<input type = "text" id = "provider" name = "provider" placeholder = "provider" value = '+ this.id +' style = "display:none;" required>'+
                                             '<input type = "text" id = "service" name = "service" placeholder = "service" value = '+ this.title +' style = "display:none;" required>'+
                                             '<div class = "form-group p-0 m-1" style = "display:block;">'+

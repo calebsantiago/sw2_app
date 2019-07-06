@@ -2,6 +2,13 @@ extends layout
 block content
     head
         include head
+        link(rel='stylesheet' type='text/css' href='/stylesheets/stars.css')
+        link(rel='stylesheet' type='text/css' href='https://fonts.googleapis.com/css?family=Lobster')
+        link(rel='stylesheet' type='text/css' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css')
+        script(type = 'text/javascript' src = '/javascripts/ratings.js')
+        if users
+            each user in users
+                script(type = 'text/javascript') addRatings('#{user._id}', #{user.average})
         script(type = 'text/javascript' src = 'javascripts/searchMap.js')
         script(type = 'text/javascript') setCoords(#{user.coordinate.latitude}, #{user.coordinate.longitude})
         if providers
@@ -81,6 +88,7 @@ block content
                                                 td(class = 'text-center align-middle' scope = 'col') prestador
                                                 td(class = 'text-center align-middle' scope = 'col') servicio
                                                 td(class = 'text-center align-middle' scope = 'col') descripción
+                                                td(class = 'text-center align-middle' scope = 'col') valoración
                                                 td(class = 'text-center align-middle' scope = 'col') cotizar servicio
                                         tbody
                                             each user in users
@@ -88,6 +96,9 @@ block content
                                                     td(class = 'text-center align-middle') #{user.name.firstname + ' ' + user.name.lastname}
                                                     td(class = 'text-center align-middle') #{user.service.title}
                                                     td(class = 'text-center align-middle') #{user.description}
+                                                    td(class = 'text-center align-middle')
+                                                        div(class = "stars-outer")
+                                                            div(id = user._id class = "stars-inner")
                                                     td(class = 'text-center align-middle')
                                                         a(href = 'searchservice/requestquotation/' + user._id)
                                                             button(type = 'button' class = 'btn btn-primary') cotizar

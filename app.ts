@@ -322,34 +322,79 @@ let main = () => {
     });
     app.post('/searchservice', (request, response) => {
         let {services} = request.body;
-            //connectDB();
-            provider_model.find({'service.title' : services}, async (error, document) => {
-                if(error) {
-                    console.log(error);
+        provider_model.aggregate([
+            {
+                $lookup : {
+                    from : "quotations",
+                    localField : "_id",
+                    foreignField : "_id_provider",
+                    as : "fromQuotations"
                 }
-                if(request.session != undefined) {
-                    let id = mongoose.Types.ObjectId(request.session.user_id);
-                    //connectDB();
-                    let doc = await client_model.findOne({_id : id}, (error) => {
-                        if(error) {
-                            console.log(error);
-                        }
-                    });
-                    //connectDB();
-                    let pro = await provider_model.find(async (error) => {
-                        if(error) {
-                            console.log(error);
-                        }
-                    });
-                    if(!document.length) {
-                        request.flash('info', 'servicio no existe.');
-                        response.render('searchservice', {error_message: request.flash('info'), user : doc, providers : pro, services});
-                    }
-                    else {
-                        response.render('searchservice', {user : doc, providers : pro, users : document, services});
+            },
+            {
+                $match : {
+                    service : {
+                        title : services
                     }
                 }
-            });
+            },
+            {
+                $project : {
+                    name : 1,
+                    service : 1,
+                    description :1,
+                    average : {
+                        $avg : '$fromQuotations.rate'
+                    },
+                    coordinate : 1
+                }
+            }
+        ], async (error : any, document : any) => {
+            if (error) {
+                console.log(error);
+            }
+            if(request.session != undefined) {
+                let id = mongoose.Types.ObjectId(request.session.user_id);
+                let doc = await client_model.findOne({_id : id}, (error) => {
+                    if (error) {
+                        console.log(error);
+                    }
+                });
+                let pro = await provider_model.aggregate([
+                    {
+                        $lookup : {
+                            from : "quotations",
+                            localField : "_id",
+                            foreignField : "_id_provider",
+                            as : "fromQuotations"
+                        }
+                    },
+                    {
+                        $project : {
+                            name : 1,
+                            service : 1,
+                            description :1,
+                            average : {
+                                $avg : '$fromQuotations.rate'
+                            },
+                            coordinate : 1
+                        }
+                    }
+                ], (error : any) => {
+                    if (error) {
+                        console.log(error);
+                    }
+
+                });
+                if (!document.length) {
+                    request.flash('info', 'servicio no existe.');
+                    response.render('searchservice', {error_message: request.flash('info'), user : doc, providers : pro, services});
+                }
+                else {
+                    response.render('searchservice', {user : doc, providers : pro, users : document, services});
+                }
+            }
+        });
     });
     app.get('/searchservice/requestquotation/:id', (request, response) => {
         let id = mongoose.Types.ObjectId(request.params.id);

@@ -398,10 +398,35 @@ var main = function () {
     });
     app.post('/searchservice', function (request, response) {
         var services = request.body.services;
-        //connectDB();
-        provider_2.provider_model.find({ 'service.title': services }, function (error, document) { return __awaiter(_this, void 0, void 0, function () {
+        provider_2.provider_model.aggregate([
+            {
+                $lookup: {
+                    from: "quotations",
+                    localField: "_id",
+                    foreignField: "_id_provider",
+                    as: "fromQuotations"
+                }
+            },
+            {
+                $match: {
+                    service: {
+                        title: services
+                    }
+                }
+            },
+            {
+                $project: {
+                    name: 1,
+                    service: 1,
+                    description: 1,
+                    average: {
+                        $avg: '$fromQuotations.rate'
+                    },
+                    coordinate: 1
+                }
+            }
+        ], function (error, document) { return __awaiter(_this, void 0, void 0, function () {
             var id, doc, pro;
-            var _this = this;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -417,14 +442,31 @@ var main = function () {
                             })];
                     case 1:
                         doc = _a.sent();
-                        return [4 /*yield*/, provider_2.provider_model.find(function (error) { return __awaiter(_this, void 0, void 0, function () {
-                                return __generator(this, function (_a) {
-                                    if (error) {
-                                        console.log(error);
+                        return [4 /*yield*/, provider_2.provider_model.aggregate([
+                                {
+                                    $lookup: {
+                                        from: "quotations",
+                                        localField: "_id",
+                                        foreignField: "_id_provider",
+                                        as: "fromQuotations"
                                     }
-                                    return [2 /*return*/];
-                                });
-                            }); })];
+                                },
+                                {
+                                    $project: {
+                                        name: 1,
+                                        service: 1,
+                                        description: 1,
+                                        average: {
+                                            $avg: '$fromQuotations.rate'
+                                        },
+                                        coordinate: 1
+                                    }
+                                }
+                            ], function (error) {
+                                if (error) {
+                                    console.log(error);
+                                }
+                            })];
                     case 2:
                         pro = _a.sent();
                         if (!document.length) {

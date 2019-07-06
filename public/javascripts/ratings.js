@@ -6,6 +6,9 @@ class Rating {
   }
 }
 function addRatings(id, rate) {
+  if (rate == null) {
+    rate = 0;
+  }
   var rating = new Rating(id, rate);
   this.ratings.push(rating);
 }
