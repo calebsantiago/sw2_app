@@ -6,7 +6,6 @@ install on computer:
 
 write in command prompt:
 - npm install typescript -g
-- npm install express-generator -g
 - npm install express --save
 - npm install @types/express --save
 - npm install mongoose --save
@@ -15,15 +14,12 @@ write in command prompt:
 - npm install @types/method-override --save
 - npm install nodemailer --save
 - npm install @types/nodemailer --save
-- npm install passport --save
 - npm install @types/passport --save
+- npm install express-session --save
 - npm install express-session --save
 - npm install @types/express-session --save
 - npm install connect-flash --save
 - npm install @types/connect-flash --save
-- npm install bcryptjs --save
-- npm install @types/bcryptjs --save
-- npm install body-parser --save
 - npm install pug --save
 - npm init
 - tsc --init
@@ -36,8 +32,8 @@ write in command prompt:
 # run
 ````
 write in command prompt:
-- tsc
-- set DEBUG=sw2_app:* & npm start
+- npm run build
+- node ./app.js
 
 write in web browser url:
 - http://localhost:3000/
