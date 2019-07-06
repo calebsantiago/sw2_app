@@ -1,0 +1,184 @@
+extends layout
+block content
+    head
+        include head
+    body(style = 'padding-top: 50px;')
+        if account == 'client'
+            header   
+                div(class = 'navbar navbar-expand-lg fixed-top navbar-dark bg-primary')
+                    div(class = 'container')
+                        a(href = '/main' class = 'navbar-brand') Contacta
+                        button(type = 'button' class = 'navbar-toggler' data-toggle = 'collapse' data-target = '#navbarResponsive' aria-controls = 'navbarResponsive' aria-expanded = 'false' aria-label = 'Toggle navigation')
+                            span(class = 'navbar-toggler-icon')
+                        div(id = 'navbarResponsive' class = 'navbar-collapse collapse')
+                            ul(class = 'navbar-nav')
+                                li(class = 'nav-item')
+                                    a(class = 'nav-link' href = '/searchservice') buscar servicio
+                                li(class = 'nav-item')
+                                    a(class = 'nav-link' href = '/checkquotations') cotizaciones
+                                li(class = 'nav-item')
+                                    a(class = 'nav-link' href = '/checkhistory') historial
+                                li(class = 'nav-item')
+                                    a(class = 'nav-link' href = '/updateaccount') editar perfil
+                                li(class = 'nav-item')
+                                    a(class = 'nav-link' href = '/deleteaccount') eliminar cuenta
+                                li(class = 'nav-item')
+                                    a(class = 'nav-link' href = '' data-toggle = 'modal' data-target = '#ayuda') ayuda
+                                li(class = 'nav-item')
+                                    a(class = 'nav-link' href = '/logout') cerrar sesión
+            div(class = 'modal fade' id = 'ayuda' tabindex = '-1' role = 'dialog' aria-labelledby = 'exampleModalLongTitle' aria-hidden = 'true')
+                div(class = 'modal-dialog' role = 'document')
+                    div(class = 'modal-content')
+                        div(class = 'modal-header')
+                            h5(class = 'modal-title' id = 'exampleModalLongTitle') Ayuda
+                            button(type = 'button' class = 'close' data-dismiss = 'modal' aria-label = 'Close')
+                                span(aria-hidden = 'true') &times;
+                        div(class = 'modal-body text-center')
+                            h3 Contáctanos
+                            div
+                                a(class = 'btn btn-social-icon btn-lg btn-twitter mx-1' href = 'https://twitter.com/')
+                                    span(class = 'fa fa-twitter' style = 'color:white;')
+                                a(class = 'btn btn-social-icon btn-lg btn-facebook mx-1' href = 'https://facebook.com/')
+                                    span(class = 'fa fa-facebook' style = 'color:white;')
+                                a(class = 'btn btn-social-icon btn-lg btn-instagram mx-1' href = 'https://instagram.com/')
+                                    span(class = 'fa fa-instagram' style = 'color:white;')
+                                a(class = 'btn btn-social-icon btn-lg btn-google mx-1' href = 'https://google.com/')
+                                    span(class = 'fa fa-google' style = 'color:white;')
+                            ul(class='list-unstyled')
+                                li(class = 'lead') Av. Javier Prado Este N.° 4600, Urb. Fundo Monterrico Chico, Santiago de Surco, Lima.
+                                li(class = 'lead') (511) 7654321
+                                li(class = 'lead') findhelp@contacta.com
+                                li(class = 'lead') © Contacta, 2019 - Todos los derechos reservados
+                        div(class = 'modal-footer')
+                            button(type = 'button' class = 'btn btn-primary' data-dismiss = 'modal') cerrar
+            div(class = 'container jumbotron')
+                include messages
+                    if quotations
+                        div(class = 'table-responsive')
+                            table(class = 'table table-hover')
+                                thead
+                                    tr(class = 'table-light')
+                                        th(class = 'text-center align-middle' scope = 'col') prestador
+                                        th(class = 'text-center align-middle' scope = 'col') servicio
+                                        th(class = 'text-center align-middle' scope = 'col') fecha
+                                        th(class = 'text-center align-middle' scope = 'col') descripción
+                                        th(class = 'text-center align-middle' scope = 'col') costo
+                                        th(class = 'text-center align-middle' scope = 'col') estado
+                                        th(class = 'text-center align-middle' scope = 'col') cambiar estado
+                                tbody
+                                    each quotation in quotations
+                                        tr(class = 'table-primary')
+                                            td(class = 'text-center align-middle') #{quotation.name.firstname + ' ' + quotation.name.lastname}
+                                            td(class = 'text-center align-middle') #{quotation.service}
+                                            td(class = 'text-center align-middle') #{quotation.date}
+                                            td(class = 'text-center align-middle') #{quotation.description}
+                                            td(class = 'text-center align-middle') S/.#{quotation.cost}
+                                            td(class = 'text-center align-middle') #{quotation.status}
+                                            td(class = 'text-center align-middle')
+                                                if quotation.status == 'aceptado'
+                                                    form(action = 'changestatus?_method=put' method = 'post')
+                                                        input(type = 'text' id = 'id' name = 'id' value = quotation._id style = 'display: none;')
+                                                        input(type = 'text' id = 'status' name = 'status' value = 'cancelado' style = 'display: none;')
+                                                        input(type = 'submit' value = 'cancelar' class = 'btn btn-danger')
+                                                else if quotation.status == 'pendiente' && quotation.cost > 0
+                                                    form(action = 'changestatus?_method=put' method = 'post')
+                                                        input(type = 'text' id = 'id' name = 'id' value = quotation._id style = 'display: none;')
+                                                        input(type = 'text' id = 'status' name = 'status' value = 'aceptado' style = 'display: none;')
+                                                        input(type = 'submit' value = 'aceptar' class = 'btn btn-primary')
+                                                else if quotation.status == 'cancelado' || quotation.status == 'rechazado' || quotation.status == 'finalizado' || quotation.cost == 0
+                                                    input(type = 'submit' value = 'aceptar' class = 'btn btn-primary' disabled)
+        else
+            header
+                div(class = 'navbar navbar-expand-lg fixed-top navbar-dark bg-primary')
+                    div(class = 'container')
+                        a(href = '/main' class = 'navbar-brand') Contacta
+                        button(type = 'button' class = 'navbar-toggler' data-toggle = 'collapse' data-target = '#navbarResponsive' aria-controls = 'navbarResponsive' aria-expanded = 'false' aria-label = 'Toggle navigation')
+                            span(class = 'navbar-toggler-icon')
+                        div(id = 'navbarResponsive' class='collapse navbar-collapse')
+                            ul(class = 'navbar-nav')
+                                li(class = 'nav-item')
+                                    a(class = 'nav-link' href = '/checkquotations') cotizaciones
+                                li(class = 'nav-item')
+                                    a(class = 'nav-link' href = '/checkhistory') historial
+                                li(class = 'nav-item')
+                                    a(class = 'nav-link' href = '/updateaccount') editar perfil
+                                li(class = 'nav-item')
+                                    a(class = 'nav-link' href = '/deleteaccount') eliminar cuenta
+                                li(class = 'nav-item')
+                                    a(class = 'nav-link' href = '' data-toggle = 'modal' data-target = '#ayuda') ayuda
+                                li(class = 'nav-item')
+                                    a(class = 'nav-link' href = '/logout') cerrar sesión
+            div(class = 'modal fade' id = 'ayuda' tabindex = '-1' role = 'dialog' aria-labelledby = 'exampleModalLongTitle' aria-hidden = 'true')
+                div(class = 'modal-dialog' role = 'document')
+                    div(class = 'modal-content')
+                        div(class = 'modal-header')
+                            h5(class = 'modal-title' id = 'exampleModalLongTitle') Ayuda
+                            button(type = 'button' class = 'close' data-dismiss = 'modal' aria-label = 'Close')
+                                span(aria-hidden = 'true') &times;
+                        div(class = 'modal-body text-center')
+                            h3 Contáctanos
+                            div
+                                a(class = 'btn btn-social-icon btn-lg btn-twitter mx-1' href = 'https://twitter.com/')
+                                    span(class = 'fa fa-twitter' style = 'color:white;')
+                                a(class = 'btn btn-social-icon btn-lg btn-facebook mx-1' href = 'https://facebook.com/')
+                                    span(class = 'fa fa-facebook' style = 'color:white;')
+                                a(class = 'btn btn-social-icon btn-lg btn-instagram mx-1' href = 'https://instagram.com/')
+                                    span(class = 'fa fa-instagram' style = 'color:white;')
+                                a(class = 'btn btn-social-icon btn-lg btn-google mx-1' href = 'https://google.com/')
+                                    span(class = 'fa fa-google' style = 'color:white;')
+                            ul(class='list-unstyled')
+                                li(class = 'lead') Av. Javier Prado Este N.° 4600, Urb. Fundo Monterrico Chico, Santiago de Surco, Lima.
+                                li(class = 'lead') (511) 7654321
+                                li(class = 'lead') findhelp@contacta.com
+                                li(class = 'lead') © Contacta, 2019 - Todos los derechos reservados
+                        div(class = 'modal-footer')
+                            button(type = 'button' class = 'btn btn-primary' data-dismiss = 'modal') cerrar
+            div(class = 'container jumbotron')
+                include messages
+                    if quotations
+                        div(class = 'table-responsive')
+                            table(class = 'table table-hover')
+                                thead
+                                    tr(class = 'table-light')
+                                        th(class = 'text-center align-middle' scope = 'col') cliente
+                                        th(class = 'text-center align-middle' scope = 'col') servicio
+                                        th(class = 'text-center align-middle' scope = 'col') fecha
+                                        th(class = 'text-center align-middle' scope = 'col') descripción
+                                        th(class = 'text-center align-middle' scope = 'col') costo
+                                        th(class = 'text-center align-middle' scope = 'col') estado
+                                        th(class = 'text-center align-middle' scope = 'col') cotizar/localizar
+                                        th(class = 'text-center align-middle' scope = 'col') cambiar estado
+                                tbody
+                                    each quotation in quotations
+                                        tr(class = 'table-primary')
+                                            td(class = 'text-center align-middle') #{quotation.name.firstname + ' ' + quotation.name.lastname}
+                                            td(class = 'text-center align-middle') #{quotation.service}
+                                            td(class = 'text-center align-middle') #{quotation.date}
+                                            td(class = 'text-center align-middle') #{quotation.description}
+                                            td(class = 'text-center align-middle') S/.#{quotation.cost}
+                                            td(class = 'text-center align-middle') #{quotation.status}
+                                            td(class = 'text-center align-middle')
+                                                if quotation.status == 'pendiente' && quotation.cost == 0
+                                                    a(href = 'quoteservice/' + quotation._id)
+                                                        button(type = 'button' class = 'btn btn-primary') cotizar
+                                                else if quotation.status == 'aceptado'
+                                                    a(href = 'locateclient/' + quotation._id)
+                                                        button(type = 'button' class = 'btn btn-info') localizar
+                                                else
+                                                    a(href = 'quoteservice/' + quotation._id) 
+                                                        button(type = 'button' class = 'btn btn-primary' disabled) cotizar
+                                            td(class = 'text-center align-middle')
+                                                if quotation.status == 'aceptado'
+                                                    form(action = 'changestatus?_method=put' method = 'post')
+                                                        input(type = 'text' id = 'id' name = 'id' value = quotation._id style = 'display: none;')
+                                                        select(id = 'status' name = 'status' class = 'btn btn-success' onchange = 'this.form.submit()')
+                                                            option(value = '' select hidden) estado
+                                                            option(value = 'rechazado') rechazar
+                                                            option(value = 'finalizado') finalizar
+                                                else if quotation.status == 'pendiente'
+                                                    form(action = 'changestatus?_method=put' method = 'post')
+                                                        input(type = 'text' id = 'id' name = 'id' value = quotation._id style = 'display: none;')
+                                                        input(type = 'text' id = 'status' name = 'status' value = 'rechazado' style = 'display: none;')
+                                                        input(type = 'submit' value = 'rechazar' class = 'btn btn-danger')
+                                                else
+                                                    input(type = 'submit' value = 'finalizar' class = 'btn btn-success' disabled)
