@@ -5,7 +5,7 @@ Install on computer:
 - visual studio code
 
 Write in command prompt:
-- npm install typescript -g
+- npm install typescript --save
 - npm install express --save
 - npm install @types/express --save
 - npm install mongoose --save
