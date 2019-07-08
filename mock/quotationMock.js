@@ -17,8 +17,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var mongoose_1 = __importDefault(require("mongoose"));
-var QuotationDAO_1 = require("../dao/QuotationDAO");
-var QuotationAdapter_1 = __importDefault(require("../adapter/QuotationAdapter"));
+var quotationDAO_1 = require("../dao/quotationDAO");
+var quotationAdapter_1 = __importDefault(require("../adapter/quotationAdapter"));
 var QuotationMock = /** @class */ (function (_super) {
     __extends(QuotationMock, _super);
     function QuotationMock() {
@@ -31,7 +31,7 @@ var QuotationMock = /** @class */ (function (_super) {
         return QuotationMock.INSTANCE;
     };
     QuotationMock.prototype.insert = function (id_client, id_provider, service, date, description, image) {
-        new QuotationDAO_1.QuotationDAO({
+        new quotationDAO_1.QuotationDAO({
             _id: new mongoose_1.default.Types.ObjectId(),
             _id_client: id_client,
             _id_provider: id_provider,
@@ -50,7 +50,7 @@ var QuotationMock = /** @class */ (function (_super) {
         });
     };
     QuotationMock.prototype.findcheckbyclient = function (id) {
-        return QuotationDAO_1.QuotationDAO.aggregate([
+        return quotationDAO_1.QuotationDAO.aggregate([
             {
                 $lookup: {
                     from: 'providers',
@@ -101,7 +101,7 @@ var QuotationMock = /** @class */ (function (_super) {
         });
     };
     QuotationMock.prototype.findcheckbyprovider = function (id) {
-        return QuotationDAO_1.QuotationDAO.aggregate([
+        return quotationDAO_1.QuotationDAO.aggregate([
             {
                 $lookup: {
                     from: 'clients',
@@ -152,14 +152,14 @@ var QuotationMock = /** @class */ (function (_super) {
         });
     };
     QuotationMock.prototype.findbyid = function (id) {
-        return QuotationDAO_1.QuotationDAO.findOne({ _id: mongoose_1.default.Types.ObjectId(id) }, function (error) {
+        return quotationDAO_1.QuotationDAO.findOne({ _id: mongoose_1.default.Types.ObjectId(id) }, function (error) {
             if (error) {
                 console.log(error);
             }
         });
     };
     QuotationMock.prototype.findhistorybyclient = function (id) {
-        return QuotationDAO_1.QuotationDAO.aggregate([
+        return quotationDAO_1.QuotationDAO.aggregate([
             {
                 $lookup: {
                     from: 'providers',
@@ -210,7 +210,7 @@ var QuotationMock = /** @class */ (function (_super) {
         });
     };
     QuotationMock.prototype.findhistorybyprovider = function (id) {
-        return QuotationDAO_1.QuotationDAO.aggregate([
+        return quotationDAO_1.QuotationDAO.aggregate([
             {
                 $lookup: {
                     from: 'clients',
@@ -261,40 +261,40 @@ var QuotationMock = /** @class */ (function (_super) {
         });
     };
     QuotationMock.prototype.updatecost = function (id, cost) {
-        QuotationDAO_1.QuotationDAO.updateOne({ _id: mongoose_1.default.Types.ObjectId(id) }, { cost: cost }, function (error) {
+        quotationDAO_1.QuotationDAO.updateOne({ _id: mongoose_1.default.Types.ObjectId(id) }, { cost: cost }, function (error) {
             if (error) {
                 console.log(error);
             }
         });
     };
     QuotationMock.prototype.updatestatus = function (id, status) {
-        QuotationDAO_1.QuotationDAO.updateOne({ _id: mongoose_1.default.Types.ObjectId(id) }, { status: status }, function (error) {
+        quotationDAO_1.QuotationDAO.updateOne({ _id: mongoose_1.default.Types.ObjectId(id) }, { status: status }, function (error) {
             if (error) {
                 console.log(error);
             }
         });
     };
     QuotationMock.prototype.updateratecomment = function (id, rate, comment) {
-        QuotationDAO_1.QuotationDAO.updateOne({ _id: mongoose_1.default.Types.ObjectId(id) }, { rate: rate, comment: comment }, function (error) {
+        quotationDAO_1.QuotationDAO.updateOne({ _id: mongoose_1.default.Types.ObjectId(id) }, { rate: rate, comment: comment }, function (error) {
             if (error) {
                 console.log(error);
             }
         });
     };
     QuotationMock.prototype.updatemanybyclient = function (id) {
-        QuotationDAO_1.QuotationDAO.updateMany({ _id_client: mongoose_1.default.Types.ObjectId(id), status: { $in: ['pendiente', 'aceptado'] } }, { status: 'cancelado' }, function (error) {
+        quotationDAO_1.QuotationDAO.updateMany({ _id_client: mongoose_1.default.Types.ObjectId(id), status: { $in: ['pendiente', 'aceptado'] } }, { status: 'cancelado' }, function (error) {
             if (error) {
                 console.log(error);
             }
         });
     };
     QuotationMock.prototype.updatemanybyprovider = function (id) {
-        QuotationDAO_1.QuotationDAO.updateMany({ _id_provider: mongoose_1.default.Types.ObjectId(id), status: { $in: ['pendiente', 'aceptado'] } }, { status: 'rechazado' }, function (error) {
+        quotationDAO_1.QuotationDAO.updateMany({ _id_provider: mongoose_1.default.Types.ObjectId(id), status: { $in: ['pendiente', 'aceptado'] } }, { status: 'rechazado' }, function (error) {
             if (error) {
                 console.log(error);
             }
         });
     };
     return QuotationMock;
-}(QuotationAdapter_1.default));
+}(quotationAdapter_1.default));
 exports.default = QuotationMock;
