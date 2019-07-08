@@ -65,7 +65,7 @@ function searchMap() {
     var markers = [providers.length];
     var services = document.getElementById('services').value;
     for (var i = 0; i < providers.length; i++) {
-        if(providers[i].title == services) {
+        if (providers[i].title == services) {
             markers[i] = new google.maps.Marker({
                 position: new google.maps.LatLng(providers[i].latitude, providers[i].longitude),
                 map: map,
