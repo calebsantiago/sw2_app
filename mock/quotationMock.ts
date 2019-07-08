@@ -132,7 +132,7 @@ export class QuotationMock extends QuotationAdapter {
         })
     }
     findbyid(id : string) : mongoose.DocumentQuery<Quotation | null, Quotation, {}> {
-        return QuotationDAO.findOne({_id : mongoose.Types.ObjectId(id)}, (error) => {
+        return QuotationDAO.findOne({_id : mongoose.Types.ObjectId(id)}, (error : any) => {
             if (error) {
                 console.log(error)
             }
@@ -239,35 +239,35 @@ export class QuotationMock extends QuotationAdapter {
         })
     }
     updatecost(id : string, cost : number) : void {
-        QuotationDAO.updateOne({_id : mongoose.Types.ObjectId(id)}, {cost : cost}, (error) => {
+        QuotationDAO.updateOne({_id : mongoose.Types.ObjectId(id)}, {cost : cost}, (error : any) => {
             if (error) {
                 console.log(error)
             }
         })
     }
     updatestatus(id : string, status : string) : void {
-        QuotationDAO.updateOne({_id : mongoose.Types.ObjectId(id)}, {status : status}, (error) => {
+        QuotationDAO.updateOne({_id : mongoose.Types.ObjectId(id)}, {status : status}, (error : any) => {
             if (error) {
                 console.log(error)
             }
         })
     }
     updateratecomment(id : string, rate : number, comment : string) : void {
-        QuotationDAO.updateOne({_id : mongoose.Types.ObjectId(id)}, {rate : rate, comment : comment}, (error) => {
+        QuotationDAO.updateOne({_id : mongoose.Types.ObjectId(id)}, {rate : rate, comment : comment}, (error : any) => {
             if (error) {
                 console.log(error)
             }
         })
     }
     updatemanybyclient(id : string) : void {
-        QuotationDAO.updateMany({_id_client : mongoose.Types.ObjectId(id), status : {$in:['pendiente', 'aceptado']}}, {status : 'cancelado'}, (error) => {
+        QuotationDAO.updateMany({_id_client : mongoose.Types.ObjectId(id), status : {$in:['pendiente', 'aceptado']}}, {status : 'cancelado'}, (error : any) => {
             if (error) {
                 console.log(error)
             }
         })
     }
     updatemanybyprovider(id : string) : void {
-        QuotationDAO.updateMany({_id_provider : mongoose.Types.ObjectId(id), status : {$in:['pendiente', 'aceptado']}}, {status : 'rechazado'}, (error) => {
+        QuotationDAO.updateMany({_id_provider : mongoose.Types.ObjectId(id), status : {$in:['pendiente', 'aceptado']}}, {status : 'rechazado'}, (error : any) => {
             if (error) {
                 console.log(error)
             }
