@@ -5,4 +5,4 @@ var QuotationAdapter = /** @class */ (function () {
     }
     return QuotationAdapter;
 }());
-exports.QuotationAdapter = QuotationAdapter;
+exports.default = QuotationAdapter;

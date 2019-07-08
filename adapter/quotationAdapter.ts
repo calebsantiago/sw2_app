@@ -1,6 +1,6 @@
 import mongoose from 'mongoose'
-import {Quotation} from './../dao/quotationDAO';
-export abstract class QuotationAdapter {
+import {Quotation} from './../dao/quotationDAO'
+export default abstract class QuotationAdapter {
     abstract insert(id_client : string, id_provider: string, service : string, date : string, description : string, image : string) : void
     abstract findcheckbyclient(id : string) : Promise<any[]>
     abstract findcheckbyprovider(id : string) : Promise<any[]>

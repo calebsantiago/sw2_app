@@ -18,7 +18,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var mongoose_1 = __importDefault(require("mongoose"));
 var QuotationDAO_1 = require("../dao/QuotationDAO");
-var QuotationAdapter_1 = require("../adapter/QuotationAdapter");
+var QuotationAdapter_1 = __importDefault(require("../adapter/QuotationAdapter"));
 var QuotationMock = /** @class */ (function (_super) {
     __extends(QuotationMock, _super);
     function QuotationMock() {
@@ -296,5 +296,5 @@ var QuotationMock = /** @class */ (function (_super) {
         });
     };
     return QuotationMock;
-}(QuotationAdapter_1.QuotationAdapter));
+}(QuotationAdapter_1.default));
 exports.QuotationMock = QuotationMock;

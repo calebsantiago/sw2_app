@@ -1,6 +1,6 @@
 import mongoose from 'mongoose'
 import {Quotation, QuotationDAO} from '../dao/QuotationDAO'
-import {QuotationAdapter} from '../adapter/QuotationAdapter'
+import QuotationAdapter from '../adapter/QuotationAdapter'
 export class QuotationMock extends QuotationAdapter {
     static INSTANCE : QuotationMock | undefined
     private constructor() {
