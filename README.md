@@ -38,7 +38,7 @@ Write in command prompt:
 Write in command prompt:
 - npm run build
 - npm test
-- node ./app.js
+- node app.js
 
 Write in web browser url:
 - http://localhost:3000/
