@@ -1,13 +1,13 @@
 {
   "name": "sw2_app",
   "version": "1.0.0",
-  "description": "",
+  "description": "sw2 application",
   "main": "app.js",
   "scripts": {
     "test": "jasmine-ts --config=jasmine.json",
     "build": "tsc"
   },
-  "author": "",
+  "author": "contacta",
   "repository": {
     "type": "git",
     "url": "git://github.com/calebsantiago/sw2_app.git"
