@@ -5,7 +5,6 @@ Install on computer:
 - visual studio code
 
 Write in command prompt:
-- npm install typescript --save
 - npm install express --save
 - npm install @types/express --save
 - npm install mongoose --save
@@ -21,6 +20,11 @@ Write in command prompt:
 - npm install connect-flash --save
 - npm install @types/connect-flash --save
 - npm install pug --save
+- npm install -D typescript
+- npm install -D jasmine
+- npm install -D jasmine-ts
+- npm install -D @types/jasmine
+- npm install -D ts-node
 - npm init
 - tsc --init
 ````
