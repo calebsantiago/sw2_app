@@ -5,7 +5,6 @@ Install on computer:
 - visual studio code
 
 Write in command prompt:
-- npm install -g typescript
 - npm install typescript --save
 - npm install express --save
 - npm install @types/express --save
