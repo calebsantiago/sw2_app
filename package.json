@@ -8,6 +8,10 @@
     "build": "tsc"
   },
   "author": "",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/calebsantiago/sw2_app.git"
+  },
   "license": "ISC",
   "dependencies": {
     "@types/connect-flash": "0.0.34",
