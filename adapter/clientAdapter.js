@@ -5,4 +5,4 @@ var ClientAdapter = /** @class */ (function () {
     }
     return ClientAdapter;
 }());
-exports.ClientAdapter = ClientAdapter;
+exports.default = ClientAdapter;

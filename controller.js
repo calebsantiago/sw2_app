@@ -34,10 +34,13 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-var clientMock_1 = require("./mock/clientMock");
-var providerMock_1 = require("./mock/providerMock");
-var quotationMock_1 = require("./mock/quotationMock");
+var clientMock_1 = __importDefault(require("./mock/clientMock"));
+var providerMock_1 = __importDefault(require("./mock/providerMock"));
+var quotationMock_1 = __importDefault(require("./mock/quotationMock"));
 var functions_1 = require("./functions");
 exports.controller = {
     'getindex': function (request, response) {
@@ -54,16 +57,16 @@ exports.controller = {
                 switch (_b.label) {
                     case 0:
                         firstname = (_a = request.body, _a.firstname), lastname = _a.lastname, gender = _a.gender, birthdate = _a.birthdate, idcard = _a.idcard, phonenumber = _a.phonenumber, email = _a.email, password = _a.password, confirm_password = _a.confirm_password, image = _a.image, account = _a.account, address = _a.address, latitude = _a.latitude, longitude = _a.longitude, video = _a.video, description = _a.description, certificate = _a.certificate, service = _a.service;
-                        return [4 /*yield*/, clientMock_1.ClientMock.getInstance().findbyphonenumber(phonenumber)];
+                        return [4 /*yield*/, clientMock_1.default.getInstance().findbyphonenumber(phonenumber)];
                     case 1:
                         query1 = _b.sent();
-                        return [4 /*yield*/, clientMock_1.ClientMock.getInstance().findbyemail(email)];
+                        return [4 /*yield*/, clientMock_1.default.getInstance().findbyemail(email)];
                     case 2:
                         query2 = _b.sent();
-                        return [4 /*yield*/, providerMock_1.ProviderMock.getInstance().findbyphonenumber(phonenumber)];
+                        return [4 /*yield*/, providerMock_1.default.getInstance().findbyphonenumber(phonenumber)];
                     case 3:
                         query3 = _b.sent();
-                        return [4 /*yield*/, providerMock_1.ProviderMock.getInstance().findbyemail(email)];
+                        return [4 /*yield*/, providerMock_1.default.getInstance().findbyemail(email)];
                     case 4:
                         query4 = _b.sent();
                         if (query1 || query3) {
@@ -76,10 +79,10 @@ exports.controller = {
                         }
                         else {
                             if (account === 'client') {
-                                clientMock_1.ClientMock.getInstance().insert(email, password, image, firstname, lastname, gender, birthdate, phonenumber, address, latitude, longitude);
+                                clientMock_1.default.getInstance().insert(email, password, image, firstname, lastname, gender, birthdate, phonenumber, address, latitude, longitude);
                             }
                             else {
-                                providerMock_1.ProviderMock.getInstance().insert(email, password, image, firstname, lastname, gender, birthdate, phonenumber, address, latitude, longitude, idcard, video, description, certificate, service);
+                                providerMock_1.default.getInstance().insert(email, password, image, firstname, lastname, gender, birthdate, phonenumber, address, latitude, longitude, idcard, video, description, certificate, service);
                             }
                             request.flash('info', 'estas registrado.');
                             response.render('login', { success_message: request.flash('info') });
@@ -104,21 +107,21 @@ exports.controller = {
                         account = 'client';
                         email_expression = /[^@\s]+@[^@\s]+\.[^@\s]+/;
                         if (!email_expression.test(email)) return [3 /*break*/, 4];
-                        return [4 /*yield*/, clientMock_1.ClientMock.getInstance().findbyemail(email)];
+                        return [4 /*yield*/, clientMock_1.default.getInstance().findbyemail(email)];
                     case 1:
                         query = _b.sent();
                         if (!!query) return [3 /*break*/, 3];
-                        return [4 /*yield*/, providerMock_1.ProviderMock.getInstance().findbyemail(email)];
+                        return [4 /*yield*/, providerMock_1.default.getInstance().findbyemail(email)];
                     case 2:
                         query = _b.sent();
                         account = 'provider';
                         _b.label = 3;
                     case 3: return [3 /*break*/, 7];
-                    case 4: return [4 /*yield*/, clientMock_1.ClientMock.getInstance().findbyphonenumber(email)];
+                    case 4: return [4 /*yield*/, clientMock_1.default.getInstance().findbyphonenumber(email)];
                     case 5:
                         query = _b.sent();
                         if (!!query) return [3 /*break*/, 7];
-                        return [4 /*yield*/, providerMock_1.ProviderMock.getInstance().findbyphonenumber(email)];
+                        return [4 /*yield*/, providerMock_1.default.getInstance().findbyphonenumber(email)];
                     case 6:
                         query = _b.sent();
                         account = 'provider';
@@ -171,11 +174,11 @@ exports.controller = {
                         account = request.session.account;
                         query = void 0;
                         if (!(account == 'client')) return [3 /*break*/, 2];
-                        return [4 /*yield*/, clientMock_1.ClientMock.getInstance().findbyid(id)];
+                        return [4 /*yield*/, clientMock_1.default.getInstance().findbyid(id)];
                     case 1:
                         query = _a.sent();
                         return [3 /*break*/, 4];
-                    case 2: return [4 /*yield*/, providerMock_1.ProviderMock.getInstance().findbyid(id)];
+                    case 2: return [4 /*yield*/, providerMock_1.default.getInstance().findbyid(id)];
                     case 3:
                         query = _a.sent();
                         _a.label = 4;
@@ -198,10 +201,10 @@ exports.controller = {
                     case 0:
                         if (!(request.session != undefined)) return [3 /*break*/, 3];
                         id = request.session.user_id;
-                        return [4 /*yield*/, clientMock_1.ClientMock.getInstance().findbyid(id)];
+                        return [4 /*yield*/, clientMock_1.default.getInstance().findbyid(id)];
                     case 1:
                         query = _a.sent();
-                        return [4 /*yield*/, providerMock_1.ProviderMock.getInstance().findall()];
+                        return [4 /*yield*/, providerMock_1.default.getInstance().findall()];
                     case 2:
                         providers = _a.sent();
                         response.render('searchservice', { user: query, providers: providers });
@@ -223,13 +226,13 @@ exports.controller = {
                         if (!(request.session != undefined)) return [3 /*break*/, 4];
                         services = request.body.services;
                         id = request.session.user_id;
-                        return [4 /*yield*/, clientMock_1.ClientMock.getInstance().findbyid(id)];
+                        return [4 /*yield*/, clientMock_1.default.getInstance().findbyid(id)];
                     case 1:
                         query = _a.sent();
-                        return [4 /*yield*/, providerMock_1.ProviderMock.getInstance().findbyservicesaveragerate(services)];
+                        return [4 /*yield*/, providerMock_1.default.getInstance().findbyservicesaveragerate(services)];
                     case 2:
                         document_1 = _a.sent();
-                        return [4 /*yield*/, providerMock_1.ProviderMock.getInstance().findall()];
+                        return [4 /*yield*/, providerMock_1.default.getInstance().findall()];
                     case 3:
                         providers = _a.sent();
                         if (!document_1.length) {
@@ -256,7 +259,7 @@ exports.controller = {
                     case 0:
                         if (!(request.session != undefined)) return [3 /*break*/, 2];
                         id = request.params.id;
-                        return [4 /*yield*/, providerMock_1.ProviderMock.getInstance().findbyid(id)];
+                        return [4 /*yield*/, providerMock_1.default.getInstance().findbyid(id)];
                     case 1:
                         user = _a.sent();
                         response.render('requestquotation', { user: user });
@@ -274,7 +277,7 @@ exports.controller = {
         if (request.session != undefined) {
             var provider = (_a = request.body, _a.provider), service = _a.service, date = _a.date, description = _a.description, image = _a.image;
             var id = request.session.user_id;
-            quotationMock_1.QuotationMock.getInstance().insert(id, provider, service, date, description, image);
+            quotationMock_1.default.getInstance().insert(id, provider, service, date, description, image);
             response.redirect('/searchservice');
         }
         else {
@@ -292,11 +295,11 @@ exports.controller = {
                         account = request.session.account;
                         quotations = void 0;
                         if (!(account == 'client')) return [3 /*break*/, 2];
-                        return [4 /*yield*/, quotationMock_1.QuotationMock.getInstance().findcheckbyclient(id)];
+                        return [4 /*yield*/, quotationMock_1.default.getInstance().findcheckbyclient(id)];
                     case 1:
                         quotations = _a.sent();
                         return [3 /*break*/, 4];
-                    case 2: return [4 /*yield*/, quotationMock_1.QuotationMock.getInstance().findcheckbyprovider(id)];
+                    case 2: return [4 /*yield*/, quotationMock_1.default.getInstance().findcheckbyprovider(id)];
                     case 3:
                         quotations = _a.sent();
                         _a.label = 4;
@@ -325,7 +328,7 @@ exports.controller = {
                     case 0:
                         if (!(request.session != undefined)) return [3 /*break*/, 2];
                         id = request.params.id;
-                        return [4 /*yield*/, quotationMock_1.QuotationMock.getInstance().findbyid(id)];
+                        return [4 /*yield*/, quotationMock_1.default.getInstance().findbyid(id)];
                     case 1:
                         quotation = _a.sent();
                         response.render('quoteservice', { quotation: quotation });
@@ -342,7 +345,7 @@ exports.controller = {
         if (request.session != undefined) {
             var cost = request.body.cost;
             var id = request.params.id;
-            quotationMock_1.QuotationMock.getInstance().updatecost(id, cost);
+            quotationMock_1.default.getInstance().updatecost(id, cost);
             response.redirect('/checkquotations');
         }
         else {
@@ -353,7 +356,7 @@ exports.controller = {
         var _a;
         if (request.session != undefined) {
             var id = (_a = request.body, _a.id), status_1 = _a.status;
-            quotationMock_1.QuotationMock.getInstance().updatestatus(id, status_1);
+            quotationMock_1.default.getInstance().updatestatus(id, status_1);
             if (status_1 == 'reportado') {
                 response.redirect('/checkhistory');
             }
@@ -373,16 +376,16 @@ exports.controller = {
                     case 0:
                         if (!(request.session != undefined)) return [3 /*break*/, 5];
                         id = request.params.id;
-                        return [4 /*yield*/, quotationMock_1.QuotationMock.getInstance().findbyid(id)];
+                        return [4 /*yield*/, quotationMock_1.default.getInstance().findbyid(id)];
                     case 1:
                         quotation = _a.sent();
                         if (!(quotation != null)) return [3 /*break*/, 4];
                         id_client = quotation._id_client.toString();
                         id_provider = quotation._id_provider.toString();
-                        return [4 /*yield*/, clientMock_1.ClientMock.getInstance().findbyid(id_client)];
+                        return [4 /*yield*/, clientMock_1.default.getInstance().findbyid(id_client)];
                     case 2:
                         client = _a.sent();
-                        return [4 /*yield*/, providerMock_1.ProviderMock.getInstance().findbyid(id_provider)];
+                        return [4 /*yield*/, providerMock_1.default.getInstance().findbyid(id_provider)];
                     case 3:
                         provider = _a.sent();
                         response.render('locateclient', { client: client, provider: provider, quotation: quotation });
@@ -407,11 +410,11 @@ exports.controller = {
                         account = request.session.account;
                         quotations = void 0;
                         if (!(account == 'client')) return [3 /*break*/, 2];
-                        return [4 /*yield*/, quotationMock_1.QuotationMock.getInstance().findhistorybyclient(id)];
+                        return [4 /*yield*/, quotationMock_1.default.getInstance().findhistorybyclient(id)];
                     case 1:
                         quotations = _a.sent();
                         return [3 /*break*/, 4];
-                    case 2: return [4 /*yield*/, quotationMock_1.QuotationMock.getInstance().findhistorybyprovider(id)];
+                    case 2: return [4 /*yield*/, quotationMock_1.default.getInstance().findhistorybyprovider(id)];
                     case 3:
                         quotations = _a.sent();
                         _a.label = 4;
@@ -440,12 +443,12 @@ exports.controller = {
                     case 0:
                         if (!(request.session != undefined)) return [3 /*break*/, 4];
                         id = request.params.id;
-                        return [4 /*yield*/, quotationMock_1.QuotationMock.getInstance().findbyid(id)];
+                        return [4 /*yield*/, quotationMock_1.default.getInstance().findbyid(id)];
                     case 1:
                         quotation = _a.sent();
                         if (!(quotation != null)) return [3 /*break*/, 3];
                         id_provider = quotation._id_provider.toString();
-                        return [4 /*yield*/, providerMock_1.ProviderMock.getInstance().findbyid(id_provider)];
+                        return [4 /*yield*/, providerMock_1.default.getInstance().findbyid(id_provider)];
                     case 2:
                         provider = _a.sent();
                         response.render('rateservice', { user: provider, quotation: quotation });
@@ -464,7 +467,7 @@ exports.controller = {
         if (request.session != undefined) {
             var rate = (_a = request.body, _a.rate), comment = _a.comment;
             var id = request.params.id;
-            quotationMock_1.QuotationMock.getInstance().updateratecomment(id, rate, comment);
+            quotationMock_1.default.getInstance().updateratecomment(id, rate, comment);
             response.redirect('/checkhistory');
         }
         else {
@@ -482,11 +485,11 @@ exports.controller = {
                         account = request.session.account;
                         query = void 0;
                         if (!(account == 'client')) return [3 /*break*/, 2];
-                        return [4 /*yield*/, clientMock_1.ClientMock.getInstance().findbyid(id)];
+                        return [4 /*yield*/, clientMock_1.default.getInstance().findbyid(id)];
                     case 1:
                         query = _a.sent();
                         return [3 /*break*/, 4];
-                    case 2: return [4 /*yield*/, providerMock_1.ProviderMock.getInstance().findbyid(id)];
+                    case 2: return [4 /*yield*/, providerMock_1.default.getInstance().findbyid(id)];
                     case 3:
                         query = _a.sent();
                         _a.label = 4;
@@ -512,21 +515,21 @@ exports.controller = {
                         firstname = (_a = request.body, _a.firstname), lastname = _a.lastname, phonenumber = _a.phonenumber, email = _a.email, password = _a.password, image = _a.image, idcard = _a.idcard, video = _a.video, description = _a.description, certificate = _a.certificate, service = _a.service;
                         id = request.session.user_id;
                         account = request.session.account;
-                        return [4 /*yield*/, clientMock_1.ClientMock.getInstance().findbyphonenumber(phonenumber)];
+                        return [4 /*yield*/, clientMock_1.default.getInstance().findbyphonenumber(phonenumber)];
                     case 1:
                         query1 = _b.sent();
-                        return [4 /*yield*/, clientMock_1.ClientMock.getInstance().findbyemail(email)];
+                        return [4 /*yield*/, clientMock_1.default.getInstance().findbyemail(email)];
                     case 2:
                         query2 = _b.sent();
-                        return [4 /*yield*/, providerMock_1.ProviderMock.getInstance().findbyphonenumber(phonenumber)];
+                        return [4 /*yield*/, providerMock_1.default.getInstance().findbyphonenumber(phonenumber)];
                     case 3:
                         query3 = _b.sent();
-                        return [4 /*yield*/, providerMock_1.ProviderMock.getInstance().findbyemail(email)];
+                        return [4 /*yield*/, providerMock_1.default.getInstance().findbyemail(email)];
                     case 4:
                         query4 = _b.sent();
                         user = void 0;
                         if (!(account == 'client')) return [3 /*break*/, 10];
-                        return [4 /*yield*/, clientMock_1.ClientMock.getInstance().findbyid(id)];
+                        return [4 /*yield*/, clientMock_1.default.getInstance().findbyid(id)];
                     case 5:
                         user = _b.sent();
                         if (!(user != null)) return [3 /*break*/, 9];
@@ -540,15 +543,15 @@ exports.controller = {
                         response.render('updateaccount', { error_message: request.flash('info'), user: user, account: account });
                         return [3 /*break*/, 9];
                     case 7:
-                        clientMock_1.ClientMock.getInstance().updateprofile(id, firstname, lastname, email, password, image, phonenumber);
-                        return [4 /*yield*/, clientMock_1.ClientMock.getInstance().findbyid(id)];
+                        clientMock_1.default.getInstance().updateprofile(id, firstname, lastname, email, password, image, phonenumber);
+                        return [4 /*yield*/, clientMock_1.default.getInstance().findbyid(id)];
                     case 8:
                         document_2 = _b.sent();
                         request.flash('info', 'los datos se actualizaron correctamente.');
                         response.render('main', { success_message: request.flash('info'), user: document_2, account: account });
                         _b.label = 9;
                     case 9: return [3 /*break*/, 15];
-                    case 10: return [4 /*yield*/, providerMock_1.ProviderMock.getInstance().findbyid(id)];
+                    case 10: return [4 /*yield*/, providerMock_1.default.getInstance().findbyid(id)];
                     case 11:
                         user = _b.sent();
                         if (!(user != null)) return [3 /*break*/, 15];
@@ -562,8 +565,8 @@ exports.controller = {
                         response.render('updateaccount', { error_message: request.flash('info'), user: user, account: account });
                         return [3 /*break*/, 15];
                     case 13:
-                        providerMock_1.ProviderMock.getInstance().updateprofile(id, firstname, lastname, email, password, image, phonenumber, idcard, video, description, certificate, service);
-                        return [4 /*yield*/, providerMock_1.ProviderMock.getInstance().findbyid(id)];
+                        providerMock_1.default.getInstance().updateprofile(id, firstname, lastname, email, password, image, phonenumber, idcard, video, description, certificate, service);
+                        return [4 /*yield*/, providerMock_1.default.getInstance().findbyid(id)];
                     case 14:
                         document_2 = _b.sent();
                         request.flash('info', 'los datos se actualizaron correctamente.');
@@ -590,14 +593,14 @@ exports.controller = {
                         id = request.session.user_id;
                         account = request.session.account;
                         if (!(account == 'client')) return [3 /*break*/, 2];
-                        clientMock_1.ClientMock.getInstance().updatelocation(id, address, latitude, longitude);
-                        return [4 /*yield*/, clientMock_1.ClientMock.getInstance().findbyid(id)];
+                        clientMock_1.default.getInstance().updatelocation(id, address, latitude, longitude);
+                        return [4 /*yield*/, clientMock_1.default.getInstance().findbyid(id)];
                     case 1:
                         document_3 = _b.sent();
                         return [3 /*break*/, 4];
                     case 2:
-                        providerMock_1.ProviderMock.getInstance().updatelocation(id, address, latitude, longitude);
-                        return [4 /*yield*/, providerMock_1.ProviderMock.getInstance().findbyid(id)];
+                        providerMock_1.default.getInstance().updatelocation(id, address, latitude, longitude);
+                        return [4 /*yield*/, providerMock_1.default.getInstance().findbyid(id)];
                     case 3:
                         document_3 = _b.sent();
                         _b.label = 4;
@@ -634,13 +637,13 @@ exports.controller = {
                         account = request.session.account;
                         query = void 0;
                         if (!(account == 'client')) return [3 /*break*/, 2];
-                        return [4 /*yield*/, clientMock_1.ClientMock.getInstance().findbyid(id)];
+                        return [4 /*yield*/, clientMock_1.default.getInstance().findbyid(id)];
                     case 1:
                         query = _a.sent();
                         if (query != null) {
                             if (password === query.account.password) {
-                                quotationMock_1.QuotationMock.getInstance().updatemanybyclient(id);
-                                clientMock_1.ClientMock.getInstance().delete(id);
+                                quotationMock_1.default.getInstance().updatemanybyclient(id);
+                                clientMock_1.default.getInstance().delete(id);
                                 response.redirect('/');
                             }
                             else {
@@ -649,13 +652,13 @@ exports.controller = {
                             }
                         }
                         return [3 /*break*/, 4];
-                    case 2: return [4 /*yield*/, providerMock_1.ProviderMock.getInstance().findbyid(id)];
+                    case 2: return [4 /*yield*/, providerMock_1.default.getInstance().findbyid(id)];
                     case 3:
                         query = _a.sent();
                         if (query != null) {
                             if (password === query.account.password) {
-                                quotationMock_1.QuotationMock.getInstance().updatemanybyprovider(id);
-                                providerMock_1.ProviderMock.getInstance().delete(id);
+                                quotationMock_1.default.getInstance().updatemanybyprovider(id);
+                                providerMock_1.default.getInstance().delete(id);
                                 response.redirect('/');
                             }
                             else {

@@ -5,4 +5,4 @@ var ProviderAdapter = /** @class */ (function () {
     }
     return ProviderAdapter;
 }());
-exports.ProviderAdapter = ProviderAdapter;
+exports.default = ProviderAdapter;

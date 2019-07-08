@@ -1,7 +1,7 @@
 import mongoose from 'mongoose'
 import {Client, ClientDAO} from '../dao/clientDAO'
-import {ClientAdapter} from '../adapter/clientAdapter'
-export class ClientMock extends ClientAdapter {
+import ClientAdapter from '../adapter/clientAdapter'
+export default class ClientMock extends ClientAdapter {
     static INSTANCE : ClientMock | undefined
     private constructor() {
         super()

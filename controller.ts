@@ -1,15 +1,15 @@
-import {ClientMock} from "./mock/clientMock"
-import {ProviderMock} from "./mock/providerMock"
-import {QuotationMock} from "./mock/quotationMock"
+import ClientMock from "./mock/clientMock"
+import ProviderMock from "./mock/providerMock"
+import QuotationMock from "./mock/quotationMock"
 import {sendMail, jsonlength} from "./functions"
 export let controller = {
-    'getindex' : function(request : any, response : any) {
+    'getindex' : function(request, response) {
         response.render('index')
     },
-    'getsignup' : function(request : any, response : any) {
+    'getsignup' : function(request, response) {
         response.render('signup')
     },
-    'postsignup' : async function(request : any, response : any) {
+    'postsignup' : async function(request, response) {
         let {firstname, lastname, gender, birthdate, idcard, phonenumber, email, password, confirm_password, image, account, address, latitude, longitude, video, description, certificate, service} = request.body    
         let query1 = await ClientMock.getInstance().findbyphonenumber(phonenumber)
         let query2 = await ClientMock.getInstance().findbyemail(email)
@@ -35,10 +35,10 @@ export let controller = {
             sendMail(email, firstname, lastname)
         }
     },
-    'getlogin' : function(request : any, response : any) {
+    'getlogin' : function(request, response) {
         response.render('login')
     }, 
-    'postlogin' : async function(request : any, response : any) {
+    'postlogin' : async function(request, response) {
         let {email, password} = request.body
         let account = 'client'
         let email_expression : RegExp = /[^@\s]+@[^@\s]+\.[^@\s]+/
@@ -75,10 +75,10 @@ export let controller = {
             }
         }
     },
-    'getlogout' : function(request : any, response : any) {
+    'getlogout' : function(request, response) {
         if (request.session != undefined) {
             request.logout()
-            request.session.destroy((error : any) => {
+            request.session.destroy((error ) => {
                 if (error) {
                     console.log(error)
                 }
@@ -89,7 +89,7 @@ export let controller = {
             response.render('login')
         }
     },
-    'getmain' : async function(request : any, response : any) {
+    'getmain' : async function(request, response) {
         if (request.session != undefined) {
             let id = request.session.user_id
             let account = request.session.account
@@ -106,7 +106,7 @@ export let controller = {
             response.render('login')
         }
     },
-    'getsearchservice' : async function(request : any, response : any) {
+    'getsearchservice' : async function(request, response) {
         if (request.session != undefined) {
             let id = request.session.user_id
             let query = await ClientMock.getInstance().findbyid(id)
@@ -117,7 +117,7 @@ export let controller = {
             response.render('login')
         }
     },
-    'postsearchservice' : async function(request : any, response : any) {
+    'postsearchservice' : async function(request, response) {
         if (request.session != undefined) {
             let {services} = request.body
             let id = request.session.user_id
@@ -136,7 +136,7 @@ export let controller = {
             response.render('login')
         }
     },
-    'getrequestquotation' : async function(request : any, response : any) {
+    'getrequestquotation' : async function(request, response) {
         if (request.session != undefined) {
             let id = request.params.id
             let user = await ProviderMock.getInstance().findbyid(id)
@@ -146,7 +146,7 @@ export let controller = {
             response.render('login')
         }
     },
-    'postrequestquotation' : function(request : any, response : any) {
+    'postrequestquotation' : function(request, response) {
         if (request.session != undefined) {
             let {provider, service, date, description, image} = request.body
             let id = request.session.user_id
@@ -157,7 +157,7 @@ export let controller = {
             response.render('login')
         }
     },
-    'getcheckquotations' : async function(request : any, response : any) {
+    'getcheckquotations' : async function(request, response) {
         if (request.session != undefined) {
             let id = request.session.user_id
             let account = request.session.account
@@ -180,7 +180,7 @@ export let controller = {
             response.render('login')
         }
     },
-    'getquoteservice' : async function(request : any, response : any) {
+    'getquoteservice' : async function(request, response) {
         if (request.session != undefined) {
             let id = request.params.id
             let quotation = await QuotationMock.getInstance().findbyid(id)
@@ -190,7 +190,7 @@ export let controller = {
             response.render('login')
         }
     },
-    'putquoteservice' : function(request : any, response : any) {
+    'putquoteservice' : function(request, response) {
         if (request.session != undefined) {
             let {cost} = request.body
             let id = request.params.id
@@ -201,7 +201,7 @@ export let controller = {
             response.render('login')
         }
     },
-    'putchangestatus' : function(request : any, response : any) {
+    'putchangestatus' : function(request, response) {
         if (request.session != undefined) {
             let {id, status} = request.body
             QuotationMock.getInstance().updatestatus(id, status)
@@ -216,7 +216,7 @@ export let controller = {
             response.render('login')
         }
     },
-    'getlocateclient' : async function(request : any, response : any) {
+    'getlocateclient' : async function(request, response) {
         if (request.session != undefined) {
             let id = request.params.id
             let quotation = await QuotationMock.getInstance().findbyid(id)
@@ -232,7 +232,7 @@ export let controller = {
             response.render('login')
         }
     },
-    'getcheckhistory' : async function(request : any, response : any) {
+    'getcheckhistory' : async function(request, response) {
         if (request.session != undefined) {
             let id = request.session.user_id
             let account = request.session.account
@@ -255,7 +255,7 @@ export let controller = {
             response.render('login')
         }
     },
-    'getrateservice' : async function(request : any, response : any) {
+    'getrateservice' : async function(request, response) {
         if (request.session != undefined) {
             let id = request.params.id
             let quotation = await QuotationMock.getInstance().findbyid(id)
@@ -269,7 +269,7 @@ export let controller = {
             response.render('login')
         }
     },
-    'putrateservice' : function(request : any, response : any) {
+    'putrateservice' : function(request, response) {
         if (request.session != undefined) {
             let {rate, comment} = request.body
             let id = request.params.id
@@ -280,7 +280,7 @@ export let controller = {
             response.render('login')
         }
     },
-    'getupdateaccount' : async function(request : any, response : any) {
+    'getupdateaccount' : async function(request, response) {
         if (request.session != undefined) {
             let id = request.session.user_id
             let account = request.session.account
@@ -297,7 +297,7 @@ export let controller = {
             response.render('login')
         }
     },
-    'putupdateaccount' : async function(request : any, response : any) {
+    'putupdateaccount' : async function(request, response) {
         if (request.session != undefined) {
             let {firstname, lastname, phonenumber, email, password, image, idcard, video, description, certificate, service} = request.body
             let id = request.session.user_id
@@ -351,7 +351,7 @@ export let controller = {
             response.render('login')
         }
     },
-    'putupdateaccountlocation' : async function(request : any, response : any) {
+    'putupdateaccountlocation' : async function(request, response) {
         if (request.session != undefined) {
             let {address, latitude, longitude} = request.body
             let id = request.session.user_id
@@ -372,7 +372,7 @@ export let controller = {
             response.render('login')
         }
     },
-    'getdeleteaccount' : function(request : any, response : any) {
+    'getdeleteaccount' : function(request, response) {
         if (request.session != undefined) {
             let account = request.session.account
             response.render('deleteaccount', {account : account})
@@ -381,7 +381,7 @@ export let controller = {
             response.render('login')
         }
     },
-    'deletedeleteaccount' : async function(request : any, response : any) {
+    'deletedeleteaccount' : async function(request, response) {
         if (request.session != undefined) {
             let {password} = request.body
             let id = request.session.user_id

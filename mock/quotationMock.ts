@@ -1,7 +1,7 @@
 import mongoose from 'mongoose'
 import {Quotation, QuotationDAO} from '../dao/QuotationDAO'
 import QuotationAdapter from '../adapter/QuotationAdapter'
-export class QuotationMock extends QuotationAdapter {
+export default class QuotationMock extends QuotationAdapter {
     static INSTANCE : QuotationMock | undefined
     private constructor() {
         super()
@@ -25,7 +25,7 @@ export class QuotationMock extends QuotationAdapter {
             rate : 0, 
             comment : 'sin comentario',
             image : image
-        }).save((error : any) => {
+        }).save((error) => {
             if (error) {
                 console.log(error)
             }
@@ -75,7 +75,7 @@ export class QuotationMock extends QuotationAdapter {
                     __v : 0,
                     fromProviders : 0
                 } 
-            }], (error : any) => {
+            }], (error) => {
                 if (error) {
                     console.log(error)
                 }
@@ -125,14 +125,14 @@ export class QuotationMock extends QuotationAdapter {
                     __v : 0,
                     fromProviders : 0
                 } 
-            }], (error : any) => {
+            }], (error) => {
                 if (error) {
                     console.log(error)
                 }
         })
     }
     findbyid(id : string) : mongoose.DocumentQuery<Quotation | null, Quotation, {}> {
-        return QuotationDAO.findOne({_id : mongoose.Types.ObjectId(id)}, (error : any) => {
+        return QuotationDAO.findOne({_id : mongoose.Types.ObjectId(id)}, (error) => {
             if (error) {
                 console.log(error)
             }
@@ -182,7 +182,7 @@ export class QuotationMock extends QuotationAdapter {
                     __v : 0,
                     fromProviders : 0
                 } 
-            }], (error : any) => {
+            }], (error) => {
                 if (error) {
                     console.log(error)
                 }
@@ -232,42 +232,42 @@ export class QuotationMock extends QuotationAdapter {
                     __v : 0,
                     fromProviders : 0
                 } 
-            }], (error : any) => {
+            }], (error) => {
                 if (error) {
                     console.log(error)
                 }
         })
     }
     updatecost(id : string, cost : number) : void {
-        QuotationDAO.updateOne({_id : mongoose.Types.ObjectId(id)}, {cost : cost}, (error : any) => {
+        QuotationDAO.updateOne({_id : mongoose.Types.ObjectId(id)}, {cost : cost}, (error) => {
             if (error) {
                 console.log(error)
             }
         })
     }
     updatestatus(id : string, status : string) : void {
-        QuotationDAO.updateOne({_id : mongoose.Types.ObjectId(id)}, {status : status}, (error : any) => {
+        QuotationDAO.updateOne({_id : mongoose.Types.ObjectId(id)}, {status : status}, (error) => {
             if (error) {
                 console.log(error)
             }
         })
     }
     updateratecomment(id : string, rate : number, comment : string) : void {
-        QuotationDAO.updateOne({_id : mongoose.Types.ObjectId(id)}, {rate : rate, comment : comment}, (error : any) => {
+        QuotationDAO.updateOne({_id : mongoose.Types.ObjectId(id)}, {rate : rate, comment : comment}, (error) => {
             if (error) {
                 console.log(error)
             }
         })
     }
     updatemanybyclient(id : string) : void {
-        QuotationDAO.updateMany({_id_client : mongoose.Types.ObjectId(id), status : {$in:['pendiente', 'aceptado']}}, {status : 'cancelado'}, (error : any) => {
+        QuotationDAO.updateMany({_id_client : mongoose.Types.ObjectId(id), status : {$in:['pendiente', 'aceptado']}}, {status : 'cancelado'}, (error) => {
             if (error) {
                 console.log(error)
             }
         })
     }
     updatemanybyprovider(id : string) : void {
-        QuotationDAO.updateMany({_id_provider : mongoose.Types.ObjectId(id), status : {$in:['pendiente', 'aceptado']}}, {status : 'rechazado'}, (error : any) => {
+        QuotationDAO.updateMany({_id_provider : mongoose.Types.ObjectId(id), status : {$in:['pendiente', 'aceptado']}}, {status : 'rechazado'}, (error) => {
             if (error) {
                 console.log(error)
             }

@@ -297,4 +297,4 @@ var QuotationMock = /** @class */ (function (_super) {
     };
     return QuotationMock;
 }(QuotationAdapter_1.default));
-exports.QuotationMock = QuotationMock;
+exports.default = QuotationMock;

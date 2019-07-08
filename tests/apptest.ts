@@ -1,8 +1,8 @@
 import mongoose from 'mongoose'
 import connect from '../connection'
-import {ProviderMock} from './../mock/providerMock'
-import {ClientMock} from './../mock/clientMock'
-import {QuotationMock} from '../mock/quotationMock'
+import ProviderMock from './../mock/providerMock'
+import ClientMock from './../mock/clientMock'
+import QuotationMock from '../mock/quotationMock'
 describe('app test', () => {
     beforeAll(() => {
         const db : string = 'mongodb+srv://caleb:Misael15@cluster0-aqv0w.mongodb.net/test?retryWrites=true'

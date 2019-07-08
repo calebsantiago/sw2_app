@@ -1,7 +1,7 @@
 import mongoose from 'mongoose'
 import {Provider, ProviderDAO} from '../dao/providerDAO'
-import {ProviderAdapter} from '../adapter/providerAdapter'
-export class ProviderMock extends ProviderAdapter {
+import ProviderAdapter from '../adapter/providerAdapter'
+export default class ProviderMock extends ProviderAdapter {
     static INSTANCE : ProviderMock | undefined
     private constructor() {
         super()
@@ -80,7 +80,7 @@ export class ProviderMock extends ProviderAdapter {
                     coordinate : 1
                 }
             }
-        ], (error : any) => {
+        ], (error) => {
             if (error) {
                 console.log(error)
             }

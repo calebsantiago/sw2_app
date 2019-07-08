@@ -41,9 +41,9 @@ var _this = this;
 Object.defineProperty(exports, "__esModule", { value: true });
 var mongoose_1 = __importDefault(require("mongoose"));
 var connection_1 = __importDefault(require("../connection"));
-var providerMock_1 = require("./../mock/providerMock");
-var clientMock_1 = require("./../mock/clientMock");
-var quotationMock_1 = require("../mock/quotationMock");
+var providerMock_1 = __importDefault(require("./../mock/providerMock"));
+var clientMock_1 = __importDefault(require("./../mock/clientMock"));
+var quotationMock_1 = __importDefault(require("../mock/quotationMock"));
 describe('app test', function () {
     beforeAll(function () {
         var db = 'mongodb+srv://caleb:Misael15@cluster0-aqv0w.mongodb.net/test?retryWrites=true';
@@ -56,7 +56,7 @@ describe('app test', function () {
         var response, result;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, clientMock_1.ClientMock.getInstance().findbyid('5d228ba5834d870dec4450be')];
+                case 0: return [4 /*yield*/, clientMock_1.default.getInstance().findbyid('5d228ba5834d870dec4450be')];
                 case 1:
                     response = _a.sent();
                     result = 'caleb';
@@ -74,7 +74,7 @@ describe('app test', function () {
         var response, result;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, providerMock_1.ProviderMock.getInstance().findbyemail('nada@gmail.com')];
+                case 0: return [4 /*yield*/, providerMock_1.default.getInstance().findbyemail('nada@gmail.com')];
                 case 1:
                     response = _a.sent();
                     result = 'nada@gmail.com';
@@ -92,7 +92,7 @@ describe('app test', function () {
         var response, result;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, clientMock_1.ClientMock.getInstance().findbyphonenumber(997754390)];
+                case 0: return [4 /*yield*/, clientMock_1.default.getInstance().findbyphonenumber(997754390)];
                 case 1:
                     response = _a.sent();
                     result = 997754390;
@@ -110,7 +110,7 @@ describe('app test', function () {
         var response, result;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, providerMock_1.ProviderMock.getInstance().findbyservicesaveragerate('panadería')];
+                case 0: return [4 /*yield*/, providerMock_1.default.getInstance().findbyservicesaveragerate('panadería')];
                 case 1:
                     response = _a.sent();
                     result = 'panadería';
@@ -128,7 +128,7 @@ describe('app test', function () {
         var response, result;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, quotationMock_1.QuotationMock.getInstance().findbyid('5d155393fae8d20017d78b74')];
+                case 0: return [4 /*yield*/, quotationMock_1.default.getInstance().findbyid('5d155393fae8d20017d78b74')];
                 case 1:
                     response = _a.sent();
                     result = 'panadería';
@@ -146,7 +146,7 @@ describe('app test', function () {
         var response, result;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, quotationMock_1.QuotationMock.getInstance().findcheckbyclient('5d228ba5834d870dec4450be')];
+                case 0: return [4 /*yield*/, quotationMock_1.default.getInstance().findcheckbyclient('5d228ba5834d870dec4450be')];
                 case 1:
                     response = _a.sent();
                     result = 'panadería';
@@ -164,7 +164,7 @@ describe('app test', function () {
         var response, result;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, quotationMock_1.QuotationMock.getInstance().findhistorybyprovider('5cd093b9c1b14913e87bd2e4')];
+                case 0: return [4 /*yield*/, quotationMock_1.default.getInstance().findhistorybyprovider('5cd093b9c1b14913e87bd2e4')];
                 case 1:
                     response = _a.sent();
                     result = 'panadería';

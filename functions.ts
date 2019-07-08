@@ -22,7 +22,7 @@ export function sendMail(email : string, firstname: string, lastname : string) :
         }
     })
 }
-export function jsonlength(object : any) : number {
+export function jsonlength(object) : number {
     if (object) {
         return Object.keys(object).length
     }

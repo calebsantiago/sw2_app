@@ -1,6 +1,6 @@
 import mongoose from 'mongoose'
 import {Provider} from '../dao/providerDAO'
-export abstract class ProviderAdapter {
+export default abstract class ProviderAdapter {
     abstract insert(email : string, password : string, image : string, firstname : string, lastname : string, gender : string, birthdate : string, phonenumber : number, address : string, latitude : number, longitude : number, idcard : number, video : string, description : string, certificate : string, service : string) : void
     abstract findall() : mongoose.DocumentQuery<Provider[] | null, Provider, {}>
     abstract findbyservicesaveragerate(services : string) : Promise<any[]>

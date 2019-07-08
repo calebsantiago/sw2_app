@@ -18,7 +18,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var mongoose_1 = __importDefault(require("mongoose"));
 var providerDAO_1 = require("../dao/providerDAO");
-var providerAdapter_1 = require("../adapter/providerAdapter");
+var providerAdapter_1 = __importDefault(require("../adapter/providerAdapter"));
 var ProviderMock = /** @class */ (function (_super) {
     __extends(ProviderMock, _super);
     function ProviderMock() {
@@ -147,5 +147,5 @@ var ProviderMock = /** @class */ (function (_super) {
         });
     };
     return ProviderMock;
-}(providerAdapter_1.ProviderAdapter));
-exports.ProviderMock = ProviderMock;
+}(providerAdapter_1.default));
+exports.default = ProviderMock;
