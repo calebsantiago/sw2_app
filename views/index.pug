@@ -1,0 +1,71 @@
+extends layout
+block content
+    head
+        include head
+    body(style = 'padding-top: 50px;')
+        header 
+            div(class = 'navbar navbar-expand-lg fixed-top navbar-dark bg-primary box-shadow')
+                div(class = 'container')
+                    a(href = '/' class = 'navbar-brand') Contacta
+                    button(type = 'button' class = 'navbar-toggler' data-toggle = 'collapse' data-target = '#navbarResponsive' aria-controls = 'navbarResponsive' aria-expanded = 'false' aria-label = 'Toggle navigation')
+                        span(class = 'navbar-toggler-icon')
+                    div(id = 'navbarResponsive' class = 'navbar-collapse collapse')
+                        ul(class = 'navbar-nav')
+                            li(class = 'nav-item')
+                                a(class = 'nav-link' href = '/signup') crear cuenta
+                            li(class = 'nav-item')
+                                a(class = 'nav-link' href = '/login') iniciar sesión
+                            li(class = 'nav-item')
+                                a(class = 'nav-link' href = '' data-toggle = 'modal' data-target = '#ayuda') ayuda
+        div(class = 'modal fade' id = 'ayuda' tabindex = '-1' role = 'dialog' aria-labelledby = 'exampleModalLongTitle' aria-hidden = 'true')
+            div(class = 'modal-dialog' role = 'document')
+                div(class = 'modal-content')
+                    div(class = 'modal-header')
+                        h5(class = 'modal-title' id = 'exampleModalLongTitle') Ayuda
+                        button(type = 'button' class = 'close' data-dismiss = 'modal' aria-label = 'Close')
+                            span(aria-hidden = 'true') &times;
+                    div(class = 'modal-body text-center')
+                        h3 Contáctanos
+                        div
+                            a(class = 'btn btn-social-icon btn-lg btn-twitter mx-1' href = 'https://twitter.com/')
+                                span(class = 'fa fa-twitter' style = 'color:white;')
+                            a(class = 'btn btn-social-icon btn-lg btn-facebook mx-1' href = 'https://facebook.com/')
+                                span(class = 'fa fa-facebook' style = 'color:white;')
+                            a(class = 'btn btn-social-icon btn-lg btn-instagram mx-1' href = 'https://instagram.com/')
+                                span(class = 'fa fa-instagram' style = 'color:white;')
+                            a(class = 'btn btn-social-icon btn-lg btn-google mx-1' href = 'https://google.com/')
+                                span(class = 'fa fa-google' style = 'color:white;')
+                        ul(class='list-unstyled')
+                            li(class = 'lead') Av. Javier Prado Este N.° 4600, Urb. Fundo Monterrico Chico, Santiago de Surco, Lima.
+                            li(class = 'lead') (511) 7654321
+                            li(class = 'lead') findhelp@contacta.com
+                            li(class = 'lead') © Contacta, 2019 - Todos los derechos reservados
+                    div(class = 'modal-footer')
+                        button(type = 'button' class = 'btn btn-primary' data-dismiss = 'modal') cerrar
+        img(src = 'images/image001.png' class = 'image-fluid rounded mx-auto d-block ' style = 'max-width: 100%;')
+        div(class = 'container') 
+            div(class = 'row')
+                div(class = 'col-lg-12 m-3')
+                    h1(class = 'display-5 text-center') Contacta tu servicio
+            div(class = 'row')
+                div(class = 'col-lg-4')
+                    div(class = 'row rounded')
+                        img(src = 'https://image.flaticon.com/icons/svg/1651/1651373.svg' class = 'rounded mx-auto d-block' width = '80px' height = '80px')
+                    div(class = 'row justify-content-center m-3')
+                        strong Rentabiliza tus servicios
+                        div(class = 'text-center')
+                            span Ofrece servicios al mejor precio y gana dinero.
+                div(class = 'col-lg-4')
+                    div(class = 'row')
+                        img(src = 'https://www.flaticon.es/premium-icon/icons/svg/1700/1700553.svg' class = 'rounded mx-auto d-block' width = '80px' height = '80px')
+                    div(class = 'row justify-content-center m-3')    
+                        strong Expande tus oportunidades
+                        div(class = 'text-center')
+                            span Descubre servicios que satisfagan tus necesidades de manera inmediata.
+                div(class = 'col-lg-4')
+                    div(class = 'row')
+                        img(src = 'https://image.flaticon.com/icons/svg/1739/1739432.svg' class = 'rounded mx-auto d-block' width = '80px' height = '80px')
+                    div(class = 'row justify-content-center m-3') 
+                        strong Registrarse es fácil 
+                        div(class = 'text-center')
+                            span Registrate en menos de 4 minutos y empieza a obtener el servicio que deseas.                                       
